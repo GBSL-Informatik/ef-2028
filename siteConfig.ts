@@ -145,7 +145,7 @@ const getSiteConfig: SiteConfigProvider = () => {
             {
                 src: 'https://umami.gbsl.website/tell-me.js',
                 ['data-website-id']: process.env.UMAMI_ID,
-                ['data-domains']: 'ef.gbsl.website',
+                ['data-domains']: 'efi.gbsl.website',
                 async: true,
                 defer: true
             }
