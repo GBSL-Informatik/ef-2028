@@ -71,8 +71,8 @@ const getSiteConfig: SiteConfigProvider = () => {
             projectName: 'ef-2028'
         },
         siteStyles: ['website/css/custom.scss'],
-        socialCard: 'img/social-card.png',
-        logo: 'img/logo.png',
+        socialCard: 'img/social-card.jpg',
+        logo: 'img/logo.svg',
         personalSpaceDocRootId: 'e1097f86-c945-4c06-81cd-bb52c8811cb8',
         navbarItems: [
             taskStateOverview,
