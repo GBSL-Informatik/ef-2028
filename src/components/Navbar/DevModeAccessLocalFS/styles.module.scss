@@ -1,0 +1,13 @@
+.buttonWrapper {
+    .text {
+        display: none;
+    }
+}
+
+:global(.navbar-sidebar) {
+    .buttonWrapper {
+        .text {
+            display: inline;
+        }
+    }
+}

@@ -1,0 +1,54 @@
+import path from 'path';
+import type { PluginConfig, PluginModule } from '@docusaurus/types';
+import type { BinaryFiles } from '@excalidraw/excalidraw/types';
+import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types';
+import Excalidoc from './model';
+export interface ExcaliData {
+    files: BinaryFiles;
+    elements: readonly ExcalidrawElement[];
+    image: string;
+}
+
+declare module '@tdev-api/document' {
+    export interface TypeDataMapping {
+        excalidoc: ExcaliData;
+    }
+    export interface TypeModelMapping {
+        excalidoc: Excalidoc;
+    }
+}
+
+export const excalidrawPluginConfig: PluginConfig = (() => {
+    return {
+        name: 'excalidraw-config',
+        configureWebpack(config, isServer, { currentBundler }) {
+            const cwd = process.cwd();
+            return {
+                module: {
+                    rules: [
+                        {
+                            test: /\.excalidraw$/,
+                            type: 'json'
+                        },
+                        {
+                            test: /\.excalidrawlib$/,
+                            type: 'json'
+                        }
+                    ]
+                },
+                resolve: {
+                    fallback: {
+                        'roughjs/bin/math': path.resolve(cwd, './node_modules/roughjs/bin/math.js'),
+                        'roughjs/bin/rough': path.resolve(cwd, './node_modules/roughjs/bin/rough.js'),
+                        'roughjs/bin/generator': path.resolve(cwd, './node_modules/roughjs/bin/generator.js')
+                    }
+                },
+                plugins: [
+                    new currentBundler.instance.DefinePlugin({
+                        'process.env.IS_PREACT': JSON.stringify('false')
+                    })
+                ]
+            };
+        }
+    };
+}) satisfies PluginModule;

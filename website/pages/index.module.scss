@@ -1,0 +1,110 @@
+/* stylelint-disable docusaurus/copyright-header */
+
+/**
+ * CSS files with the .module.css suffix will be treated as CSS modules
+ * and scoped locally.
+ */
+
+.heroBanner {
+    padding: 4rem 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+@media screen and (max-width: 966px) {
+    .heroBanner {
+        padding: 2rem;
+    }
+}
+
+.buttons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.news {
+    margin-bottom: 2em;
+    .row {
+        @media screen and (max-width: 996px) {
+            justify-content: center;
+        }
+
+        .col {
+            padding-bottom: var(--ifm-spacing-horizontal);
+            max-width: 400px;
+        }
+    }
+}
+
+.galleryWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+    .container {
+        position: relative;
+        .bib {
+            position: absolute;
+            bottom: 10px;
+            right: 5px;
+            display: flex;
+            gap: 0.5em;
+            justify-content: center;
+            align-items: center;
+            opacity: 0.4;
+            &:hover {
+                opacity: 1;
+            }
+        }
+        &.last {
+            .bib {
+                left: 5px;
+                right: unset;
+            }
+        }
+        .videoWallpaper {
+            height: max(20vh, 230px);
+            margin-left: -1px;
+        }
+        &.single {
+            .videoWallpaper {
+                width: calc(100vw + 0px);
+                height: unset;
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+.shuffle {
+    display: flex;
+    justify-content: flex-end;
+    @keyframes moveToCenterScaleAndSpin {
+        0% {
+            transform: translateX(0) translateY(0) scale(1) rotate(0deg); /* Start at original position and scale */
+        }
+        20% {
+            /*  Adjust the translateX value based on the width of the div.
+            This example assumes the parent container is the screen width
+            and the div's width is "width: 100px", so it should move half
+            the difference between the screen width and its own width 
+            minus an additional 100px to center it without calculation.*/
+
+            transform: translateX(-25vw) translateY(10vh) scale(3) rotate(360deg); /* Mid way translation and scale and rotation */
+        }
+
+        100% {
+            transform: translateX(-80vw) translateY(-20vh) scale(7) rotate(1720deg); /* End at center, double size and full spin */
+        }
+    }
+    .shuffleBtn {
+        &.animate {
+            animation: moveToCenterScaleAndSpin 1.5s linear forwards;
+        }
+    }
+}
+.main {
+    margin: 0;
+}

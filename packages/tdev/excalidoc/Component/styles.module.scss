@@ -1,0 +1,45 @@
+.excalidraw {
+    position: relative;
+    &.fullscreen {
+        .actions {
+            top: 1.5em;
+            right: 1.5em;
+        }
+    }
+    &.preview {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .actions {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: var(--ifm-z-index-dropdown);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        button {
+            &:not(:hover) {
+                background: var(--ifm-color-secondary-contrast-background);
+            }
+        }
+    }
+    max-height: 70vh;
+    :global(.excalidraw) {
+        :global(.App-bottom-bar) {
+            :global(.Island) {
+                min-width: unset;
+                width: auto;
+                :global(.dropdown-menu.dropdown-menu--mobile) {
+                    min-width: 13em;
+                }
+                :global(.App-toolbar) {
+                    :global(.App-toolbar-content) {
+                        padding: 0;
+                    }
+                }
+            }
+        }
+    }
+}

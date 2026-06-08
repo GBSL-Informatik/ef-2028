@@ -1,0 +1,22 @@
+.textAreaInput {
+    width: 100%;
+    --tdev-text-area-height-shift: 1em;
+    padding: var(--ifm-button-padding-vertical);
+    resize: none;
+    overflow-y: hidden;
+    border: 1px solid var(--ifm-color-gray-500);
+    border-radius: var(--ifm-global-radius);
+    font-size: var(--ifm-font-size-base);
+    box-shadow: var(--ifm-global-shadow-md);
+    min-height: calc(1.1em + var(--tdev-text-area-height-shift)); /* Minimum height for single line */
+    line-height: normal; /* Ensure consistent line height */
+    height: auto; /* Allow height to adjust based on content */
+    &:focus {
+        border-color: var(--ifm-link-hover-color);
+        outline: none;
+        box-shadow: 0 0 8px var(--ifm-link-hover-color);
+    }
+    &.monospace {
+        font-family: var(--ifm-font-family-monospace);
+    }
+}

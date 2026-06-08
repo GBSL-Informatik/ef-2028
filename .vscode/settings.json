@@ -1,0 +1,37 @@
+{
+    "[scss]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[css]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescriptreact]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.formatOnSave": true,
+    "json.format.keepLines": true,
+    "materialdesigniconsIntellisense.matchers": [
+        {
+            "match": ":?\\bmdi-{param}\\b",
+            "insert": "mdi-{param}",
+            "displayName": "kebab-case (web font)",
+            "name": "kebabCase",
+            "insertSuffix": ":"
+        },
+        {
+            "match": "\\bmdi{pascal}\\b",
+            "insert": "mdi{pascal}",
+            "displayName": "camelCase (js)",
+            "name": "camelCase"
+        },
+        {
+            "match": ":mdi\\[{param}\\]",
+            "insert": "mdi\\[{param}\\]",
+            "displayName": "md directive (web font)",
+            "name": "mdDirective"
+        }
+    ]
+}

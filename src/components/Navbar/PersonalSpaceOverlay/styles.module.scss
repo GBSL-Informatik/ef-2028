@@ -1,0 +1,45 @@
+.personalSpaceOverlay {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+
+    .content {
+        border-radius: var(--ifm-global-radius);
+        overflow: auto;
+        width: 80vw;
+        height: 80vh;
+    }
+}
+
+.buttonWrapper {
+    margin-right: 0.2em;
+    position: relative;
+
+    .button {
+        padding: 0.5px 0.1rem;
+        .text {
+            display: none;
+        }
+    }
+}
+
+@media screen and (max-width: 750px) {
+    .personalSpaceOverlay {
+        .content {
+            width: 98vw;
+        }
+    }
+}
+
+:global(.navbar-sidebar) {
+    .buttonWrapper {
+        .button {
+            .text {
+                display: inline;
+            }
+        }
+    }
+}

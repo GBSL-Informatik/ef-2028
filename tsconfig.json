@@ -1,0 +1,26 @@
+{
+    // This file is not used in compilation. It is here just for a nice editor experience.
+    "extends": "./tsconfig.tdev.json",
+    "compilerOptions": {
+        "ignoreDeprecations": "6.0",
+        "paths": {
+            "@tdev-components/*": ["tdev-website/website/components/*", "src/components/*"],
+            "@tdev-hooks/*": ["tdev-website/website/hooks/*", "src/hooks/*"],
+            "@tdev-models/*": ["tdev-website/website/models/*", "src/models/*"],
+            "@tdev-stores/*": ["tdev-website/website/stores/*", "src/stores/*"],
+            "@tdev-plugins/*": ["tdev-website/website/plugins/*", "src/plugins/*"],
+            "@tdev-api/*": ["tdev-website/website/api/*", "src/api/*"],
+            "@tdev/*": [
+                "tdev-website/website/*",
+                "tdev-website/website/packages/*",
+                "src/*",
+                "packages/tdev/*"
+            ],
+            "@tdev-original/*": ["src/*", "packages/tdev/*"],
+            "@site/*": ["./*"]
+        }
+    },
+    "mdx": {
+        "plugins": [["remark-frontmatter", ["toml", "yaml"]], "remark-directive", "remark-math"]
+    }
+}

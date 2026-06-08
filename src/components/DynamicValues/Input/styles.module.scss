@@ -1,0 +1,82 @@
+.dynamicInput {
+    display: grid;
+    grid-template-columns: minmax(8em, auto) 2fr auto;
+    grid-template-areas: 'label input action';
+    position: relative;
+    margin-bottom: 1em;
+    &:has(+ .dynamicInput) {
+        margin-bottom: 0.15em;
+    }
+    .label {
+        grid-area: label;
+        font-weight: var(--ifm-font-weight-semibold);
+        font-family: var(--ifm-font-family-monospace);
+        background-color: var(--ifm-color-gray-200);
+        border: 1px solid var(--ifm-color-gray-600);
+        border-top-left-radius: var(--ifm-global-radius);
+        border-bottom-left-radius: var(--ifm-global-radius);
+        border-right-width: 0;
+        padding-right: 0.5em;
+        padding-left: 0.5em;
+        line-height: 1.9;
+        text-align: right;
+        &.derived {
+            border-color: var(--ifm-color-primary);
+            background-color: var(--ifm-color-gray-300);
+        }
+    }
+    .input {
+        grid-area: input;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        border-color: var(--ifm-color-gray-600);
+        border-left-width: 0;
+        &.monospace {
+            font-family: var(--ifm-font-family-monospace);
+        }
+    }
+    .action {
+        grid-area: action;
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    .dynamicInput {
+        grid-template-columns: auto 1fr auto;
+        grid-template-areas:
+            'label . action'
+            'input input input';
+        .label {
+            margin-bottom: 0;
+            border-bottom-left-radius: 0;
+            border-right-width: 1px;
+            border-bottom-width: 0;
+            text-align: left;
+            border-top-right-radius: var(--ifm-global-radius);
+            padding-left: 0.5em;
+            font-size: 80%;
+        }
+        .input {
+            margin-bottom: 0;
+            border-bottom-left-radius: var(--ifm-global-radius);
+            border-left-width: 1px;
+        }
+    }
+}
+
+[data-theme='dark'] {
+    .dynamicInput {
+        .label {
+            background-color: var(--ifm-color-gray-700);
+            border-color: var(--ifm-color-gray-500);
+            &.derived {
+                background-color: var(--ifm-color-gray-800);
+                border-color: var(--ifm-color-primary);
+            }
+        }
+        .input {
+            border-color: var(--ifm-color-gray-500);
+        }
+    }
+}

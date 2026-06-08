@@ -1,0 +1,67 @@
+.figure {
+    display: block;
+    position: relative;
+    text-align: center;
+    margin: 0 auto;
+    margin-bottom: 1em;
+    width: fit-content;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+
+    .editButton {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+        padding: 0.2em;
+        opacity: 50%;
+        &:hover {
+            opacity: 100%;
+        }
+    }
+    > span:global(.markup) {
+        position: absolute;
+        top: 0;
+        left: 0;
+        line-height: 0;
+    }
+    span:global(.caption) {
+        font-style: italic;
+        display: flex;
+        justify-content: flex-end;
+        align-items: baseline;
+        flex-wrap: wrap;
+        gap: 0.2em;
+        line-height: 1em;
+        margin: 0;
+        margin-bottom: 0.1em;
+
+        &:global(.inline) {
+            position: absolute;
+            bottom: 0.8em;
+            right: 0.4em;
+            padding: 0;
+            opacity: 50%;
+
+            &:hover {
+                opacity: 100%;
+            }
+            &:has(+ :global(.comment-wrapper.open)) {
+                position: unset;
+                padding: 0;
+                opacity: 100%;
+            }
+        }
+        > p {
+            margin-bottom: 0;
+        }
+    }
+}
+
+:global(.card__image) {
+    figure.figure {
+        width: 100%;
+    }
+}
