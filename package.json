@@ -9,7 +9,6 @@
     "scripts": {
         "docusaurus": "docusaurus",
         "start": "concurrently --raw --kill-others 'PACKAGE_SRC=packages PACKAGE_DEST=tdev-website/docs/packages docusaurus start' 'sleep 1s && ts-node --files updateSync/packageDocsSync/watch.ts --src packages --dest tdev-website/docs/packages'",
-        "prebuild": "ts-node --files updateSync/packageDocsSync/preBuild.ts --src packages --dest tdev-website/docs/packages",
         "build": "docusaurus build",
         "swizzle": "docusaurus swizzle",
         "deploy": "docusaurus deploy",

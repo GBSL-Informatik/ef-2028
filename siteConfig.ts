@@ -8,7 +8,6 @@ import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
 import matrialConfig from './material_config.json';
 import {
     accountSwitcher,
-    blog,
     loginProfileButton,
     requestTarget,
     taskStateOverview,
@@ -76,7 +75,6 @@ const getSiteConfig: SiteConfigProvider = () => {
         logo: 'img/logo.png',
         personalSpaceDocRootId: 'e1097f86-c945-4c06-81cd-bb52c8811cb8',
         navbarItems: [
-            blog,
             taskStateOverview,
             devModeAccessLocalFS,
             accountSwitcher,
