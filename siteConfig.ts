@@ -3,6 +3,8 @@
 
 import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
+import * as yaml from 'js-yaml';
+import fs from 'fs';
 import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
 import {

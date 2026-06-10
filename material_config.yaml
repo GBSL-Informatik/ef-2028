@@ -1,2 +1,11 @@
-28EF: []
+28EF:
+    - from: docs/EF-Programmieren/
+      to: versioned_docs/version-28EF/10-Programmieren
+      ignore:
+          - _category_.yml
+      open: true
+    - from: docs/OF-Programmieren-1/
+      to: versioned_docs/version-28EF/10-Programmieren/01-Repetition
+      ignore:
+          - _category_.yml
 pages: []
