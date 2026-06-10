@@ -5,7 +5,6 @@ import { mdiSourceCommit } from '@mdi/js';
 import path from 'path';
 import { EditUrlFunction, VersionOptions } from '@docusaurus/plugin-content-docs';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
-import matrialConfig from './material_config.json';
 import {
     accountSwitcher,
     loginProfileButton,
@@ -17,6 +16,14 @@ import {
 import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
 
+const rawMatConf = fs.readFileSync('./material_config.yaml', 'utf8');
+type MatrialConfigEntry = {
+    from: string;
+    to: string;
+    ignore: string[];
+};
+const matrialConfig: Partial<{ [key: string]: MatrialConfigEntry[] }> = yaml.load(rawMatConf) || {};
+
 const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
     const { version, docPath, versionDocsDirPath } = props;
     const joinPath = (parts: string[]) => `/${versionDocsDirPath}/${parts.join('/')}`;
@@ -26,11 +33,7 @@ const getEditUrl = (props: Parameters<EditUrlFunction>[0]) => {
     if (!(version in matrialConfig)) {
         return joinPath([docPath]);
     }
-    const config = matrialConfig[version as keyof typeof matrialConfig] as {
-        from: string;
-        to: string;
-        ignore: string[];
-    }[];
+    const config = matrialConfig[version as keyof typeof matrialConfig] ?? [];
     const parts = docPath.split('/');
     const getSourceFilePath = (absParts: string[], relParts: string[]) => {
         if (absParts.length === 0) {

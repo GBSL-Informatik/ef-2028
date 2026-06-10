@@ -4,18 +4,13 @@
     "compilerOptions": {
         "ignoreDeprecations": "6.0",
         "paths": {
-            "@tdev-components/*": ["tdev-website/website/components/*", "src/components/*"],
-            "@tdev-hooks/*": ["tdev-website/website/hooks/*", "src/hooks/*"],
-            "@tdev-models/*": ["tdev-website/website/models/*", "src/models/*"],
-            "@tdev-stores/*": ["tdev-website/website/stores/*", "src/stores/*"],
-            "@tdev-plugins/*": ["tdev-website/website/plugins/*", "src/plugins/*"],
-            "@tdev-api/*": ["tdev-website/website/api/*", "src/api/*"],
-            "@tdev/*": [
-                "tdev-website/website/*",
-                "tdev-website/website/packages/*",
-                "src/*",
-                "packages/tdev/*"
-            ],
+            "@tdev-components/*": ["website/components/*", "src/components/*"],
+            "@tdev-hooks/*": ["website/hooks/*", "src/hooks/*"],
+            "@tdev-models/*": ["website/models/*", "src/models/*"],
+            "@tdev-stores/*": ["website/stores/*", "src/stores/*"],
+            "@tdev-plugins/*": ["website/plugins/*", "src/plugins/*"],
+            "@tdev-api/*": ["website/api/*", "src/api/*"],
+            "@tdev/*": ["website/*", "website/packages/*", "src/*", "packages/tdev/*"],
             "@tdev-original/*": ["src/*", "packages/tdev/*"],
             "@site/*": ["./*"]
         }
