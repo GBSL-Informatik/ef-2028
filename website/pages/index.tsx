@@ -24,7 +24,6 @@ const Home = observer(() => {
             <Layout>
                 <HomepageHeader />
                 <main className={clsx(styles.main)}>
-                    <h1>EF 2028</h1>
                     <HomepageCourses />
                 </main>
             </Layout>
