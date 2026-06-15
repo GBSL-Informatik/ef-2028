@@ -96,6 +96,9 @@ const getSiteConfig: SiteConfigProvider = () => {
             },
             excalidraw: {
                 excalidoc: true
+            },
+            loggedOutOverlay: {
+                disable: process.env.NODE_ENV !== 'production'
             }
         },
         footer: {
