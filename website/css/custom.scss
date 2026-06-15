@@ -213,6 +213,9 @@ nav.menu {
             &.inf-ef {
                 --tdev-sidebar-color: gold;
             }
+            &.setup {
+                --tdev-sidebar-color: rgb(132, 0, 255);
+            }
             &.marked {
                 --tdev-sidebar-color: var(--ifm-color-blue);
             }
