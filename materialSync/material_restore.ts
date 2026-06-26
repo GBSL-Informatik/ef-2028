@@ -12,13 +12,6 @@ const main = (): void => {
         }
         fs.renameSync('_docs', 'docs');
     }
-    if (fs.existsSync('_news') && fs.lstatSync('_news').isDirectory()) {
-        console.log('RENAMING docs/ to _news/');
-        if (fs.existsSync('news')) {
-            fs.rmSync('news', { recursive: true });
-        }
-        fs.renameSync('_news', 'news');
-    }
     if (fs.existsSync('_versioned_docs') && fs.lstatSync('_versioned_docs').isDirectory()) {
         console.log('RENAMING _versioned_docs/ to versioned_docs/');
         if (fs.existsSync('versioned_docs')) {

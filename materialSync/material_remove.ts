@@ -1,7 +1,12 @@
 import fs from 'fs';
 import path from 'path';
 import minimist from 'minimist';
-import { ConfigEntry, loadMaterialConfig, saveMaterialConfig } from './material_helpers';
+import {
+    loadMaterialConfig,
+    resolveMaterialConfig,
+    saveMaterialConfig,
+    SyncConfig
+} from './material_helpers';
 
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
@@ -48,22 +53,19 @@ const ensureTrailingSlash = (p: string): string => {
 };
 
 klassen.forEach((klass) => {
-    const config = configs[klass];
-    const keepedFiles: ConfigEntry[] = [];
+    const klassConfig = configs[klass];
+    const keepedFiles: SyncConfig[] = [];
 
-    config.forEach((src) => {
-        const fromRel = relative2Doc(typeof src === 'string' ? src : src.from);
-        const from = `${docBasePath(typeof src === 'string' ? src : src.from)}${fromRel}`;
-        const to =
-            typeof src === 'object' && src.to
-                ? src.to
-                : `versioned_docs/version-${klass}/${relative2Doc(typeof src === 'string' ? src : src.from)}`;
-
+    klassConfig.forEach((_config) => {
+        const config = resolveMaterialConfig(klass, _config);
+        const fromRel = relative2Doc(config.from);
+        const from = `${docBasePath(config.from)}${fromRel}`;
+        const to = config.to;
         let keep = true;
 
         toRemove.forEach((rmSrc) => {
             let toRmSrc = `${docBasePath(rmSrc)}${relative2Doc(rmSrc)}`;
-            console.log(typeof src === 'string' ? src : src.from, fromRel, docBasePath(rmSrc), from, toRmSrc);
+            console.log(config.from, fromRel, docBasePath(rmSrc), from, toRmSrc);
 
             if (fs.lstatSync(toRmSrc).isDirectory()) {
                 toRmSrc = ensureTrailingSlash(toRmSrc);
@@ -93,7 +95,7 @@ klassen.forEach((klass) => {
         });
 
         if (keep) {
-            keepedFiles.push(src);
+            keepedFiles.push(_config);
         }
     });
 

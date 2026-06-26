@@ -1,8 +1,13 @@
 import fs from 'fs';
 import path from 'path';
 import Rsync from 'rsync';
-import { ConfigType, ensureSync, loadMaterialConfig, syncSecure } from './material_helpers';
-
+import {
+    ConfigType,
+    ensureSync,
+    loadMaterialConfig,
+    resolveMaterialConfig,
+    syncSecure
+} from './material_helpers';
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
 
@@ -65,11 +70,11 @@ const ensureTrailingSlash = (p: string): string => {
 };
 
 const main = async (): Promise<void> => {
-    /**
-     * page for the class
-     * includes the sync-pages from the secure folder
-     */
     if (process.env.WITHOUT_DOCS) {
+        /**
+         * move docs/ to _docs/ and make sure docusaurus can still build the site.
+         * Can be undone by running the restore script.
+         */
         console.log('RENAMING docs/ to _docs/');
         fs.renameSync('docs', '_docs');
         fs.mkdirSync('docs');
@@ -83,8 +88,8 @@ const main = async (): Promise<void> => {
         /** copy secure pages */
         await syncSecure();
     }
-    /* No Versioning, no News Page */
     if (process.env.DOCS_ONLY) {
+        /* Build only the docs - can be undone by running the restore script */
         if (fs.existsSync('versioned_docs')) {
             console.log('RENAMING versioned_docs/ to _versioned_docs/');
             fs.renameSync('versioned_docs', '_versioned_docs');
@@ -100,42 +105,24 @@ const main = async (): Promise<void> => {
             fs.renameSync('versions.json', '_versions.json');
             fs.writeFileSync('versions.json', '[\n  "current"\n]');
         }
-        if (fs.existsSync('news')) {
-            console.log('RENAMING news/ to _news/');
-            fs.renameSync('news', '_news');
-            fs.mkdirSync('news');
-            fs.writeFileSync(`news/${new Date().toISOString().slice(0, 10)}-news.md`, `# News Placeholder\n`);
-        }
     }
-    fs.writeFileSync('static/CNAME', (process.env.DOMAIN || 'inf.gbsl.website').replace(/https?:\/\//g, ''), {
-        encoding: 'utf-8',
-        flag: 'w'
-    }); /** overwrite */
+    if (fs.existsSync('CNAME')) {
+        fs.cpSync('CNAME', 'static/CNAME');
+    }
 
     Object.keys(typedConfig).forEach(async (klass) => {
         const config = typedConfig[klass];
         const gitignore: string[] = [];
         const classDir = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
 
-        config.forEach(async (src) => {
-            let srcPath: string | undefined;
-            let toPath: string | undefined;
+        config.forEach(async (_config) => {
+            const config = resolveMaterialConfig(klass, _config);
             const ignore: string[] = [];
+            ignore.push(...(config.ignore || []));
 
-            if (typeof src === 'string') {
-                srcPath = src;
-                toPath = `${classDir}${relative2Doc(src)}`;
-            } else {
-                srcPath = src.from;
-                if (src.to) {
-                    toPath = src.to;
-                } else {
-                    toPath = `${classDir}${relative2Doc(srcPath)}`;
-                }
-                ignore.push(...(src.ignore || []));
-            }
+            let srcPath = config.from;
 
-            if (process.env.WITHOUT_DOCS && srcPath.startsWith('docs/')) {
+            if (process.env.WITHOUT_DOCS && config.from.startsWith('docs/')) {
                 srcPath = `_${srcPath}`;
             }
 
@@ -144,15 +131,15 @@ const main = async (): Promise<void> => {
                 srcPath = ensureTrailingSlash(srcPath);
             }
 
-            const parent = path.dirname(toPath);
-            if (!fs.existsSync(parent)) {
-                fs.mkdirSync(parent, { recursive: true });
+            const destParent = path.dirname(config.to);
+            if (!fs.existsSync(destParent)) {
+                fs.mkdirSync(destParent, { recursive: true });
             }
 
             if (isDir) {
-                const sanitizedClassDir = ensureTrailingSlash(toPath.replace(classDir, ''));
+                const sanitizedClassDir = ensureTrailingSlash(config.to.replace(classDir, ''));
                 gitignore.push(`${sanitizedClassDir}*`);
-                const rsync = new Rsync().source(srcPath).destination(toPath).archive().delete();
+                const rsync = new Rsync().source(srcPath).destination(config.to).archive().delete();
                 if (ignore.length > 0) {
                     rsync.exclude(ignore.map((i) => ensureStartingSlash(i)));
                     ignore.forEach((ifile) => {
@@ -172,15 +159,15 @@ const main = async (): Promise<void> => {
                     });
                 }
                 rsync.exclude(['.sync.*', '*.nosync.*']);
-                console.log('SYNC', toPath, srcPath);
+                console.log('SYNC', config.to, srcPath);
                 await ensureSync(rsync, srcPath);
             } else {
-                fs.copyFileSync(srcPath, toPath);
-                gitignore.push(toPath.replace(classDir, ''));
+                fs.copyFileSync(srcPath, config.to);
+                gitignore.push(config.to.replace(classDir, ''));
             }
 
-            if (typeof src !== 'string' && src.open) {
-                const folder = isDir ? toPath : parent;
+            if (config.open) {
+                const folder = isDir ? config.to : destParent;
                 try {
                     fs.mkdirSync(folder, { recursive: true });
                 } catch (e) {

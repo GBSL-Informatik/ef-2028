@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import { exit } from 'process';
 import minimist from 'minimist';
-import { loadMaterialConfig, saveMaterialConfig } from './material_helpers';
+import { loadMaterialConfig, resolveMaterialConfig, saveMaterialConfig } from './material_helpers';
 
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
@@ -70,17 +70,11 @@ klassen.forEach((klass) => {
         `);
         return;
     }
-    configs[klass] = configs[klass].filter((srcPath) => {
-        if (typeof srcPath === 'string') {
-            if (srcPath === src) {
-                console.log('ℹ️  Modify old source: ', srcPath);
-                return false;
-            }
-        } else {
-            if (srcPath.from === src) {
-                console.log('ℹ️  Modify old source: ', srcPath);
-                return false;
-            }
+    configs[klass] = configs[klass].filter((_config) => {
+        const config = resolveMaterialConfig(klass, _config);
+        if (config.from === src) {
+            console.log('ℹ️  Modify old source: ', config.from);
+            return false;
         }
         return true;
     });

@@ -5,20 +5,63 @@ import yaml from 'js-yaml';
 
 type RsyncInstance = InstanceType<typeof Rsync>;
 
-export interface SyncConfig {
-    from: string;
-    to: string;
+type BaseConfig = {
     ignore: string[];
     open?: boolean;
-}
+};
 
-export type ConfigEntry = string | SyncConfig;
+export type NormalizedConfig = BaseConfig & {
+    from: string;
+    to: string;
+};
+
+export type SyncConfig = BaseConfig &
+    (
+        | {
+              from: string;
+          }
+        | {
+              material?: string;
+          }
+    ) &
+    (
+        | {
+              to: string;
+          }
+        | {
+              section: string;
+          }
+    );
 
 export interface ConfigType {
-    [key: string]: ConfigEntry[];
+    [key: string]: SyncConfig[];
 }
 
 const materialConfigPath = path.resolve(__dirname, '..', 'material_config.yaml');
+
+export const resolveMaterialConfig = (klass: string, config: SyncConfig): NormalizedConfig => {
+    let from: string;
+    let to: string;
+    const destinationBase = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
+    if ('material' in config && config.material) {
+        from = path.join('docs', config.material);
+    }
+    if ('from' in config && config.from) {
+        from = config.from;
+    }
+    if ('section' in config && config.section) {
+        to = path.join(destinationBase, config.section);
+    }
+    if ('to' in config && config.to) {
+        if (config.to.startsWith(destinationBase)) {
+            to = config.to;
+        } else {
+            to = path.join(destinationBase, config.to);
+        }
+    }
+
+    return { from: from!, to: to!, ignore: config.ignore, open: config.open };
+};
 
 export const loadMaterialConfig = (): ConfigType => {
     const source = fs.readFileSync(materialConfigPath, 'utf-8');
