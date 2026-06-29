@@ -1,13 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import Rsync from 'rsync';
-import {
-    ConfigType,
-    ensureSync,
-    loadMaterialConfig,
-    resolveMaterialConfig,
-    syncSecure
-} from './material_helpers';
+import { ConfigType, ensureSync, loadMaterialConfig, resolveMaterialConfig } from './material_helpers';
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
 
@@ -84,10 +78,6 @@ const main = async (): Promise<void> => {
             fs.cpSync(file, file.replace('/_docs/', '/docs/'));
         });
     }
-    if (process.env.WITHOUT_DOCS || process.env.NODE_ENV !== 'production') {
-        /** copy secure pages */
-        await syncSecure();
-    }
     if (process.env.DOCS_ONLY) {
         /* Build only the docs - can be undone by running the restore script */
         if (fs.existsSync('versioned_docs')) {
@@ -109,13 +99,13 @@ const main = async (): Promise<void> => {
     if (fs.existsSync('CNAME')) {
         fs.cpSync('CNAME', 'static/CNAME');
     }
-
-    Object.keys(typedConfig).forEach(async (klass) => {
+    for (const klass of Object.keys(typedConfig)) {
+        // Object.keys(typedConfig).forEach(async (klass) => {
         const config = typedConfig[klass];
         const gitignore: string[] = [];
         const classDir = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
-
-        config.forEach(async (_config) => {
+        for (const _config of config) {
+            // config.forEach(async (_config) => {
             const config = resolveMaterialConfig(klass, _config);
             const ignore: string[] = [];
             ignore.push(...(config.ignore || []));
@@ -139,7 +129,12 @@ const main = async (): Promise<void> => {
             if (isDir) {
                 const sanitizedClassDir = ensureTrailingSlash(config.to.replace(classDir, ''));
                 gitignore.push(`${sanitizedClassDir}*`);
-                const rsync = new Rsync().source(srcPath).destination(config.to).archive().delete();
+                const rsync = new Rsync()
+                    .flags('v')
+                    .source(srcPath)
+                    .destination(config.to)
+                    .archive()
+                    .delete();
                 if (ignore.length > 0) {
                     rsync.exclude(ignore.map((i) => ensureStartingSlash(i)));
                     ignore.forEach((ifile) => {
@@ -191,8 +186,8 @@ const main = async (): Promise<void> => {
             }
 
             fs.writeFileSync(`${classDir}.gitignore`, gitignore.join('\n'));
-        });
-    });
+        }
+    }
 };
 
 main().catch((e: Error) => {
