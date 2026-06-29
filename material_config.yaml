@@ -1,4 +1,6 @@
 28EF:
+    - from: docs/Kickoff/
+      to: versioned_docs/version-28EF/05-Kickoff
     - from: docs/EF-Programmieren/
       to: versioned_docs/version-28EF/10-Programmieren
       ignore:
