@@ -1,13 +1,7 @@
-import fs from 'fs';
+import fsp from 'fs/promises';
 import path from 'path';
 import Rsync from 'rsync';
-import {
-    ConfigType,
-    ensureSync,
-    loadMaterialConfig,
-    resolveMaterialConfig,
-    syncSecure
-} from './material_helpers';
+import { ConfigType, ensureSync, loadMaterialConfig, resolveMaterialConfig } from './material_helpers';
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
 
@@ -22,23 +16,35 @@ const docBasePath = (src: string): string => {
 /**
  * Recursively find markdown template files (starting with _)
  */
-const findMdTemplate = (src: string): string[] => {
+const findMdTemplate = async (src: string): Promise<string[]> => {
     const mdFiles: string[] = [];
-    if (fs.lstatSync(src).isDirectory()) {
-        fs.readdirSync(src).forEach((file) => {
+    const srcStat = await fsp.lstat(src);
+    if (srcStat.isDirectory()) {
+        const files = await fsp.readdir(src);
+        for (const file of files) {
             const fname = path.join(src, file);
-            if (fs.lstatSync(fname).isDirectory()) {
-                mdFiles.push(...findMdTemplate(fname));
+            const fileStat = await fsp.lstat(fname);
+            if (fileStat.isDirectory()) {
+                mdFiles.push(...(await findMdTemplate(fname)));
             } else if ((file.endsWith('.md') || file.endsWith('.mdx')) && file.startsWith('_')) {
                 mdFiles.push(fname);
             }
-        });
+        }
     } else {
         if ((src.endsWith('.md') || src.endsWith('.mdx')) && src.startsWith('_')) {
             mdFiles.push(src);
         }
     }
     return mdFiles;
+};
+
+const pathExists = async (p: string): Promise<boolean> => {
+    try {
+        await fsp.access(p);
+        return true;
+    } catch {
+        return false;
+    }
 };
 
 /**
@@ -76,46 +82,39 @@ const main = async (): Promise<void> => {
          * Can be undone by running the restore script.
          */
         console.log('RENAMING docs/ to _docs/');
-        fs.renameSync('docs', '_docs');
-        fs.mkdirSync('docs');
-        fs.cpSync('_docs/home.md', 'docs/home.md');
+        await fsp.rename('docs', '_docs');
+        await fsp.mkdir('docs');
+        await fsp.cp('_docs/home.md', 'docs/home.md');
         /** copy all markdown-templates - otherwise some pages might fail */
-        findMdTemplate(path.join(__dirname, '../_docs')).forEach((file) => {
-            fs.cpSync(file, file.replace('/_docs/', '/docs/'));
-        });
-    }
-    if (process.env.WITHOUT_DOCS || process.env.NODE_ENV !== 'production') {
-        /** copy secure pages */
-        await syncSecure();
+        const templates = await findMdTemplate(path.join(__dirname, '../_docs'));
+        await Promise.all(templates.map((file) => fsp.cp(file, file.replace('/_docs/', '/docs/'))));
     }
     if (process.env.DOCS_ONLY) {
         /* Build only the docs - can be undone by running the restore script */
-        if (fs.existsSync('versioned_docs')) {
+        if (await pathExists('versioned_docs')) {
             console.log('RENAMING versioned_docs/ to _versioned_docs/');
-            fs.renameSync('versioned_docs', '_versioned_docs');
-            fs.mkdirSync('versioned_docs');
+            await fsp.rename('versioned_docs', '_versioned_docs');
+            await fsp.mkdir('versioned_docs');
         }
-        if (fs.existsSync('versioned_sidebars')) {
+        if (await pathExists('versioned_sidebars')) {
             console.log('RENAMING versioned_sidebars/ to _versioned_sidebars/');
-            fs.renameSync('versioned_sidebars', '_versioned_sidebars');
-            fs.mkdirSync('versioned_sidebars');
+            await fsp.rename('versioned_sidebars', '_versioned_sidebars');
+            await fsp.mkdir('versioned_sidebars');
         }
-        if (fs.existsSync('versions.json')) {
+        if (await pathExists('versions.json')) {
             console.log('RENAMING versions.json to _versions.json');
-            fs.renameSync('versions.json', '_versions.json');
-            fs.writeFileSync('versions.json', '[\n  "current"\n]');
+            await fsp.rename('versions.json', '_versions.json');
+            await fsp.writeFile('versions.json', '[\n  "current"\n]');
         }
     }
-    if (fs.existsSync('CNAME')) {
-        fs.cpSync('CNAME', 'static/CNAME');
+    if (await pathExists('CNAME')) {
+        await fsp.cp('CNAME', 'static/CNAME');
     }
-
-    Object.keys(typedConfig).forEach(async (klass) => {
+    for (const klass of Object.keys(typedConfig)) {
         const config = typedConfig[klass];
         const gitignore: string[] = [];
         const classDir = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
-
-        config.forEach(async (_config) => {
+        for (const _config of config) {
             const config = resolveMaterialConfig(klass, _config);
             const ignore: string[] = [];
             ignore.push(...(config.ignore || []));
@@ -126,50 +125,55 @@ const main = async (): Promise<void> => {
                 srcPath = `_${srcPath}`;
             }
 
-            const isDir = fs.lstatSync(srcPath).isDirectory();
+            const isDir = (await fsp.lstat(srcPath)).isDirectory();
             if (isDir) {
                 srcPath = ensureTrailingSlash(srcPath);
             }
 
             const destParent = path.dirname(config.to);
-            if (!fs.existsSync(destParent)) {
-                fs.mkdirSync(destParent, { recursive: true });
+            if (!(await pathExists(destParent))) {
+                await fsp.mkdir(destParent, { recursive: true });
             }
 
             if (isDir) {
                 const sanitizedClassDir = ensureTrailingSlash(config.to.replace(classDir, ''));
                 gitignore.push(`${sanitizedClassDir}*`);
-                const rsync = new Rsync().source(srcPath).destination(config.to).archive().delete();
+                const rsync = new Rsync()
+                    .flags('v')
+                    .source(srcPath)
+                    .destination(config.to)
+                    .archive()
+                    .delete();
                 if (ignore.length > 0) {
                     rsync.exclude(ignore.map((i) => ensureStartingSlash(i)));
-                    ignore.forEach((ifile) => {
+                    for (const ifile of ignore) {
                         const opath = `${srcPath}${ifile}`;
                         const ipath = `${sanitizedClassDir}${ifile}`;
-                        if (!fs.existsSync(opath)) {
+                        if (!(await pathExists(opath))) {
                             console.warn(
                                 `⚠️ [ignore] ${klass}->${srcPath}: ignored "${ifile}" does not exist`
                             );
                             return;
                         }
-                        if (fs.lstatSync(opath).isDirectory()) {
+                        if ((await fsp.lstat(opath)).isDirectory()) {
                             gitignore.push(`!${ensureTrailingSlash(ipath)}`);
                         } else {
                             gitignore.push(`!${ipath}`);
                         }
-                    });
+                    }
                 }
                 rsync.exclude(['.sync.*', '*.nosync.*']);
                 console.log('SYNC', config.to, srcPath);
                 await ensureSync(rsync, srcPath);
             } else {
-                fs.copyFileSync(srcPath, config.to);
+                await fsp.copyFile(srcPath, config.to);
                 gitignore.push(config.to.replace(classDir, ''));
             }
 
             if (config.open) {
                 const folder = isDir ? config.to : destParent;
                 try {
-                    fs.mkdirSync(folder, { recursive: true });
+                    await fsp.mkdir(folder, { recursive: true });
                 } catch (e) {
                     console.log(e);
                 }
@@ -181,18 +185,18 @@ const main = async (): Promise<void> => {
                     collapsed: false,
                     className: 'library-item marked'
                 };
-                if (fs.existsSync(categoryPath)) {
-                    category = JSON.parse(fs.readFileSync(categoryPath, 'utf-8'));
+                if (await pathExists(categoryPath)) {
+                    category = JSON.parse(await fsp.readFile(categoryPath, 'utf-8'));
                     category.collapsed = false;
                     category.collapsible = true;
                     category.className = 'library-item marked';
                 }
-                fs.writeFileSync(categoryPath, JSON.stringify(category, undefined, 2) + '\n');
+                await fsp.writeFile(categoryPath, JSON.stringify(category, undefined, 2) + '\n');
             }
 
-            fs.writeFileSync(`${classDir}.gitignore`, gitignore.join('\n'));
-        });
-    });
+            await fsp.writeFile(`${classDir}.gitignore`, gitignore.join('\n'));
+        }
+    }
 };
 
 main().catch((e: Error) => {

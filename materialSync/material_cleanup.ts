@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import minimist from 'minimist';
-import { loadMaterialConfig } from './material_helpers';
+import { loadMaterialConfig, resolveMaterialConfig } from './material_helpers';
 
 const repoRoot = path.resolve(__dirname, '..');
 process.chdir(repoRoot);
@@ -32,10 +32,10 @@ klassen.forEach((klass) => {
 
     fs.mkdirSync(tmp_dir, { recursive: true });
 
-    config.forEach((src) => {
-        const srcConfig = typeof src === 'string' ? null : src;
-        const toPath = srcConfig?.to || `versioned_docs/version-${klass}/${srcConfig ? '' : src}`;
-        const ignoreList = srcConfig?.ignore || [];
+    config.forEach((_config) => {
+        const config = resolveMaterialConfig(klass, _config);
+        const toPath = config?.to || `versioned_docs/version-${klass}/${config ? '' : _config}`;
+        const ignoreList = config?.ignore || [];
 
         if (ignoreList.length > 0) {
             fs.mkdirSync(`${tmp_dir}/${toPath}`, { recursive: true });
@@ -59,10 +59,10 @@ klassen.forEach((klass) => {
             } else {
                 fs.unlinkSync(toPath);
                 const categoryPath = path.join(path.dirname(toPath), '_category_.json');
-                if (srcConfig?.open) {
+                if (config?.open) {
                     console.log(categoryPath, fs.existsSync(categoryPath));
                 }
-                if (srcConfig?.open && fs.existsSync(categoryPath)) {
+                if (config?.open && fs.existsSync(categoryPath)) {
                     console.log('REMOVE CAT', categoryPath);
                     fs.unlinkSync(categoryPath);
                 }
