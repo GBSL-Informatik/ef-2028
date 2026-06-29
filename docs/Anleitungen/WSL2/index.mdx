@@ -13,19 +13,60 @@ WSL2
 
 <Steps>
 1. Öffnen Sie PowerShell als Administrator:in
-    ![](./images/01-powershell-as-admin.png)
+    ![](./images/00-powershell-as-admin.png)
 2. Geben Sie den folgenden Befehl ein und drücken Sie Enter, um WSL zu installieren:
 
    ```powershell
    wsl --install
    ```
 
-   ![](./images/02-wsl-install.png)
+   ![](./images/01-ps-wsl-install.png)
 
    :::details[Troubleshooting]
    [Bei Problemen kann diese Seite helfen](https://learn.microsoft.com/en-us/windows/wsl/troubleshooting#installation-issues)
    :::
 
 3. Starten Sie Ihren Computer neu, wenn Sie dazu aufgefordert werden.
+   ![](./images/02-ps-restart-hint.png)
+4. Ubuntu installieren: Öffnen Sie PowerShell erneut __als Administrator:in__ und geben Sie den folgenden Befehl ein:
 
+   ```powershell
+   wsl --install ubuntu
+   ```
+
+   ![](./images/04-wsl-ubuntu-install.png)
+
+5. Ubuntu __erstmalig__ starten: Benutzer:in und Passwort festlegen:
+
+    ![](./images/05-wsl-ubuntu-user.png)
+
+    ![](./images/06-wsl-ubuntu-metrics-n.png)
+
+
+6. Terminal konfigurieren
+
+    ![](./images/08-terminal-select-ubuntu.png)
+
+    ![](./images/08.2-terminal-default-ubuntu.png)
+
+    ![](./images/08.3-terminal-ubuntu-settings.png)
+
+    Aktuelle Ubuntu-Version prüfen:
+
+    ```bash
+    lsb_release -a
+    ```
+
+    ![](./images/09-ubuntu-version.png)
+
+7. Ubuntu aktualisieren:
+
+   ```bash
+   sudo apt update
+   sudo apt upgrade
+   ```
+
+   ![](./images/10-ubuntu-apt-update.png)
+
+   ![](./images/10.2-ubuntu-apt-upgrade.png)
 </Steps>
