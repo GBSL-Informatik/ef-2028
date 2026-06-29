@@ -111,12 +111,10 @@ const main = async (): Promise<void> => {
         await fsp.cp('CNAME', 'static/CNAME');
     }
     for (const klass of Object.keys(typedConfig)) {
-        // Object.keys(typedConfig).forEach(async (klass) => {
         const config = typedConfig[klass];
         const gitignore: string[] = [];
         const classDir = klass === 'pages' ? 'src/pages/' : `versioned_docs/version-${klass}/`;
         for (const _config of config) {
-            // config.forEach(async (_config) => {
             const config = resolveMaterialConfig(klass, _config);
             const ignore: string[] = [];
             ignore.push(...(config.ignore || []));
