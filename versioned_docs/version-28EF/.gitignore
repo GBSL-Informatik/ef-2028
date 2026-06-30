@@ -1,4 +1,6 @@
-05-Kickoff/*
+05-Kickoff/Anleitungen/*
+!05-Kickoff/Anleitungen/WSL2/
+!05-Kickoff/Anleitungen/_category_.yml
 10-Programmieren/*
 !10-Programmieren/_category_.yml
 10-Programmieren/_category_.json

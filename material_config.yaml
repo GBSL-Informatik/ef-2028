@@ -1,6 +1,9 @@
 28EF:
-    - from: docs/Kickoff/
-      to: versioned_docs/version-28EF/05-Kickoff
+    - from: docs/Anleitungen
+      to: versioned_docs/version-28EF/05-Kickoff/Anleitungen
+      ignore:
+          - WSL2
+          - _category_.yml
     - from: docs/EF-Programmieren/
       to: versioned_docs/version-28EF/10-Programmieren
       ignore:
