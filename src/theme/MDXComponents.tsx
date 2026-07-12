@@ -11,7 +11,6 @@ import Answer from '@tdev-components/Answer';
 import Solution from '@tdev-components/documents/Solution';
 import MdxComment from '@tdev-components/documents/MdxComment';
 import MdxPage from '@tdev-components/MdxPage';
-import TaskState from '@tdev-components/documents/TaskState';
 
 export default {
     // Re-use the default mapping
@@ -25,6 +24,5 @@ export default {
     Answer: Answer,
     Solution: Solution,
     MdxPage: MdxPage,
-    MdxComment: MdxComment,
-    TaskState: TaskState
+    MdxComment: MdxComment
 };
