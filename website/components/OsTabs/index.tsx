@@ -21,13 +21,13 @@ const getValues = (os: OsType[]) => {
 
 const OsTabs = (props: Props) => {
     const tabs = Array.isArray(props.children)
-        ? props.children.map((tab) => tab.props.value)
+        ? props.children.map((tab) => (tab.props as { value: OsType }).value)
         : ['win11', 'win10', 'macOS'];
     return (
         <Tabs
             groupId="operating-systems"
             defaultValue={props.os ? props.os[0] : tabs[0]}
-            values={getValues(props.os || tabs)}
+            values={getValues(props.os || (tabs as OsType[]))}
             lazy
         >
             {props.children}

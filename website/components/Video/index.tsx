@@ -8,9 +8,9 @@ import { mdiWindowMinimize } from '@mdi/js';
 interface Props {
     src: string;
     type?: 'mp4';
-    title?: string | JSX.Element;
+    title?: string | React.ReactNode;
     expanded?: boolean;
-    children?: string | JSX.Element;
+    children?: string | React.ReactNode;
 }
 
 const Video = (props: Props) => {
