@@ -26,8 +26,6 @@ trackedElements:
     dst: src/theme/Admonition/
   - src: src/theme/CodeBlock/
     dst: src/theme/CodeBlock/
-  - src: src/theme/MDXComponents.tsx
-    dst: src/theme/MDXComponents.tsx
   - src: packages/tdev/
     dst: packages/tdev
   - src: updateSync/

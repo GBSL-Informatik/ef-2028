@@ -11,7 +11,7 @@ import {
     devModeAccessLocalFS,
     personalSpaceOverlay
 } from './src/siteConfig/navbarItems';
-import { brythonCodePluginConfig } from './src/siteConfig/pluginConfigs';
+import { brythonCodePluginConfig, yamlLoaderPluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
@@ -106,26 +106,7 @@ const getSiteConfig: SiteConfigProvider = () => {
                 defer: true
             }
         ],
-        plugins: [
-            brythonCodePluginConfig(),
-            () => {
-                return {
-                    name: 'yaml-loader-config',
-                    configureWebpack(config, isServer, { currentBundler }) {
-                        return {
-                            module: {
-                                rules: [
-                                    {
-                                        test: /\.ya?ml$/,
-                                        use: 'yaml-loader'
-                                    }
-                                ]
-                            }
-                        };
-                    }
-                };
-            }
-        ],
+        plugins: [brythonCodePluginConfig(), yamlLoaderPluginConfig],
         docs: {
             lastVersion: 'current',
             routeBasePath: '/',
