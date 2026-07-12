@@ -1,15 +1,15 @@
 28EF:
     - from: docs/Anleitungen
-      to: versioned_docs/version-28EF/05-Kickoff/Anleitungen
+      as: 05-Kickoff/Anleitungen
       ignore:
           - _category_.yml
     - from: docs/EF-Programmieren/
-      to: versioned_docs/version-28EF/10-Programmieren
+      as: 10-Programmieren
       ignore:
           - _category_.yml
       open: true
     - from: docs/OF-Programmieren-1/
-      to: versioned_docs/version-28EF/10-Programmieren/01-Repetition
+      as: 10-Programmieren/01-Repetition
       ignore:
           - _category_.yml
 pages: []
