@@ -28,6 +28,8 @@ trackedElements:
     dst: src/theme/CodeBlock/
   - src: packages/tdev/
     dst: packages/tdev
+    ignore:
+      - material-sync/src/migrate_tdev/migrations
   - src: updateSync/
     dst: updateSync
   - src: .prettierrc
