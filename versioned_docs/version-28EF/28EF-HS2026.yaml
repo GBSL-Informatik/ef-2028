@@ -1,0 +1,113 @@
+- cells:
+    - 14.08.2026
+    - Programmieren
+    - Python Grundlagen und Repetition
+- cells:
+    - 21.08.2026
+    - Programmieren
+    - Infrastruktur, Git, Markdown, Datenstrukturen - Listen
+- cells:
+    - 28.08.2026
+    - Programmieren
+    - Listen, 2D-Listen, Referenzen
+- cells:
+    - 04.09.2026
+    - Programmieren
+    - "Numtrip: Spielfelderstellung, Spielregeln, Spielbrett"
+- cells:
+    - 11.09.2026
+    - Programmieren
+    - "Funktionen & Software Engineering"
+- cells:
+    - 18.09.2026
+    - Sonderwoche
+    - 
+  type: holiday
+  icon: mdiWalletTravel
+- cells:
+    - 25.09.2026
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 02.10.2026
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 09.10.2026
+    - Herbstferien
+    - 🏝️🏖️🏖️😎
+  type: holiday
+- cells:
+    - 16.10.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 23.10.2026
+    - Programmieren
+    - Test Tooling und Programmier-Repe + Listen, [0.5]
+  type: test
+- cells:
+    - 30.10.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 06.11.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 13.11.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 20.11.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 27.11.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 04.12.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 11.12.2026
+    - Programmieren
+    - Test Programmieren [1]
+  type: test
+- cells:
+    - 18.12.2026
+    - Programmieren
+    - 🚧
+- cells:
+    - 25.12.2026
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 01.01.2027
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 08.01.2027
+    - Winterferien
+    - 🏂❄️⛷️🎄🧑‍🎄
+  type: holiday
+  icon: mdiPineTreeVariantOutline
+- cells:
+    - 15.01.2027
+    - Programmieren
+    - 🚧
+- cells:
+    - 22.01.2027
+    - Programmieren
+    - 🚧
+- cells:
+    - 29.01.2027
+    - Programmieren
+    - Abgabe Projekt [1]
