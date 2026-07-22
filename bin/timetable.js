@@ -64,6 +64,7 @@ const CLASS_EVENTS = {
 
 const SCHOOL_EVENTS = {
     // [3]: { desc: 'Notenschluss', type: 'event', icon: 'mdiSchool' }
+    [3]: { desc: 'Notenschluss EF', type: 'event', date: '20.01.2027', icon: 'mdiFlagCheckered' }
 };
 
 const SCHEDULE_EF_HS1 = [

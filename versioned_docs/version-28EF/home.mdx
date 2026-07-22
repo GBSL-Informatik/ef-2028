@@ -4,4 +4,16 @@ sidebar_label: 28EF
 page_id: 5f53eb28-c6c2-4f3f-8a89-0ee2af4472ff
 ---
 
+import SemesterTable from '@tdev-components/SemesterTable';
+import { SortTimeTableByDate } from '@tdev/helpers/time';
+import hs2026 from './28EF-HS2026.yaml';
+
 # 28 EF Informatik
+
+<SemesterTable
+    header={['Datum', 'Thema', 'Inhalt']}
+    compact
+    selectable
+    rows={hs2026}
+    order={SortTimeTableByDate()}
+/>

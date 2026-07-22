@@ -42,12 +42,13 @@
 - cells:
     - 16.10.2026
     - Programmieren
-    - 🚧
+    - Numtrip
 - cells:
     - 23.10.2026
     - Programmieren
-    - Test Tooling und Programmier-Repe + Listen, [0.5]
+    - Test Tooling und Programmier-Repe + Listen
   type: test
+  icon: mdiFractionOneHalf
 - cells:
     - 30.10.2026
     - Programmieren
@@ -75,7 +76,8 @@
 - cells:
     - 11.12.2026
     - Programmieren
-    - Test Programmieren [1]
+    - Test Programmieren
+  icon: mdiNumeric1BoxOutline
   type: test
 - cells:
     - 18.12.2026
@@ -101,6 +103,12 @@
   icon: mdiPineTreeVariantOutline
 - cells:
     - 15.01.2027
+    - Notenschluss EF
+    -
+  type: event
+  icon: mdiFlagCheckered
+- cells:
+    - 20.01.2027
     - Programmieren
     - 🚧
 - cells:
@@ -110,4 +118,6 @@
 - cells:
     - 29.01.2027
     - Programmieren
-    - Abgabe Projekt [1]
+    - Abgabe Projekt
+  type: test
+  icon: mdiNumeric1BoxOutline
