@@ -140,10 +140,10 @@
     {
       "id": "neDSyGYwY8eNTYXBGcZtk",
       "type": "arrow",
-      "x": 177.4999550049642,
-      "y": 368.47250501483893,
-      "width": 93.88888041178384,
-      "height": 0.2778116861979356,
+      "x": 178.8888610049642,
+      "y": 374.97646401483894,
+      "width": 95.83333333333334,
+      "height": 6.111043294270814,
       "angle": 0,
       "strokeColor": "#e03131",
       "backgroundColor": "#0c0c0c",
@@ -159,11 +159,11 @@
         "type": 2
       },
       "seed": 1630457061,
-      "version": 84,
-      "versionNonce": 911681867,
+      "version": 105,
+      "versionNonce": 834857006,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1782729570428,
+      "boundElements": [],
+      "updated": 1782803529725,
       "link": null,
       "locked": false,
       "points": [
@@ -172,12 +172,16 @@
           0
         ],
         [
-          -93.88888041178384,
-          0.2778116861979356
+          -95.83333333333334,
+          -6.111043294270814
         ]
       ],
       "lastCommittedPoint": null,
-      "startBinding": null,
+      "startBinding": {
+        "elementId": "jlNpX5eylzRI8lsYpHN2c",
+        "focus": -0.559215886316039,
+        "gap": 8.055573254882773
+      },
       "endBinding": null,
       "startArrowhead": null,
       "endArrowhead": "triangle",
@@ -186,10 +190,10 @@
     {
       "id": "jlNpX5eylzRI8lsYpHN2c",
       "type": "text",
-      "x": 182.777767259847,
-      "y": 360.2503170148389,
-      "width": 308,
-      "height": 25,
+      "x": 186.944434259847,
+      "y": 359.58365001483895,
+      "width": 606.766398111979,
+      "height": 31.341251993446576,
       "angle": 0,
       "strokeColor": "#e03131",
       "backgroundColor": "#0c0c0c",
@@ -203,20 +207,25 @@
       "index": "a7",
       "roundness": null,
       "seed": 1433878597,
-      "version": 75,
-      "versionNonce": 1910940171,
+      "version": 159,
+      "versionNonce": 1037152878,
       "isDeleted": false,
-      "boundElements": null,
-      "updated": 1782729592949,
+      "boundElements": [
+        {
+          "id": "neDSyGYwY8eNTYXBGcZtk",
+          "type": "arrow"
+        }
+      ],
+      "updated": 1782803529725,
       "link": null,
       "locked": false,
-      "text": "n eingeben und Enter drücken",
-      "fontSize": 20,
+      "text": "n für \"no\" eingeben und mit Enter bestätigen",
+      "fontSize": 25.073001594757258,
       "fontFamily": 8,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "n eingeben und Enter drücken",
+      "originalText": "n für \"no\" eingeben und mit Enter bestätigen",
       "autoResize": true,
       "lineHeight": 1.25
     }

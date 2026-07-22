@@ -1,50 +1,56 @@
 tdevPath: ../teaching-dev
 expectedTdevBranch: main
 trackedElements:
-    - src: docusaurus.config.ts
-      dst: docusaurus.config.ts
-    - src: tsconfig.package.json
-      dst: tsconfig.package.json
-    - src: tsconfig.tdev.json
-      dst: tsconfig.tdev.json
-    - src: src/
-      dst: src
-      ignore:
-          - pages/index.tsx
-          - pages/__index.tsx
-          - pages/.gitignore
-          - theme/**
-    - src: src/theme/Root.tsx
-      dst: src/theme/Root.tsx
-    - src: src/theme/EditThisPage/
-      dst: src/theme/EditThisPage/
-    - src: src/theme/NavbarItem/
-      dst: src/theme/NavbarItem/
-    - src: src/theme/DocSidebarItem/
-      dst: src/theme/DocSidebarItem/
-    - src: src/theme/Admonition/
-      dst: src/theme/Admonition/
-    - src: src/theme/CodeBlock/
-      dst: src/theme/CodeBlock/
-    - src: src/theme/MDXComponents.tsx
-      dst: src/theme/MDXComponents.tsx
-    - src: packages/tdev/
-      dst: packages/tdev
-    - src: updateSync/
-      dst: updateSync
-    - src: .prettierrc
-      dst: .prettierrc
-    - src: .prettierignore
-      dst: .prettierignore
-    - src: vitest.config.ts
-      dst: vitest.config.ts
-    - src: static/tdev-artifacts/
-      dst: static/tdev-artifacts/
-      ignore:
-          - '*/**'
+  - src: docusaurus.config.ts
+    dst: docusaurus.config.ts
+  - src: tsconfig.package.json
+    dst: tsconfig.package.json
+  - src: tsconfig.tdev.json
+    dst: tsconfig.json
+  - src: src/
+    dst: src
+    ignore:
+      - pages/index.tsx
+      - pages/__index.tsx
+      - pages/.gitignore
+      - theme/**
+  - src: src/theme/Root.tsx
+    dst: src/theme/Root.tsx
+  - src: src/theme/EditThisPage/
+    dst: src/theme/EditThisPage/
+  - src: src/theme/NavbarItem/
+    dst: src/theme/NavbarItem/
+  - src: src/theme/DocSidebarItem/
+    dst: src/theme/DocSidebarItem/
+  - src: src/theme/Admonition/
+    dst: src/theme/Admonition/
+  - src: src/theme/CodeBlock/
+    dst: src/theme/CodeBlock/
+  - src: packages/tdev/
+    dst: packages/tdev
+    ignore:
+      - material-sync/src/migrate_tdev/migrations
+  - src: updateSync/
+    dst: updateSync
+  - src: .prettierrc
+    dst: .prettierrc
+  - src: .prettierignore
+    dst: .prettierignore
+  - src: vitest.config.ts
+    dst: vitest.config.ts
+  - src: static/tdev-artifacts/
+    dst: static/tdev-artifacts/
+    ignore:
+      - '*/**'
+  - src: tsconfig.docusaurus.json
+    dst: tsconfig.docusaurus.json
+  - src: static/bry-libs/
+    dst: static/bry-libs
+  - src: static/pyodide.sw.js
+    dst: static/pyodide.sw.js
 watchedElements:
-    - .babel.config.js
-    - package.json
-    - .env.example
-    - static/bry-libs/
-    - src/theme/
+  - .babel.config.js
+  - package.json
+  - .env.example
+  - static/bry-libs/
+  - src/theme/

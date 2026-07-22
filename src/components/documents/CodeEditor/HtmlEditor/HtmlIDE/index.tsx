@@ -69,7 +69,7 @@ const HtmlIDE = observer((props: Props) => {
             .map((f) => {
                 const meta = extractMetaProps({ metastring: f.meta || '' });
                 return {
-                    meta: meta as MetaProps,
+                    meta: meta as Partial<MetaProps>,
                     path: (meta as { path: string }).path,
                     id: (meta as { id?: string }).id,
                     lang: f.lang,
@@ -90,8 +90,7 @@ const HtmlIDE = observer((props: Props) => {
             parts.forEach((part, idx) => {
                 const isLast = idx === parts.length - 1;
                 const nextItem = currentDir.children.find((c) => typeof c === 'object' && c.name === part) as
-                    | DirType
-                    | undefined;
+                    DirType | undefined;
                 if (nextItem) {
                     currentDir = nextItem;
                 } else {
