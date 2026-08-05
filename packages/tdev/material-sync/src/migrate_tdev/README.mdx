@@ -197,7 +197,7 @@ import { applySearchAndReplace } from '../helpers/searchAndReplace';
 import { hasUncommittedChanges } from '../helpers/gitHelpers';
 
 const migrate: MigrationRunner = async (root, apiMode, managed, timestamp): Promise<void> => {
-    // alle Dateien im Projekt, die den String "@observable.ref" enthalten.
+    // alle Dateien im Projekt, die den String "@observableRef" enthalten.
     const files = await filesContainingMatch(root, `@observable\\.ref`);
     await applySearchAndReplace(files, [
         {
@@ -216,7 +216,7 @@ const migrate: MigrationRunner = async (root, apiMode, managed, timestamp): Prom
 
     const hasChanges = await hasUncommittedChanges();
     if (hasChanges) {
-        await $`git commit -am ${'[tdev] migrate imports to mobx@7 (using @observableRef instead of @observable.ref).'}`;
+        await $`git commit -am ${'[tdev] migrate imports to mobx@7 (using @observableRef instead of @observableRef).'}`;
     }
 };
 
