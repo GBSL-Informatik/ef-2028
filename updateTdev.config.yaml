@@ -29,7 +29,7 @@ trackedElements:
   - src: packages/tdev/
     dst: packages/tdev
     ignore:
-      - material-sync/src/migrate_tdev/migrations
+      - migrate-tdev/migrations
   - src: updateSync/
     dst: updateSync
   - src: .prettierrc
