@@ -41,6 +41,7 @@ import ChoiceAnswer from '@tdev-models/documents/Assessable/ChoiceAnswer';
 import TrueFalseAnswer from '@tdev-models/documents/Assessable/TrueFalseAnswer';
 import Quiz from '@tdev-models/documents/Assessable/Quiz';
 import { isStalledUpdate } from '@tdev/helpers/isStalledUpdate';
+import Unknown from '@tdev-models/documents/Unknown';
 
 const IsNotUniqueError = (error: any) => {
     try {
@@ -375,7 +376,7 @@ class DocumentStore extends iStore<`delete-${string}`> {
     @action
     addPresentedDocumentToStore(studentGroup: StudentGroup) {
         const presentedDoc = studentGroup.presentedDocumentProps;
-        if (!presentedDoc) {
+        if (!presentedDoc || !studentGroup.canPresent) {
             return;
         }
         const rawDoc = presentedDoc.document;

@@ -23,6 +23,8 @@ import type ChoiceAnswer from '@tdev-models/documents/Assessable/ChoiceAnswer';
 import type TrueFalseAnswer from '@tdev-models/documents/Assessable/TrueFalseAnswer';
 import type Quiz from '@tdev-models/documents/Assessable/Quiz';
 import iAssessable from '@tdev-models/documents/Assessable/iAssessable';
+import iDocument from '@tdev-models/iDocument';
+import Unknown from '@tdev-models/documents/Unknown';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -141,6 +143,7 @@ export interface TaskableDocumentMapping extends AssessableDataMapping {
 }
 
 export interface TypeDataMapping extends TaskableDocumentMapping, ContainerTypeDataMapping {
+    ['_unknown_']: { name: string };
     ['code']: CodeData;
     // TODO: rename to `code_version`
     ['script_version']: ScriptVersionData;
@@ -187,6 +190,7 @@ null as unknown as EnsureAllTaskable<TaskableTypeModelMapping>;
 
 export interface TypeModelMapping
     extends TaskableTypeModelMapping, ContainerTypeModelMapping, AssessableTypeModelMapping {
+    ['_unknown_']: Unknown; // should never be instantiated, it's just a placeholder for type safety
     ['code']: Code;
     // TODO: rename to `code_version`?
     ['script_version']: ScriptVersion;

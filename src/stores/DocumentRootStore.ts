@@ -26,6 +26,7 @@ import { ModelMeta as StringMeta } from '@tdev-models/documents/String';
 import { ModelMeta as QuillV2Meta } from '@tdev-models/documents/QuillV2';
 
 import { CmsTextMeta } from '@tdev-models/documents/CmsText';
+import { UnknownMeta } from '@tdev-models/documents/Unknown';
 
 type LoadConfig = {
     /** if true, user permissions will be loaded
@@ -40,9 +41,9 @@ type LoadConfig = {
     /**
      * @option 'replace': the document root will be created and when already exists,
      *                    it will replace the existing one.
-     * @option 'addIfMissing': when the document root does not exist in the mobx store, it will
+     * @option 'addIfMissing': when the document root does not exist in the mobx store (or has an _unknown_ type), it will
      *                         be added. But no new document root will be created on the api.
-     * @option false: the document root will not be loaded.
+     * @option false: the document root will not be loaded
      * @default 'replace'
      */
     documentRoot?: 'replace' | 'addIfMissing' | boolean;
@@ -71,6 +72,7 @@ type BatchedMeta = {
 };
 
 const DefaultMeta: TypeMeta<DocumentType>[] = [
+    new UnknownMeta({}),
     new CodeMeta({}),
     new MdxCommentMeta({}),
     new RestrictedMeta({}),
@@ -99,6 +101,19 @@ export class DocumentRootStore extends iStore {
     @computed
     get defaultMetas(): TypeMeta<DocumentType>[] {
         return [...DefaultMeta, ...this.root.componentStore.defaultMeta];
+    }
+
+    @action
+    cleanupUnknownDocumentRoots(removePermissions?: boolean) {
+        const knownRoots = this.documentRoots.filter((dr) => !dr.isUnknown);
+        if (removePermissions) {
+            const unknownRoots = this.documentRoots.filter((dr) => dr.isUnknown);
+            this.root.permissionStore.removeFromStoreByDocumentRootIds(unknownRoots.map((dr) => dr.id));
+        }
+        if (knownRoots.length === this.documentRoots.length) {
+            return;
+        }
+        this.documentRoots.replace(knownRoots);
     }
 
     @action
@@ -313,7 +328,7 @@ export class DocumentRootStore extends iStore {
         if (config.load.documentRoot) {
             if (config.load.documentRoot === 'addIfMissing') {
                 const current = this.find(data.id);
-                if (!current) {
+                if (!current || current.isUnknown) {
                     this.addDocumentRoot(documentRoot);
                 }
             } else {
