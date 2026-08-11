@@ -1,0 +1,345 @@
+---
+page_id: bb42972c-ce24-4d6a-b120-e60bd51aec42
+unlisted: true
+---
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+
+# Einstiegsübungen Programmieren OF
+
+Im folgenden finden Sie einige kleine Aufgaben, deren Bearbeitung das gesamte Wissen und Verständnis der Inhalte des obligatorischen Fachs Informatik erfordert. Keine Angst, wenn Sie diese Aufgaben nicht auf Anhieb lösen können - mehrfaches Probieren ist durchaus normal und in den Unterlagen, durch die Hilfestellungen auf der Seite oder von den Lehrkräften erhalten Sie sonst Tipps und Hinweise.
+
+Zum Einstieg aber gleich etwas neues 😎
+
+:::tip[Ausprobieren]
+Probieren Sie alle Beispiele aus, so dass Sie ein Verständnis entwickeln und die Codesequenzen später auch selbständig einsetzen können.
+:::
+
+:::flex{columns="2" minWidth="440px" gap="1rem"}
+    <ChoiceAnswer keepExpanded='selected' title="Ausgabe" correct={[3]}  id="b3a28d81-3158-412c-98f6-018e48e7e5ee">
+        > Welche Option erzeugt in Python eine *einzeilige Ausgabe* `Hallo Welt`?
+
+        1. 
+            ```py
+            print('Hallo')
+            print('Welt')
+            ```
+        2. 
+            ```py
+            print('Hallo', end='')
+            print('Welt')
+            ```
+        4. 
+            ```py
+            print('Hallo', end=' ')
+            print('Welt')
+            ```
+        5. 
+            ```py
+            print_on_same_line('Hallo')
+            print('Welt')
+            ```
+    </ChoiceAnswer>
+::br
+    <ChoiceAnswer keepExpanded='selected' title="Zahlenbereich" correct={[2]}  id="9224748b-782f-4eb4-9daf-9604e3309f2a">
+        > Welcher Code gibt die Zahlen `2, 3, 4, 5, 6, ` aus?
+
+        1. 
+            ```py
+            Z = 6
+            for i in range(1, Z):
+                print(i, end=', ')
+            ```
+        2. 
+            ```py
+            Z = 6
+            for i in range(2, Z + 1):
+                print(i, end=', ')
+            ```
+        3.
+            ```py
+            Z = 6
+            for i in range(1, Z + 1):
+                print(i, end=', ')
+            ```
+        4. 
+            ```py
+            Z = 6
+            for i in range(2, Z):
+                print(i, end=', ')
+            ```
+    </ChoiceAnswer>
+::br
+    <ChoiceAnswer keepExpanded='selected' title="Teilbarkeit" correct={[4]}  id="46571102-1f9b-4f61-9cd5-b91b08ad5f8b">
+        > Welcher Code überprüft, ob die Zahl `Z` durch die Zahl `5` teilbar ist?
+
+        1. 
+            ```py
+            Z = 10
+            if Z / 5 == 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+        2. 
+            ```py
+            Z = 10
+            if Z // 5 == 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+        3.
+            ```py
+            Z = 10
+            if Z % 5 = 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+        4. 
+            ```py
+            Z = 10
+            if Z % 5 == 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+    </ChoiceAnswer>
+::br
+```py live_py slim
+# zum ausprobieren
+
+```
+:::
+
+## Aufgabe 1
+
+:::::aufgabe[Schritt 1]
+<Answer type="state" id="d25f0cbd-d494-4766-bd55-c2c83b6e4b93" />
+
+Erstellen Sie ein Programm, welches für eine gegebene Zahl `Z` prüft, ob diese durch die Zahlen 2, 3, 4, ... (bis zur gegebenen Zahl `Z`) teilbar ist. Dabei soll ein `!` ausgegeben werden, wenn die Zahl teilbar ist, und ein `.` wenn sie nicht teilbar ist. Die Ausgabe soll in einer Zeile erfolgen.
+
+::::info[Beispiele]
+:::flex
+```
+(7)     ! . . . . . !
+```
+::br
+```
+(10)    ! ! . . ! . . . . !
+```
+::br
+```
+(15)    ! . ! . ! . . . . . . . . . !
+```
+:::
+::::
+
+```py live_py id=06c789a6-ccd8-45d5-8254-c87b41ec7d2a
+Z = 7
+
+```
+
+:::tip
+Verändern Sie den Initialisierungswert der Variable `Z`, um das Programm mit anderen Zahlen zu testen.
+:::
+
+<Solution id="dcc8b9cd-4542-47ed-87c0-6916f6df3a0a">
+```py live_py slim
+Z = 10
+for i in range(1, Z + 1):
+    if Z % i == 0:
+        print('!', end=' ')
+    else:
+        print('.', end=' ')
+```
+</Solution>
+:::::
+
+## Aufgabe 2
+:::aufgabe[Schritt 2]
+<Answer type="state" id="facfb748-641a-4d8e-8697-ccd210d09092" />
+
+Erweitern Sie das Programm aus Schritt 1 so, dass die Ausgabe für jede Zahl von 1 bis 20 erfolgt:
+
+```
+!
+! !
+! . !
+! ! . !
+! . . . !
+! ! ! . . !
+! . . . . . !
+! ! . ! . . . !
+! . ! . . . . . !
+! ! . . ! . . . . !
+! . . . . . . . . . !
+! ! ! ! . ! . . . . . !
+! . . . . . . . . . . . !
+! ! . . . . ! . . . . . . !
+! . ! . ! . . . . . . . . . !
+! ! . ! . . . ! . . . . . . . !
+! . . . . . . . . . . . . . . . !
+! ! ! . . ! . . ! . . . . . . . . !
+! . . . . . . . . . . . . . . . . . !
+! ! . ! ! . . . . ! . . . . . . . . . ! 
+```
+
+```py live_py id=0912d600-d253-4465-b0e8-a640935303c4
+
+```
+
+<Solution id="a168db60-5cb8-4c9a-9457-edae55e9f59b">
+```py live_py slim
+for z in range(1, 21):
+    for i in range(1, z + 1):
+        if z % i == 0:
+            print('!', end=' ')
+        else:
+            print('.', end=' ')
+    print()  # Neue Zeile nach jeder Zahl
+```
+</Solution>
+:::
+
+:::aufgabe[Vorbereitung]
+<ChoiceAnswer keepExpanded='selected' multiple title="Ausgabe" correct={[1,2,3]} randomizeOptions id="9fe9ad09-f70c-417b-879a-c641aeec4148">
+    > Welche Befehle (mehrere möglich) stellen sicher, dass der Variable `msg` ein Text mit der Länge `10` zugeordnet wird?
+
+    1. 
+        ```py
+        msg = 'Hallo'.ljust(10, '.')
+        print(msg)
+        ```
+    2. 
+        ```py
+        msg = 'Hallo'.rjust(10, '.')
+        print(msg)
+        ```
+    3.
+        ```py
+        msg = 'Hallo'
+        msg = msg + '.' * (10 - len(msg))
+        print(msg)
+        ```
+    4. 
+        ```py
+        msg = 'Hallo'
+        msg = msg + '.' * 10
+        print(msg)
+        ```
+</ChoiceAnswer>
+
+```py live_py slim
+# zum ausprobieren
+
+```
+
+Halten Sie kurz fest:
+- was macht Python, wenn ein Text multipliziert wird?
+- was machen `ljust()` und `rjust()` und welche Parameter benötigen sie?¨
+- Wann könnte dies nützlich sein?
+
+<Answer type="text" id="2f9ef3f4-4837-4805-bbcd-388d7bdc9106" />
+:::
+
+## Aufgabe 3
+
+:::aufgabe[Schritt 3]
+<Answer type="state" id="878b0d6d-385c-48ff-aa1d-de1ee560ec58" />
+
+Letzter Erweiterung: Nun soll bei der Ausgabe vor jeder Zeile die Zahl ausgegeben werden, für die die Teilbarkeit überprüft wird. Die Ausgabe soll so aussehen:
+
+```
+ (1)   !
+ (2)   ! !
+ (3)   ! . !
+ (4)   ! ! . !
+ (5)   ! . . . !
+ (6)   ! ! ! . . !
+ (7)   ! . . . . . !
+ (8)   ! ! . ! . . . !
+ (9)   ! . ! . . . . . !
+(10)   ! ! . . ! . . . . !
+(11)   ! . . . . . . . . . !
+(12)   ! ! ! ! . ! . . . . . !
+(13)   ! . . . . . . . . . . . !
+(14)   ! ! . . . . ! . . . . . . !
+(15)   ! . ! . ! . . . . . . . . . !
+(16)   ! ! . ! . . . ! . . . . . . . !
+(17)   ! . . . . . . . . . . . . . . . !
+(18)   ! ! ! . . ! . . ! . . . . . . . . !
+(19)   ! . . . . . . . . . . . . . . . . . !
+(20)   ! ! . ! ! . . . . ! . . . . . . . . . ! 
+```
+
+```py live_py id=5fce713f-c96a-469b-8e53-3925ab96bda7
+
+```
+
+<Solution id="240c8644-57bc-46f1-b653-8e64bf9f08ee">
+```py live_py slim
+for z in range(1, 21):
+    print(f'({z})   '.rjust(7), end='')
+    for i in range(1, z + 1):
+        if z % i == 0:
+            print('!', end=' ')
+        else:
+            print('.', end=' ')
+    print()  # Neue Zeile nach jeder Zahl
+```
+</Solution>
+:::
+
+## ⭐ Zusatzaufgabe
+
+:::aufgabe[Primzahlen]
+<Answer type="state" id="0599d543-1d91-442b-9c20-1fe2fdd201ee" />
+
+Markieren Sie alle Zeilen, die Primzahlen darstellen. Eine Primzahl ist eine Zahl, die nur durch 1 und sich selbst teilbar ist. Die Ausgabe soll so aussehen:
+```
+ (1)   !
+ (2)   ! ! <--
+ (3)   ! . ! <--
+ (4)   ! ! . !
+ (5)   ! . . . ! <--
+ (6)   ! ! ! . . !
+ (7)   ! . . . . . ! <--
+ (8)   ! ! . ! . . . !
+ (9)   ! . ! . . . . . !
+(10)   ! ! . . ! . . . . !
+(11)   ! . . . . . . . . . ! <--
+(12)   ! ! ! ! . ! . . . . . !
+(13)   ! . . . . . . . . . . . ! <--
+(14)   ! ! . . . . ! . . . . . . !
+(15)   ! . ! . ! . . . . . . . . . !
+(16)   ! ! . ! . . . ! . . . . . . . !
+(17)   ! . . . . . . . . . . . . . . . ! <--
+(18)   ! ! ! . . ! . . ! . . . . . . . . !
+(19)   ! . . . . . . . . . . . . . . . . . ! <--
+(20)   ! ! . ! ! . . . . ! . . . . . . . . . ! 
+```
+
+```py live_py id=f645c9fd-90a2-4343-8764-de053d7b3072
+
+```
+
+<Solution id="366e6f16-d0f4-4b35-928f-2398ac4059cb">
+
+```py live_py slim
+for z in range(1, 21):
+    print(f'({z})   '.rjust(7), end='')
+    teiler = 0
+    for i in range(1, z + 1):
+        if z % i == 0:
+            print('!', end=' ')
+            teiler = teiler + 1
+        else:
+            print('.', end=' ')
+    if teiler == 2:
+        print('<--', end='')
+    print() 
+```
+</Solution>
+:::
+
