@@ -1,0 +1,141 @@
+---
+page_id: bb42972c-ce24-4d6a-b120-e60bd51aec42
+---
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+
+# Übungen Programmieren OF
+
+:::flex
+    <ChoiceAnswer title="Python Ausgabe" correct={[3]}  id="b3a28d81-3158-412c-98f6-018e48e7e5ee">
+        > Welche Option erzeugt in Python eine *einzeilige Ausgabe* `Hallo Welt`?
+
+        1. 
+            ```py
+            print('Hallo')
+            print('Welt')
+            ```
+        2. 
+            ```py
+            print('Hallo', end='')
+            print('Welt')
+            ```
+        4. 
+            ```py
+            print('Hallo', end=' ')
+            print('Welt')
+            ```
+        5. 
+            ```py
+            print_on_same_line('Hallo')
+            print('Welt')
+            ```
+    </ChoiceAnswer>
+::br
+    <ChoiceAnswer title="Python Zahlenbereich" correct={[2]}  id="9224748b-782f-4eb4-9daf-9604e3309f2a">
+        > Welcher Code gibt die Zahlen `2, 3, 4, 5, 6, ` aus?
+
+        1. 
+            ```py
+            Z = 6
+            for i in range(1, Z):
+                print(i, end=', ')
+            ```
+        2. 
+            ```py
+            Z = 6
+            for i in range(2, Z + 1):
+                print(i, end=', ')
+            ```
+        3.
+            ```py
+            Z = 6
+            for i in range(1, Z + 1):
+                print(i, end=', ')
+            ```
+        4. 
+            ```py
+            Z = 6
+            for i in range(2, Z):
+                print(i, end=', ')
+            ```
+    </ChoiceAnswer>
+::br
+    <ChoiceAnswer title="Python Teilbarkeit" correct={[4]}  id="46571102-1f9b-4f61-9cd5-b91b08ad5f8b">
+        > Welcher Code überprüft, ob die Zahl `Z` durch die Zahl `5` teilbar ist?
+
+        1. 
+            ```py
+            Z = 10
+            if Z / 5 == 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+        2. 
+            ```py
+            Z = 10
+            if Z // 5 == 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+        3.
+            ```py
+            Z = 10
+            if Z % 5 = 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+        4. 
+            ```py
+            Z = 10
+            if Z % 5 == 0:
+                print(f'{Z} ist durch 5 teilbar')
+            else:
+                print(f'{Z} ist nicht durch 5 teilbar')
+            ```
+    </ChoiceAnswer>
+::br{minWidth="250px"}
+```py live_py slim
+# zum ausprobieren
+
+```
+:::
+
+:::::aufgabe[Schritt 1]
+<Answer type="state" id="d25f0cbd-d494-4766-bd55-c2c83b6e4b93" />
+
+Erstellen Sie ein Programm, welches für eine gegebene Zahl prüft, ob diese durch die Zahlen 2, 3, 4, ... (bis zur gegebenen Zahl) teilbar ist. Dabei soll ein `:` ausgegeben werden, wenn die Zahl teilbar ist, und ein `.` wenn sie nicht teilbar ist. Die Ausgabe soll in einer Zeile erfolgen.
+
+::::info[Beispiele]
+:::flex
+```
+(7)     : . . . . . :
+```
+::br
+```
+(10)    : : . . : . . . . :
+```
+::br
+```
+(15)    : . : . : . . . . . . . . . :
+```
+:::
+::::
+
+```py live_py id=953b25a6-2fad-44af-95b1-4a11b0574f5f
+
+```
+
+<Solution id="dcc8b9cd-4542-47ed-87c0-6916f6df3a0a">
+```py live_py slim
+Z = 10
+for i in range(1, Z + 1):
+    if Z % i == 0:
+        print(':', end=' ')
+    else:
+        print('.', end=' ')
+```
+</Solution>
+:::::
