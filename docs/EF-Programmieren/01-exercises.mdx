@@ -68,6 +68,71 @@ Probieren Sie alle Beispiele aus, so dass Sie ein Verständnis entwickeln und di
             ```
     </ChoiceAnswer>
 ::br
+    <ChoiceAnswer keepExpanded='selected' title="Ganzzahldivision" correct={[3]}  id="53dbf74a-d4c3-4daf-986d-b09e87712ad0">
+        > Bei welchem Code wird der **ganzzahlige** Teil einer **Division mit Rest** ausgegeben?
+
+        1. 
+            ```py
+            Z = 14
+            t = 3
+            res = Z / 4
+            print(res)
+            ```
+        2. 
+            ```py
+            Z = 14
+            t = 3
+            res = Z % 4
+            print(res)
+            ```
+        3.
+            ```py
+            Z = 14
+            t = 3
+            res = Z // 4
+            print(res)
+            ```
+        4. 
+            ```py
+            Z = 14
+            t = 3
+            res = Z ** 4
+            print(res)
+            ```
+    </ChoiceAnswer>
+    <ChoiceAnswer keepExpanded='selected' title="Ganzzahldivision" correct={[2]}  id="d0f58b38-0fa9-4709-9f3c-f9afa892920f">
+        > Bei welchem Code wird der **Restwert**-Teil einer **Division mit Rest** ausgegeben?
+
+        1. 
+            ```py
+            Z = 14
+            t = 3
+            res = Z / 4
+            print(res)
+            ```
+        2. 
+            ```py
+            Z = 14
+            t = 3
+            res = Z % 4
+            print(res)
+            ```
+        3.
+            ```py
+            Z = 14
+            t = 3
+            res = Z // 4
+            print(res)
+            ```
+        4. 
+            ```py
+            Z = 14
+            t = 3
+            res = Z ** 4
+            print(res)
+            ```
+    </ChoiceAnswer>
+::br
     <ChoiceAnswer keepExpanded='selected' title="Teilbarkeit" correct={[4]}  id="46571102-1f9b-4f61-9cd5-b91b08ad5f8b">
         > Welcher Code überprüft, ob die Zahl `Z` durch die Zahl `5` teilbar ist?
 
@@ -112,7 +177,6 @@ Probieren Sie alle Beispiele aus, so dass Sie ein Verständnis entwickeln und di
 :::
 
 ## Aufgabe 1
-
 :::::aufgabe[Schritt 1]
 <Answer type="state" id="d25f0cbd-d494-4766-bd55-c2c83b6e4b93" />
 
@@ -293,7 +357,7 @@ for z in range(1, 21):
 </Solution>
 :::
 
-## ⭐ Zusatzaufgabe
+## ⭐ Aufgabe 4
 
 :::aufgabe[Primzahlen]
 <Answer type="state" id="0599d543-1d91-442b-9c20-1fe2fdd201ee" />
@@ -345,3 +409,166 @@ for z in range(1, 21):
 </Solution>
 :::
 
+## Aufgabe 5
+:::::aufgabe[Schritt 1]
+<Answer type="state" id="6446018c-f8e8-4c89-9d77-cdf759c55018" />
+
+Ihr Taschenrechner hat einen Wackelkontakt: Er kennt zwar noch die vier Grundrechenarten `+`, `-`, `*`, `/`, aber die Kabel sind vertauscht worden. Wenn man ihn benutzt, rechnet er nicht das, was man eingibt, sondern etwas anderes — aber immer auf die gleiche (falsche) Art.
+
+Erstellen Sie ein Programm, welches von der Benutzer:in zwei ganze Zahlen `a` und `b` sowie einen Operator (`+`, `-`, `*` oder `/`) einliest und je nach eingegebenem Operator folgendes berechnet und ausgibt:
+
+| Eingabe | Der Taschenrechner berechnet stattdessen |
+|---------|------------------------------------------|
+| `+`     | Subtraktion                              |
+| `-`     | Multiplikation                           |
+| `*`     | Ganzzahl-Teil der Division mit Rest      |
+| `/`     | Restwert-Teil der Division mit Rest      |
+
+::::info[Beispiele]
+:::flex
+```
+> a eingeben: 7
+> b eingeben: 3
+> Operator eingeben: +
+> Resultat: 4
+```
+::br
+```
+> a eingeben: 5
+> b eingeben: 5
+> Operator eingeben: -
+> Resultat: 25
+```
+:::
+::::
+
+```py live_py id=9b8b97fc-bc75-4ff9-a47c-e3e13e25c624
+```
+
+<Solution id="c13a96ca-601e-4309-bae8-f489d8d01cd1">
+```py live_py slim
+a = int(input('a eingeben: '))
+b = int(input('b eingeben: '))
+op = input('Operator eingeben: ')
+if op == '+':
+    print(f'Resultat: {a - b}')
+elif op == '-':
+    print(f'Resultat: {a * b}')
+elif op == '*':
+    print(f'Resultat: {a // b}')
+elif op == '/':
+    print(f'Resultat: {a % b}')
+```
+</Solution>
+:::::
+
+## Aufgabe 6
+:::aufgabe[Vorbereitung]
+<ChoiceAnswer keepExpanded='selected' title="Mehrere Versuche" correct={[4]} randomizeOptions id="b7d0fa2c-d2f3-4295-a634-691a25a4e917">
+    > Welcher Code lässt die Userin so lange etwas eintippen, bis sie das Codewort "EF-INFO" erraten hat, und gibt dann `Bravo!` aus?
+
+    1. 
+        ```py
+        eingabe = input('Codewort eingeben: ')
+        if eingabe == 'EF-INFO':
+            print('Bravo!')
+        else:
+            print('Leider falsch :(')
+        ```
+    2. 
+        ```py
+        for i in range(3):
+            eingabe = input('Codewort eingeben: ')
+            if eingabe == 'EF-INFO':
+                print('Bravo!')
+            else:
+                print('Leider falsch :(')
+        ```
+    3.
+        ```py
+        eingabe = input('Codewort eingeben: ')
+        if eingabe == 'EF-INFO':
+            print('Bravo!')
+        else:
+            eingabe = input('Codewort eingeben: ')
+            if eingabe == 'EF-INFO':
+                print('Bravo!')
+            else:
+                print('Leider falsch :(')
+        ```
+    4. 
+        ```py
+        erraten = False
+        eingabe = input('Codewort eingeben: ')
+        while not erraten:
+            if eingabe == 'EF-INFO':
+                print('Bravo!')
+                erraten = True
+            else:
+                print('Leider falsch :(')
+                eingabe = input('Codewort eingeben: ')
+        ```
+</ChoiceAnswer>
+```py live_pyo slim
+# zum ausprobieren
+
+```
+
+Halten Sie kurz fest:
+- Wie wird geprüft, ob es noch einen weiteren Versuch braucht?
+- Wie wird sichergestellt, dass nach korrektem Erraten nicht nochmal versucht wird?
+
+<Answer type="text" id="9fd0f87f-0bb4-43a8-9fc6-269436a8bf3e" />
+
+:::
+
+:::::aufgabe[Schritt 2]
+<Answer type="state" id="50e569db-78d8-4dd5-ad42-c2fd79e4a0f4" />
+
+Erweitern Sie Ihr Programm aus dem vorherigen Schritt nun so, dass bei einer Eingabe eines unbekannten Operators eine entsprechende Fehlermeldung erscheint und der User / die Userin den Operator nochmal neu eingeben muss – und zwar so lange, bis es ein gültiger Operator ist.
+
+:::info[Beispiel]
+```
+> a eingeben: 7
+> b eingeben: 3
+> Operator eingeben: $
+> $ ist kein gültiger Operator.
+> Operator eingeben: hallovelo
+> hallovelo ist kein gültiger Operator.
+> Operator eingeben: -
+> Resultat: 21
+```
+:::
+
+:::tip[Darstellung]
+Bei diesem Code-Editor erscheint für die Eingabe ein Eingabefeld anstelle eines Pop-Ups. Zudem ist es normal, dass die Eingaben nach dem Drücken der [[Enter]]-Taste direkt wieder verschwinden.
+:::
+
+```py live_pyo id="4f89e746-63df-4422-9afa-df6047657ab6"
+```
+
+<Solution id="4d2e964f-46f0-4119-aca0-251851ef3a2c">
+```py live_pyo
+a = int(input('a eingeben: '))
+b = int(input('b eingeben: '))
+op = input('Operator eingeben: ')
+ok = False
+while not ok:
+    if op == '+':
+        print(f'Resultat: {a - b}')
+        ok = True
+    elif op == '-':
+        print(f'Resultat: {a * b}')
+        ok = True
+    elif op == '*':
+        print(f'Resultat: {a // b}')
+        ok = True
+    elif op == '/':
+        print(f'Resultat: {a % b}')
+        ok = True
+    else:
+        print(f'{op} ist kein gültiger Operator.')
+        op = input('Operator eingeben: ')
+```
+</Solution>
+:::::
