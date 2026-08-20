@@ -43,7 +43,7 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
     @observable accessor scrollTo: boolean = false;
     @observable accessor _assessed: boolean;
     // @observableRef accessor scoringFunction: ((self: this) => Assessement) | null = null;
-    @observableRef accessor linkedMeta: AssessableMeta<T> | null = null;
+    @observableRef accessor _linkedMeta: AssessableMeta<T> | null = null;
     @observable accessor showAllOptions: boolean = false;
 
     constructor(props: DocumentProps<T>, store: DocumentStore) {
@@ -53,9 +53,21 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         this._checkIntegrity();
     }
 
+    @computed
+    get linkedMeta() {
+        if (!this._linkedMeta && this.quiz) {
+            // try getting a linked meta from the quiz
+            const refMeta = this.root?.allDocuments.find(
+                (doc) => doc.type === this.type && !!doc._linkedMeta && doc.qid === this.qid
+            ) as iAssessable<T> | undefined;
+            return refMeta?._linkedMeta;
+        }
+        return this._linkedMeta;
+    }
+
     @action
     setLinkedMeta(metadata: AssessableMeta<T>) {
-        this.linkedMeta = metadata;
+        this._linkedMeta = metadata;
         this.onLinkedMetaChange();
     }
 
@@ -107,9 +119,13 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
     @computed
     get editingIconState() {
         return {
-            path: mdiTooltipQuestionOutline,
+            path: this.icon,
             color: this.isAssessed ? CorrectnessColors[this.correctness] : IfmColors.gray,
-            title: this.isNA ? 'N/A' : `${this.hits}/${this.maxHits}`
+            title: this.isAssessed
+                ? this.assessment?.scoring
+                    ? `${this.assessment.scoring.pointsAchieved}/${this.assessment.scoring.maxPoints}`
+                    : `${this.hits}/${this.maxHits}`
+                : 'N/A'
         };
     }
 
@@ -138,7 +154,7 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         if (this.type === 'quiz' || !this.inQuiz) {
             return undefined;
         }
-        const quiz = this.root?.documents.find(
+        const quiz = this.root?.allDocuments.find(
             (doc) => doc.authorId === this.authorId && doc.type === 'quiz'
         );
         return quiz as Quiz | undefined;
@@ -164,11 +180,6 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
     }
 
     @computed
-    get isNA(): boolean {
-        return this.hits === 0 && this.misses === 0;
-    }
-
-    @computed
     get assessment(): Assessement | undefined {
         return this.scoringFunction?.(this);
     }
@@ -189,7 +200,7 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
 
     @computed
     get correctness(): Correctness {
-        if (!this.isAssessed || this.isNA) {
+        if (!this.isAssessed) {
             return Correctness.NA;
         }
         if (this.assessment) {
@@ -197,16 +208,18 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         }
         return this.hits === this.maxHits && this.misses === 0
             ? Correctness.Correct
-            : this.hits === 0
-              ? Correctness.Incorrect
-              : Correctness.PartiallyCorrect;
+            : this.isNA
+              ? Correctness.NA
+              : this.hits > 0
+                ? Correctness.PartiallyCorrect
+                : Correctness.Incorrect;
     }
 
     /**
      * Returns the maximum achievable "hits" for this assessable item.
      */
     get maxHits(): number {
-        return this._meta?.correct?.length || 0;
+        return this._meta?.correct?.length ?? 1;
     }
 
     /**
@@ -250,7 +263,11 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         return this.linkedMeta.title ? `Frage ${nr} – ${this.linkedMeta.title}` : `Frage ${nr}`;
     }
 
+    abstract get icon(): string;
+
     abstract reset(): void;
+
+    abstract get isNA(): boolean;
 
     shuffle(): void {
         // By default, do nothing. Only applicable for certain assessable document types (e.g. ChoiceAnswer).
