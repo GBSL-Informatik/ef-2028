@@ -4,7 +4,6 @@ import styles from './styles.module.scss';
 import { Prism } from 'prism-react-renderer';
 import { default as ReactDiffViewer } from 'react-diff-viewer';
 
-
 const highlightSyntax = (str: string) => {
     if (!str) {
         return;
@@ -12,7 +11,7 @@ const highlightSyntax = (str: string) => {
     return (
         <span
             dangerouslySetInnerHTML={{
-                __html: Prism.highlight(str, Prism.languages.python, 'python'),
+                __html: Prism.highlight(str, Prism.languages.python, 'python')
             }}
         />
     );
@@ -24,7 +23,7 @@ interface Props {
 }
 const SPACER = ' ';
 
-const DiffViewer = (props: Props) => {    
+const DiffViewer = (props: Props) => {
     const refLeft = React.useRef<HTMLDivElement>(null);
     const refRight = React.useRef<HTMLDivElement>(null);
     const [l, setL] = React.useState<string>();
@@ -34,15 +33,15 @@ const DiffViewer = (props: Props) => {
         if (refLeft.current && !l) {
             setL(refLeft.current.innerText.replace(/ /g, SPACER));
         }
-    }, [refLeft])
+    }, [refLeft]);
     React.useEffect(() => {
         if (refRight.current && !r) {
             setR(refRight.current.innerText.replace(/ /g, SPACER));
         }
-    }, [refRight])
+    }, [refRight]);
 
     if (props.children.length < 2) {
-        return (<div>Please provide two children with code blocks!</div>)
+        return <div>Please provide two children with code blocks!</div>;
     }
     return (
         <div className={clsx(styles.diffViewer)}>
