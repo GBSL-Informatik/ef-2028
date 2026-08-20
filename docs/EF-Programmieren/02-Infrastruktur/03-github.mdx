@@ -1,0 +1,79 @@
+---
+sidebar_custom_props:
+  id: d38c73c0-df42-4b36-a919-bf8c280a912a
+page_id: d38c73c0-df42-4b36-a919-bf8c280a912a
+---
+
+import Steps from '@tdev-components/Steps';
+
+# GitHub
+
+https://github.com
+
+Um unsere Repositories zu synchronisieren, verwenden wir GitHub. Github ist aktuell der Quasi-Standard für Opensource Software und bietet Entwicklern kostenlos die Möglichkeit Repositories zu erstellen. Zudem können wir später unser Repository auch als Webseite - ähnlich dieser Lernwebseite hier - erzeugen lassen. Dazu aber sp$ter mehr.
+
+:::aufgabe[Github Repository erstellen]
+<Answer type="state" id="497b3691-ed12-45f1-b2f3-21da24952137" />
+
+Erstellen Sie auf Github ein neues Repository (z.B. mit dem Namen `EF-Informatik`).
+- :mdi[flash-triangle]{color="orange"}: achten Sie darauf, dass der Namen keine Leerschläge enthält
+- Wählen Sie die Option **Add a README file** aus.
+
+![](images/gh-repo.png)
+
+\* Da wir das Repository später als Webseite veröffentlichen, wird die Url das Format `https://username.github.io/EF-Informatik` haben. Da bei URL's Leerschläge zu `%20` umgewandelt werden, wäre die Adresse für den Repo-Namen `EF Informatik` dann `https://username.github.io/EF%20Informatik`, was mühsam zu tippen ist.
+:::
+
+
+::::aufgabe[Github Repository klonen]
+<Answer type="state" id="249021f4-5bee-4b50-acb7-70e156701c50"/>
+
+Klonen Sie das Repository auf Ihren Laptop.
+
+<Steps>
+1. Erstellen Sie auf Ihrem Laptop zuerst einen neuen Ordner (bspw. unter `Dokumente/git_code`), in welchem Sie alle git Repositories abspeichern.
+   :::danger[git repositories nicht auf OneDrive/Dropbox]
+   Git-Repositories haben ein grundlegend anderen Ansatz zur Synchronisierung von Daten. Wird ein git-Repo über bspw. Dropbox synchronisiert, werden laufend die Änderungen (von einem anderen Computer) synchronisiert, auch wenn die Änderungen per Git noch gar nicht veröffentlicht wurden. Die Folge sind viele Änderungen (und Probleme)...
+   :::
+2. Klonen Sie das Repository (wie unten in dieser Aufgabe im (stummen) Video gezeigt):
+   1. Klonen
+   2. README.md bearbeiten: Fügen Sie einen Code-Block hinzu, schreiben Sie eine Commit-Nachricht und pushen Sie die Änderungen.
+      ````md
+      ```py
+      print('Hello World')
+      ```
+      ````
+   3. Kontrollieren Sie, ob die Änderungen online sichtbar sind.
+3. Markieren Sie die Aufgabe als erledigt.
+</Steps>
+
+::video[./images/gh-clone-hd.mp4]{controls=false autoplay=true loop=true muted=true}
+::::
+
+::::aufgabe[Repository Struktur]
+<Answer type="state" id="9d809cc7-81dc-4358-9f7b-0d74f1b2fd04" />
+
+Unser Repository `EF-Informatik` sollte in etwa die folgende Struktur haben:
+
+```txt
+git_code/
+    ├── ...
+    └── EF-Informaik/
+        ├── docs/
+        │     ├── git.md
+        │     └── programmieren.md
+        ├── exercises/
+        │     └── 01-hello-world.py
+        ├── NumTrip
+        │     └── main.py
+        └── README.md
+```
+
+- Alle Dokumente mit Notizen etc. werden in den Ordner `docs` als `*.md` abgelegt.
+- Übungen können Sie im Ordner `exercises` ablegen
+- für das Spiel `NumTrip` werden wir die Programme im Ordner `NumTrip` abspeichern.
+
+:::info[Leere Ordner]
+Leere Ordner werden von Git ignoriert, weshalb leere Ordner nicht als Änderung angezeigt werden.
+:::
+::::
