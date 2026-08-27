@@ -13,6 +13,32 @@ import {
 } from './src/siteConfig/navbarItems';
 import { brythonCodePluginConfig, yamlLoaderPluginConfig } from './src/siteConfig/pluginConfigs';
 import { themes as prismThemes } from 'prism-react-renderer';
+import {
+    recommendedRemarkPlugins,
+    codeAsAttributePluginConfig
+} from './src/siteConfig/markdownPluginConfigs';
+
+const RemarkPlugins = [
+    ...recommendedRemarkPlugins.filter((p) => p !== codeAsAttributePluginConfig),
+    [
+        codeAsAttributePluginConfig[0],
+        {
+            ...codeAsAttributePluginConfig[1],
+            components: [
+                ...(
+                    codeAsAttributePluginConfig[1] as {
+                        components: { name: string; attributeName: string }[];
+                    }
+                ).components,
+                {
+                    name: 'DiffViewer',
+                    attributeName: 'diffs',
+                    processMultiple: true
+                }
+            ]
+        }
+    ]
+];
 
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);
 const getSiteConfig: SiteConfigProvider = () => {
@@ -113,7 +139,8 @@ const getSiteConfig: SiteConfigProvider = () => {
             exclude: process.env.NODE_ENV === 'production' ? ['tdev/**'] : [],
             showLastUpdateTime: true,
             includeCurrentVersion: true,
-            sidebarCollapsible: true
+            sidebarCollapsible: true,
+            remarkPlugins: RemarkPlugins
         },
         blog: {},
         apiDocumentProviders: [

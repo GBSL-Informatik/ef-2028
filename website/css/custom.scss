@@ -43,6 +43,11 @@
             display: none;
         }
     }
+
+    .docusaurus-mermaid-container {
+        display: flex;
+        justify-content: center;
+    }
 }
 
 html[data-theme='dark'] {

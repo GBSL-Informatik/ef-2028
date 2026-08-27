@@ -1,17 +1,17 @@
 ---
 page_id: 452e8dd9-ea4a-44dd-adba-fdc5b9aa0102
 sidebar_label: Git Grundlagen
-draft: true
 ---
-
+import PageReadCheck from '@tdev/page-read-check/PageReadCheck';
 import DiffViewer from '@tdev-components/DiffViewer';
 import BrowserWindow from '@tdev-components/BrowserWindow';
 import Tabs from '@theme/Tabs';
 import TabItem from "@theme/TabItem";
+import Steps from '@tdev-components/Steps';
 
 # Git Grundlagen :mdi[git]{.orange}
 
-👉 https://git-scm.com/
+https://git-scm.com/
 
 
 <BrowserWindow url="https://www.lernmoment.de/alle/warum-git/">
@@ -40,7 +40,7 @@ Die Entwicklung von Git ist eine Erfolgsgeschichte. Als [Linus Torvalds](https:/
 ## Konzepte
 
 
-Das Kernelement von Git sind die Repositories (Repo - ein ganz normaler Ordner, dessen Dokumente mit Git versioniert werden). Dabei wird zwischen dem __remote Repos__ auf dem Server und den __lokalen Repos__ auf einem Computer unterschieden.
+Das Kernelement von Git sind die Repositories (Repo - ein ganz normaler Ordner, dessen Dokumente mit Git versioniert werden). Dabei wird zwischen dem __remote Repo__ auf dem Server und den __lokalen Repo__ auf einem Computer unterschieden.
 
 ```mermaid
 flowchart LR
@@ -54,47 +54,40 @@ Um mit Git verwalteten Projekten zu arbeiten, muss das Repository heruntergelade
 - sich Git die Internet-Adresse des Remote Repos merkt und man somit zu einem späteren Zeitpunkt Änderungen (manuell) synchronisieren kann
 - auch alle Vorgängerversionen der Projektdateien enthalten sind
 
-:::info[Repo Klonen in VS Code]
-Anleitung, wie in VS Code ein Repository von Github geklont wird.
+Dateien in diesem Ordner sind **versioniert** - dies bedeutet für Git, dass zu einem gewissen Zeitpunkt Änderungen vorgenommen wurden. Jede Änderung ist mit einer von der Programmierer:in geschriebenen Nachricht versehen.
 
-https://code.visualstudio.com/docs/editor/github#_setting-up-a-repository
+Commit
+: Versionen werden in Git als __Commits__ bezeichnet. Ein Commit ist ein Paket von Änderungen, die zu einem bestimmten **Zeitpunkt** gemacht wurden.
+:::dd
+    ```mermaid
+    gitGraph
+        commit id: "02.08.2026 14:30"
+        commit id: "16.08.2026 09:15"
+        commit id: "28.08.2026 12:13"
+    ```
+:::
+Nachricht
+: Jeder __Commit__ wird mit einer Nachricht (*Message*) versehen. So kann nachvollzogen werden, was in welchem Schritt dazugekommen ist.
+:::dd
+    ```mermaid
+    gitGraph
+        commit id: "Initial Commit"
+        commit id: "Füge Beschreibung des Repos hinzu"
+        commit id: "Fix Typo"
+    ```
+:::
+Hashwert
+: Jeder Commit wird eindeutig über einen **Hashwert** identifiziert. Dieser Hashwert ist eine Art Fingerabdruck einer Änderung, wobei alle relevanten Informationen (inkl. Autor, Zeit, Hashwert des vorherigen Commits, Hashwert des aktuellen Repository-Inhalts, Commit-Nachricht) enthalten sind.
+:::dd
+    ```mermaid
+    gitGraph
+        commit
+        commit
+        commit
+    ```
 :::
 
-Dateien in diesem Ordner sind versioniert - dies bedeutet für Git, dass zu einem gewissen Zeitpunkt Änderungen vorgenommen wurden. Jede Änderung ist mit einer von der Programmierer:in geschriebenen Nachricht versehen.
-
-<Tabs groupId="section">
-    <TabItem value="versionen" label="Versionen">
-        ```mermaid
-        %%{init: { 'gitGraph': {'showCommitLabel': false}} }%%
-        gitGraph
-            commit
-            commit
-            commit
-        ```
-    </TabItem>
-    <TabItem value="id" label="ID">
-        Änderungen werden zu einem Paket - einem __Commit__ zusammengefasst und mit einem Hashwert der Änderungen identifiziert.
-
-        ```mermaid
-        gitGraph
-            commit
-            commit
-            commit
-        ```
-    </TabItem>
-    <TabItem value="nachricht" label="Nachricht">
-        Jeder __Commit__ wird mit einer Nachricht versehen. So kann nachvollzogen werden, bei welchem Schritt was dazugekommen ist.
-
-        ```mermaid
-        gitGraph
-            commit id: "Initial Commit"
-            commit id: "Füge Beschreibung des Repos hinzu"
-            commit id: "Fix Typo"
-        ```
-    </TabItem>
-</Tabs>
-
-Nach dem Klonen des Projektes, kann zu beliebigen späteren Zeitpunkten durch einen `pull` der neueste Stand vom remote Repository ins lokale Repository synchronisiert werden. Dadurch stellt man sicher, dass man keine Änderungen von anderen Projektmitarbeitern verpasst.
+Nach dem Klonen des Projektes können mit einem `pull` alle Änderungen vom remote Repository ins lokale Repository synchronisiert werden. Dadurch wird sichergestellt, dass keine Änderungen von anderen Projektmitarbeitenden verpasst werden.
 
 ```mermaid
 %%{init: { 'gitGraph': {'mainBranchName': 'remote', 'showCommitLabel': false}} }%%
@@ -112,58 +105,61 @@ gitGraph
 
 ### Änderungen vornehmen
 
-Jetzt kann die Datei bearbeitet werden. Git kann nun anzeigen, welche Zeilen und Zeichen verändert. Dadurch können Änderungen nochmals überprüft werden. 
+Jetzt kann die Datei bearbeitet werden. Git kann nun anzeigen, welche Zeilen und Zeichen lokal verändert wurden. Dadurch können Änderungen nochmals überprüft werden. 
 
 <DiffViewer titles={['', 'Änderungen']}>
-
 ```py
 def aaa(a, b):
     return (a + b) / 2
+
+print(f'Ø:{aaa(3, 5)}')
 ```
-
-
 ```py
 def durchschnitt(a, b):
     return (a + b) / 2
-```
 
+print(f'Ø: {durchschnitt(3, 5)}')
+```
 </DiffViewer>
 
 
-Ist man zufrieden, wählt man die veränderten Dateien, deren Änderungen man zusammenfassen möchte, aus und fügt sie einem `Stage` hinzu (man bündelt diese Änderungen zusammen). Mit einer Nachricht wird beschrieben, was in dieser Änderung gemacht wurde, der anschliessende __Commit__ finalisiert das Änderungspaket. 
-Im obigen Beispiel könnte die Nachricht etwa
+Ist man mit der Änderung zufrieden, fügt man alle veränderten Dateien einem Änderungspaket hinzu. Dieses Änderungspaket wird in Git als __Stage__ bezeichnet. Mit dem __Commit__ Befehl wird das Änderungspaket finalisiert und mit einem Zeitstempel und einer Nachricht versehen. Die Nachricht beschreibt, was in dieser Änderung gemacht wurde.
+
+Im obigen Beispiel könnte die Nachricht etwa lauten:
 
 > Verwende einen sinnvollen Funktionsnamen
 
-lauten.
 
 Mit dem __push__ Befehl wird anschliessend dieses Änderungspaket an das Remote-Repository geschickt.
 
-Die wichtigste Eigenschaft von Git ist, dass es Änderungen, welche von verschiedenen Personen vorgenommen wurden, zusammenführen kann, und dafür sorgt, dass alle Repositories auf dem gleichen Stand sind. Dieser Vorgang wird in Git merge genannt.
+Die wichtigste Eigenschaft von Git ist, dass es Änderungen, welche von verschiedenen Personen vorgenommen wurden, zusammenführen kann. Dadurch kann man Änderungen von verschiedenen Personen in einem Repository kombinieren, ohne dass man permanent online ist. Der Vorgang des Zusammenführens wird in Git __merge__ genannt.
 
 ```mermaid
 %%{init: { 'gitGraph': {'showBranches': true, 'showCommitLabel':true,'mainBranchOrder': 2}} }%%
 gitGraph
     commit
     commit
-    branch dev1 order: 1
+    branch maria order: 1
     commit
     checkout main
     commit
-    branch dev2 order: 2
+    branch reto order: 2
     commit
-    checkout dev1
+    checkout maria
     commit
     checkout main
-    merge dev2
-    checkout dev1
+    merge reto
+    checkout maria
     merge main
     commit
     checkout main
     commit
-    merge dev1
+    merge maria
 ```
 
 Visual Studio Code verfügt über eine eingebaute Schnittstelle zu Git. Diese werden wir im Normalfall brauchen. Manchmal ist es aber nötig direkt mit Git zu arbeiten. Dazu dient die App Git Bash auf Windows. Auf dem Mac kann man dazu direkt das Terminal brauchen. Die nötigen Kommandos werden wir nach und nach kennenlernen (halten Sie diese am besten in Ihrer Dokumentation fest).
+
+<PageReadCheck id="d76b2eb2-ccde-43a6-8584-220269380f1b" minReadTime={180} />
+
 
 [^1]: Quelle: [Tobias Vetter](https://www.lernmoment.de/alle/warum-git/)

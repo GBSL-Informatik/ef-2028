@@ -3,6 +3,7 @@ import clsx from 'clsx';
 import styles from './styles.module.scss';
 import { Prism } from 'prism-react-renderer';
 import { default as ReactDiffViewer } from 'react-diff-viewer';
+import { MultiCode } from '@tdev-plugins/remark-code-as-attribute/plugin';
 
 const highlightSyntax = (str: string) => {
     if (!str) {
@@ -18,52 +19,32 @@ const highlightSyntax = (str: string) => {
 };
 
 interface Props {
-    children: JSX.Element[];
+    diffs: MultiCode[];
     titles: string[];
 }
 const SPACER = ' ';
 
 const DiffViewer = (props: Props) => {
-    const refLeft = React.useRef<HTMLDivElement>(null);
-    const refRight = React.useRef<HTMLDivElement>(null);
-    const [l, setL] = React.useState<string>();
-    const [r, setR] = React.useState<string>();
+    const { diffs } = props;
 
-    React.useEffect(() => {
-        if (refLeft.current && !l) {
-            setL(refLeft.current.innerText.replace(/ /g, SPACER));
-        }
-    }, [refLeft]);
-    React.useEffect(() => {
-        if (refRight.current && !r) {
-            setR(refRight.current.innerText.replace(/ /g, SPACER));
-        }
-    }, [refRight]);
-
-    if (props.children.length < 2) {
-        return <div>Please provide two children with code blocks!</div>;
+    if (diffs?.length < 2) {
+        return <div>Please provide two diffs!</div>;
     }
+    const [l, r] = diffs;
     return (
         <div className={clsx(styles.diffViewer)}>
+            Halo
             {l && r && (
                 <ReactDiffViewer
                     leftTitle={props.titles[0]}
                     rightTitle={props.titles[1]}
                     splitView
-                    oldValue={l}
-                    newValue={r}
+                    oldValue={l.code.replace(/ /g, SPACER)}
+                    newValue={r.code.replace(/ /g, SPACER)}
+                    styles={{ marker: 'max-width: 1em; padding: 0;' }}
+                    showDiffOnly={false}
                     renderContent={highlightSyntax}
                 />
-            )}
-            {!l && (
-                <div ref={refLeft} className={styles.codeRaw}>
-                    {props.children[0]}
-                </div>
-            )}
-            {!r && (
-                <div ref={refRight} className={styles.codeRaw}>
-                    {props.children[1]}
-                </div>
             )}
         </div>
     );
