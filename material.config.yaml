@@ -7,7 +7,6 @@
       as: 10-Programmieren
       ignore:
           - _category_.yml
-          - 03-Python/
       open: true
     - from: docs/OF-Programmieren-1/
       as: 10-Programmieren/01-Repetition
