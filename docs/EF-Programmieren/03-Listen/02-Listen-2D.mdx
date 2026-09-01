@@ -5,7 +5,6 @@ sidebar_custom_props:
     name: sdg
     ref: 'https://gitlab.gbsl.website/gymbefin23/material/-/snippets/11'
 page_id: 15878b1f-21ab-4f28-9c47-db5358abc1b6
-draft: true
 ---
 
 # Zweidimensionale Listen
@@ -79,13 +78,13 @@ for zeile in matrix:
 ```
 :::
 
-::::aufgabe[`pprint()`]
+::::aufgabe[`pretty_print()`]
 <Answer type="state" id="32b77e06-fa29-4ed2-950c-e28b0259eb3c" />
 
-Schreiben Sie eine Funktion `pprint` (Abkürzung für `Pretty Print`), welche eine 2D-Liste übersichtlich ausgibt:
+Schreiben Sie eine Funktion `pretty_print` (Abkürzung für `Pretty Print`), welche eine 2D-Liste übersichtlich ausgibt:
 
 ```py
-pprint([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+pretty_print([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 # Ausgabe bspw.
 # [
 #    [1, 2, 3],
@@ -94,12 +93,12 @@ pprint([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 # ]
 ```
 
-```py live_py id=df2cf353-14ac-4676-b560-5024a4946db5 title=pprint.py
-def pprint(mat2d):
+```py live_py id=df2cf353-14ac-4676-b560-5024a4946db5 title=pretty_print.py
+def pretty_print(mat2d):
     print(mat2d)
 
-pprint([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
-pprint([[1, 2, 3, 4], [5, 6, 7, 8], [9, 8, 7, 6]])
+pretty_print([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+pretty_print([[1, 2, 3, 4], [5, 6, 7, 8], [9, 8, 7, 6]])
 ```
 
 :::info[Über Funktionen...]
@@ -120,13 +119,13 @@ def pretty_print(matrix2d):
 <Solution id="4f1b3847-4bd3-49ab-83dd-3b9982b33cd6">
 
 ```py live_py slim
-def pprint(mat2d):
+def pretty_print(mat2d):
     print('[')
     for row in mat2d:
         print(' ', row, end=',\n')
     print(']')
 
-pprint([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+pretty_print([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 ```
 
 </Solution>
