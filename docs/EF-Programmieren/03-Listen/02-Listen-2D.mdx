@@ -10,7 +10,7 @@ draft: true
 
 # Zweidimensionale Listen
 
-![Zweidimensionale Liste](images/2d-listen.jpeg)
+![Zweidimensionale Liste](./images/2d-listen.jpeg)
 
 Eine Liste, welche einfach eine Reihe von Zahlen oder Texten enthält, ist eine **eindimensionale** Liste. Aus der Mathematik kennen wir auch Matrizen, oder Tabellen. Diese bestehen aus **Zeilen** und **Spalten**, haben also **zwei Dimensionen**.
 
@@ -80,7 +80,7 @@ for zeile in matrix:
 :::
 
 :::aufgabe[`pprint()`]
-<Answer type="state" webKey="32b77e06-fa29-4ed2-950c-e28b0259eb3c" />
+<Answer type="state" id="32b77e06-fa29-4ed2-950c-e28b0259eb3c" />
 
 Schreiben Sie eine Funktion `pprint` (Abkürzung für `Pretty Print`), welche eine 2D-Liste übersichtlich ausgibt:
 
@@ -102,7 +102,7 @@ pprint([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
 pprint([[1, 2, 3, 4], [5, 6, 7, 8], [9, 8, 7, 6]])
 ```
 
-<Hint title="Über Funktionen...">
+:::info[Über Funktionen...]
 
 Funktionen werden in Python mit dem Schlüsselwort `def` definiert.
 
@@ -115,9 +115,9 @@ def pretty_print(matrix2d):
 
 ```
 
-</Hint>
+:::
 
-<Solution webKey="4f1b3847-4bd3-49ab-83dd-3b9982b33cd6">
+<Solution id="4f1b3847-4bd3-49ab-83dd-3b9982b33cd6">
 
 ```py live_py slim
 def pprint(mat2d):
@@ -153,7 +153,7 @@ for i in range(3):
 :::
 
 :::aufgabe
-<Answer type="state" webKey="c7a2e1a2-1476-4fcc-b4f9-fdcbdcc2a7b6" />
+<Answer type="state" id="c7a2e1a2-1476-4fcc-b4f9-fdcbdcc2a7b6" />
 
 Obiges Beispiel funktioniert nur für eine `3x3` Matrix. Ändern Sie das Programm so ab, dass es für beliebige zweidimensionale Listen funktioniert. Probieren Sie Ihre Lösung, indem Sie die unterschiedlichen `matrix` Variablen einkommentieren...
 
@@ -167,16 +167,16 @@ for i in range(3):
         print(f'[i: {i}, j: {j}] =', matrix[i][j])
 ```
 
-<Hint>
+:::info[Hinweis]
 
 Die Länge einer Liste kann mit `len` abgefragt werden:
 
 ```py live_py slim
 print(len([2, 3, 5]))
 ```
-</Hint>
+:::
 
-<Solution webKey="c5091336-dac5-440a-9b95-9b9f2d482b48">
+<Solution id="c5091336-dac5-440a-9b95-9b9f2d482b48">
 
 ```py live_py slim
 matrix = [[1, 2], [4, 5], [6, 7], [8, 9], [10, 11]]
@@ -190,7 +190,7 @@ for i in range(len(matrix)):
 :::
 
 :::aufgabe[2D-Liste erstellen]
-<Answer type="state" webKey="302c5fcd-76d3-4fa7-aef0-c52b9d03422d" />
+<Answer type="state" id="302c5fcd-76d3-4fa7-aef0-c52b9d03422d" />
 
 #### `create_from.py`
 
@@ -206,14 +206,14 @@ matrix = []
 print(matrix) # => [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]]
 ```
 
-<Hint>
+:::info[Hinweis]
 
 - Es braucht eine doppelte Schleife, wobei in der ersten Schleife eine leere Zeilen-Liste erzeugt wird, welche dann in der zweiten (verschachtelten) Schleife mit den Zahlen gefüllt wird.
 - [👉 Elemente zu einer Liste hinzufügen](./01-Listen-1D.md#element-hinzufügen-append)
 
-</Hint>
+:::
 
-<Solution webKey="e8b99d8b-7838-4179-b4bb-8c7b8ceadedd">
+<Solution id="e8b99d8b-7838-4179-b4bb-8c7b8ceadedd">
 
 ```py live_py slim
 ZEILEN = 3
@@ -231,7 +231,7 @@ for i in range(ZEILEN):
 print(matrix)
 ```
 </Solution>
-<Solution webKey="e8b99d8b-7838-4179-b4bb-8c7b8ceadedd" title="⭐️ Lösung: Mit List-Comprehension">
+<Solution id="e8b99d8b-7838-4179-b4bb-8c7b8ceadedd" title="⭐️ Lösung: Mit List-Comprehension">
 
 ```py live_py slim
 ZEILEN = 3
@@ -265,7 +265,7 @@ matrix = []
 print(matrix)
 ```
 
-<Solution webKey="3571eae1-ce0a-4a86-9373-dca332470f95">
+<Solution id="3571eae1-ce0a-4a86-9373-dca332470f95">
 
 ```py live_py slim
 SIZE = 4
@@ -287,7 +287,7 @@ print(matrix)
 :::
 
 :::aufgabe[Was ist denn hier los?]
-<Answer type="state" webKey="c134f37d-8e4b-49e0-964e-355d202560bf" />
+<Answer type="state" id="c134f37d-8e4b-49e0-964e-355d202560bf" />
 
 Dateiname
 : __EF-Informatik/docs/python/referenzen.md__
@@ -303,7 +303,7 @@ print('Liste b: ', b)
 
 Wie erklären Sie sich dieses Verhalten?
 
-<Answer type="text" webKey="7ffc70a8-50a8-40a1-97d0-f30be4e54910" />
+<Answer type="text" id="7ffc70a8-50a8-40a1-97d0-f30be4e54910" />
 
 Lesen Sie den Abschnitt [👉 Assignment (=) in Python](https://www.codingem.com/python-copy-list/#assignment-in-python) (*The Copy Module in Python* brauchen Sie nicht zu lesen). 
 
@@ -377,7 +377,7 @@ png.from_array(simley, 'L').save('small_smiley.png')
 Probieren Sie es aus!
 
 :::aufgabe[Graustufen-Bilder]
-<Answer type="state" webKey="8131c3da-101f-44dd-8a32-3c8ff541186c" />
+<Answer type="state" id="8131c3da-101f-44dd-8a32-3c8ff541186c" />
 
 Dateiname
 : __EF-Informatik/exercises/mat-to-png.py__
