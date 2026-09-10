@@ -10,32 +10,7 @@ import CodeBlock from '@theme/CodeBlock';
 
 # Referenzen
 
-::::aufgabe
-<Answer type="state" id="7f7a0c76-fe9a-434b-8eb3-5565d7e7983c" />
-
-Dateiname
-: __EF-Informatik/exercises/referenzen.py__
-
 Jetzt, wo wir Listen in Python kennen, müssen wir unsere bisherige Vorstellung von Variablen überdenken und anpassen.
-
-Lesen Sie die untenstehende Einführung zum Thema Referenzen durch und führen Sie im Anschluss das Programm angehängte Programm __referenzen.py__ im Debuuger von VS Code aus.
-
-Führen Sie dann das Snippet refernzen.py im Debugger Ihres Visual Studio Code aus (falls Sie es noch nicht geklont haben, müssen Sie das zuerst tun).
-
-Achten Sie auf die in der Konsole (unten) angezeigten Objekt-Ids und Datentypen. Daran können Sie erkennen, um welches Objekt es sich jeweils handelt und welchen Datentyp es hat.
-
-Auf der linken Seite sehen Sie die aktuellen Objektwerte in den Variablen a und b. Achten Sie besonders, was dort passiert, wenn die Zeile 30 ausgeführt wird.
-
-import referenzen from '!!raw-loader!./assets/referenzen.py';
-
-:::details[__EF-Informatik/exercises/referenzen.py__]
-<CodeBlock language="py" showLineNumbers={true} title="referenzen.py">
-{referenzen}
-</CodeBlock>
-:::
-
-Zum Schluss den Selbsttest ganz am Ende der Seite durchführen...
-::::
 
 ## Bisheriges Modell für Variablen
 Bisher haben wir uns **Variablen** als *Karteikärtchen* vorgestellt, auf welchen sich der Computer einen bestimmten **Wert** (eine Zahl, ein Text, etc.) merkt. Das Kärtchen trägt einen Namen. Unter diesem Namen kann die Information zu einem späteren Zeitpunkt wieder hervorgeholt werden. Die **Zuweisung** 
@@ -68,7 +43,8 @@ führt zu:
 
 Mit der Einführung von **Listen** stösst dieses Modell an seine Grenzen und wir brauchen ein besseres Modell.
 
-------------------------------
+---
+
 ## Etiketten statt Karteikärtchen - Referenzen und Objekte
 In diesem Modell werden die Karteikarten durch *Etiketten* ersetzt, welche mit einer *Schnur* an beliebige *Gegenstände* gebunden werden können.
 
@@ -178,7 +154,27 @@ graph LR
 ### Aufgabe
 Laden Sie zur Illustration das folgenden **Snippet** auf Ihren Computer und führen Sie es aus.
 
----------------------------------
+::::aufgabe
+<Answer type="state" id="7f7a0c76-fe9a-434b-8eb3-5565d7e7983c" />
+
+Dateiname
+: __EF-Informatik/exercises/referenzen.py__
+
+Führen Sie dann das Snippet refernzen.py im Debugger Ihres Visual Studio Code aus (falls Sie es noch nicht geklont haben, müssen Sie das zuerst tun).
+
+Achten Sie auf die in der Konsole (unten) angezeigten Objekt-Ids und Datentypen. Daran können Sie erkennen, um welches Objekt es sich jeweils handelt und welchen Datentyp es hat.
+
+Auf der linken Seite sehen Sie die aktuellen Objektwerte in den Variablen a und b. Achten Sie besonders, was dort passiert, wenn die Zeile 30 ausgeführt wird.
+
+import referenzen from '!!raw-loader!./assets/referenzen.py';
+
+:::details[__EF-Informatik/exercises/referenzen.py__]
+<CodeBlock language="py" showLineNumbers={true} title="referenzen.py">
+{referenzen}
+</CodeBlock>
+:::
+::::
+
 
 ## Hintergrund
 Das neue Modell für Variablen hat folgenden Hintergrund:
