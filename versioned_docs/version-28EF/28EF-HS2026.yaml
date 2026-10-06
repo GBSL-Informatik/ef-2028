@@ -5,19 +5,19 @@
 - cells:
     - 21.08.2026
     - Programmieren
-    - Infrastruktur, Git, Markdown, Datenstrukturen - Listen
+    - Infrastruktur, Git, Markdown, Datenstrukturen
 - cells:
     - 28.08.2026
     - Programmieren
-    - Listen, 2D-Listen, Referenzen
+    - Wiederholung, Listen 1D, 2D-Listen
 - cells:
     - 04.09.2026
     - Programmieren
-    - "Numtrip: Spielfelderstellung, Spielregeln, Spielbrett"
+    - Listen, 2D-Listen
 - cells:
     - 11.09.2026
     - Programmieren
-    - "Funktionen & Software Engineering"
+    - Listen, 2D-Listen, Zusatzübungen
 - cells:
     - 18.09.2026
     - Sonderwoche
@@ -41,38 +41,38 @@
   type: holiday
 - cells:
     - 16.10.2026
-    - Programmieren
-    - Numtrip
+    - "Game: Numtrip"
+    - "Referenzen, Dateitypen, Einstieg Game: Datenstruktur"
 - cells:
     - 23.10.2026
-    - Programmieren
-    - Test Tooling und Programmier-Repe + Listen
-  type: test
-  icon: mdiFractionOneHalf
+    - "Game: Numtrip"
+    - Spielfelddarstellung, Funktionen, Übungen
 - cells:
     - 30.10.2026
-    - Programmieren
-    - 🚧
+    - "Game: Numtrip"
+    - Software Engineering, Funktionen
 - cells:
     - 06.11.2026
     - Programmieren
-    - 🚧
+    - Test Tooling, Programmier-Repe + Listen, danach Scopes, Shadowing
+  type: test
+  icon: mdiFractionOneHalf
 - cells:
     - 13.11.2026
-    - Programmieren
-    - 🚧
+    - "Game: Numtrip"
+    - User-Input, Input-Validierung, Try-Except
 - cells:
     - 20.11.2026
-    - Programmieren
-    - 🚧
+    - "Game: Numtrip"
+    - Implementierung Numtrip
 - cells:
     - 27.11.2026
-    - Programmieren
-    - 🚧
+    - "Game: Numtrip"
+    - Felder Zusammenfügen, rekursive Funktionen
 - cells:
     - 04.12.2026
-    - Programmieren
-    - 🚧
+    - "Game: Numtrip"
+    - Prüfungsbesprechung, Übungen, Gravitation Numtrip
 - cells:
     - 11.12.2026
     - Programmieren
@@ -81,8 +81,8 @@
   type: test
 - cells:
     - 18.12.2026
-    - Programmieren
-    - 🚧
+    - "Game: Numtrip"
+    - Gravitation Numtrip
 - cells:
     - 25.12.2026
     - Winterferien
