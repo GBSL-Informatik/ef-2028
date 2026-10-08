@@ -1,9 +1,8 @@
-import { computed } from 'mobx';
-import { DocumentType, Document as DocumentProps } from '@tdev-api/document';
-import DocumentStore from '@tdev-stores/DocumentStore';
-import _ from 'es-toolkit/compat';
-import iFileSystem, { DefaultName, iFSMeta, MetaInit } from './iFileSystem';
+import { Document as DocumentProps } from '@tdev-api/document';
 import { formatDateTime } from '@tdev-models/helpers/date';
+import DocumentStore from '@tdev-stores/DocumentStore';
+import { computed } from 'mobx';
+import iFileSystem, { DefaultName, iFSMeta, MetaInit } from './iFileSystem';
 
 export class ModelMeta extends iFSMeta<'file'> {
     constructor(props: Partial<MetaInit>) {
@@ -14,7 +13,7 @@ export class ModelMeta extends iFSMeta<'file'> {
 class File extends iFileSystem<'file'> {
     constructor(props: DocumentProps<'file'>, store: DocumentStore) {
         super(props, store);
-        this.name =
+        this._name =
             props.data?.name || this.meta?.name || `${DefaultName[this.type]} ${formatDateTime(new Date())}`;
     }
 
@@ -27,13 +26,28 @@ class File extends iFileSystem<'file'> {
     }
 
     @computed
-    get fileExtension() {
-        const parts = this.name.split('.');
-        if (parts.length < 2) {
+    get allowedFileExtensions() {
+        if (!this.document || !this.store.fileExtensions.has(this.document.type)) {
+            return [];
+        }
+        const configs = this.store.fileExtensions.get(this.document.type)!;
+        return configs.map((c) => c.extension.toLowerCase().replace(/^\./, ''));
+    }
+
+    @computed
+    get fileExtension(): string {
+        if (this.allowedFileExtensions.length === 0) {
             return '';
         }
+        if (this.allowedFileExtensions.length === 1) {
+            return this.allowedFileExtensions[0];
+        }
+        const parts = this.name.split('.');
+        if (parts.length < 2) {
+            return this.allowedFileExtensions[0] || '';
+        }
         const ext = parts[parts.length - 1].toLowerCase();
-        return ext;
+        return this.allowedFileExtensions.includes(ext) ? ext : this.allowedFileExtensions[0];
     }
 
     @computed

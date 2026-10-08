@@ -1,15 +1,15 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import CodeEditor from '@tdev-components/shared/CodeEditor';
-import { ExcalidocComponent, Props } from '..';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import Loader from '@tdev-components/Loader';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
-import Image from '../Preview/Image';
+import CodeEditor from '@tdev-components/shared/CodeEditor';
+import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import { Source } from '@tdev-models/iDocument';
 import { ModelMeta } from '@tdev/excalidoc/model/ModelMeta';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import { ExcalidocComponent, Props } from '..';
+import Image from '../Preview/Image';
+import styles from './styles.module.scss';
 
 const ExcalidocWithCodeEditor = observer((props: Props) => {
     const meta = React.useMemo(
@@ -38,7 +38,7 @@ const ExcalidocWithCodeEditor = observer((props: Props) => {
                     allowImageInsertion={false}
                     onEdit={setShowEditor}
                     libraryItems={undefined}
-                    documentId={doc.id}
+                    doc={doc}
                     onlyCommitValidChanges
                     zenMode={false}
                 />

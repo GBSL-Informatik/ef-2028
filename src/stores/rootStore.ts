@@ -1,15 +1,15 @@
-import React from 'react';
+import { AdminStore } from '@tdev-stores/AdminStore';
 import { DocumentRootStore } from '@tdev-stores/DocumentRootStore';
-import { UserStore } from '@tdev-stores/UserStore';
-import { SessionStore } from '@tdev-stores/SessionStore';
-import { SocketDataStore } from '@tdev-stores/SocketDataStore';
-import { action } from 'mobx';
-import { StudentGroupStore } from '@tdev-stores/StudentGroupStore';
-import PermissionStore from '@tdev-stores/PermissionStore';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import { PageStore } from '@tdev-stores/PageStore';
-import { AdminStore } from '@tdev-stores/AdminStore';
+import PermissionStore from '@tdev-stores/PermissionStore';
+import { SessionStore } from '@tdev-stores/SessionStore';
 import SiteStore from '@tdev-stores/SiteStore';
+import { SocketDataStore } from '@tdev-stores/SocketDataStore';
+import { StudentGroupStore } from '@tdev-stores/StudentGroupStore';
+import { UserStore } from '@tdev-stores/UserStore';
+import { action } from 'mobx';
+import React from 'react';
 import { AuthStore } from './AuthStore';
 import ComponentStore from './ComponentStore';
 import ViewStore from './ViewStores';
@@ -74,6 +74,7 @@ export class RootStore {
          * could be probably ignored since the page gets reloaded on logout?
          */
         console.log('cleanup data stores');
+        this.viewStore.cleanup();
         this.sessionStore.setIsLoggedIn(false);
         this.userStore.cleanup();
         this.socketStore.cleanup();

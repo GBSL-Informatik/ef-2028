@@ -1,24 +1,23 @@
-import React from 'react';
-import { observer } from 'mobx-react-lite';
-import styles from './styles.module.scss';
-import Loader from '@tdev-components/Loader';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import _ from 'es-toolkit/compat';
-import Preview from './Preview';
-import Editor from './Editor';
-import SyncStatus from '@tdev-components/SyncStatus';
-import RequestFullscreen from '@tdev-components/shared/RequestFullscreen';
-import { mdiCircleEditOutline, mdiClose, mdiFullscreen, mdiFullscreenExit, mdiLoading } from '@mdi/js';
-import clsx from 'clsx';
-import Button from '@tdev-components/shared/Button';
-import type { LibraryItems } from '@excalidraw/excalidraw/types';
 import type * as ExcalidrawLib from '@excalidraw/excalidraw';
-import Image from './Preview/Image';
+import type { LibraryItems } from '@excalidraw/excalidraw/types';
+import { mdiCircleEditOutline, mdiClose, mdiLoading } from '@mdi/js';
+import Loader from '@tdev-components/Loader';
 import PermissionsPanel from '@tdev-components/PermissionsPanel';
-import { useDocument } from '@tdev-hooks/useDocument';
+import SyncStatus from '@tdev-components/SyncStatus';
+import Button from '@tdev-components/shared/Button';
+import RequestFullscreen from '@tdev-components/shared/RequestFullscreen';
 import { useClientLib } from '@tdev-hooks/useClientLib';
-import { MetaInit, ModelMeta } from '@tdev/excalidoc/model/ModelMeta';
+import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
 import { useStore } from '@tdev-hooks/useStore';
+import { MetaInit, ModelMeta } from '@tdev/excalidoc/model/ModelMeta';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import { default as ExcalidocModel } from '../model';
+import Editor from './Editor';
+import Preview from './Preview';
+import Image from './Preview/Image';
+import styles from './styles.module.scss';
 
 export const DEFAULT_HEIGHT = '600px' as const;
 export const mdiExcalidraw =
@@ -51,25 +50,25 @@ const Excalidoc = observer((props: Props) => {
             </div>
         );
     }
-    return <ExcalidocComponent {...props} documentId={doc.id} />;
+    return <ExcalidocComponent {...props} doc={doc} />;
 });
 
 export const ExcalidocComponent = observer(
     (
         props: Omit<ExcaliProps, 'id'> & {
-            documentId: string;
+            doc: ExcalidocModel;
             onEdit?: (edit: boolean) => void;
             onlyCommitValidChanges?: boolean;
             zenMode?: boolean;
         }
     ) => {
+        const { doc } = props;
         const [edit, setEdit] = React.useState(false);
         const viewStore = useStore('viewStore');
         const Lib = useClientLib<typeof ExcalidrawLib>(
             () => import('@excalidraw/excalidraw'),
             '@excalidraw/excalidraw'
         );
-        const doc = useDocument<'excalidoc'>(props.documentId);
         const id = React.useId();
         const onEdit = React.useCallback(
             (edit: boolean) => {

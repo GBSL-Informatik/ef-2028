@@ -1,18 +1,30 @@
 require('dotenv').config();
 import logger from '@docusaurus/logger';
+import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 import type {
   EditThisPageOption,
   ShowEditThisPage,
   TdevConfig
 } from '@tdev/siteConfig/siteConfig';
-import type { VersionOptions } from '@docusaurus/plugin-content-docs';
 
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config, OnBrokenMarkdownImagesFunction } from '@docusaurus/types';
 import type * as Preset from '@docusaurus/preset-classic';
-import { v4 as uuidv4 } from 'uuid';
-import matter from 'gray-matter';
+import type { Config, OnBrokenMarkdownImagesFunction } from '@docusaurus/types';
+import { GlobExcludeDefault } from '@docusaurus/utils';
+import { resolveEditUrl } from '@tdev/material-sync/src/helpers/resolveEditUrl';
+import { remarkPdfPluginConfig } from '@tdev/remark-pdf';
+import type { TdevCustomFields } from '@tdev/siteConfig/TdevCustomFields';
 import { promises as fs } from 'fs';
+import matter from 'gray-matter';
+import path from 'path';
+import { themes as prismThemes } from 'prism-react-renderer';
+import { v4 as uuidv4 } from 'uuid';
+import pageIndexPlugin from './packages/tdev/page-index/plugin';
+import { useTdevContentPath } from './src/siteConfig/helpers';
+import {
+  recommendedBeforeDefaultRemarkPlugins,
+  recommendedRehypePlugins,
+  recommendedRemarkPlugins,
+} from './src/siteConfig/markdownPluginConfigs';
 import {
   accountSwitcher,
   blog,
@@ -24,29 +36,17 @@ import {
   requestTarget,
   taskStateOverview
 } from './src/siteConfig/navbarItems';
-import { applyTransformers } from './src/siteConfig/transformers';
-import { withSiteConfig } from './src/siteConfig/withSiteConfig';
 import {
-  sassPluginConfig,
+  aliasConfigurationPlugin,
   dynamicRouterPluginConfig,
-  stackblitzRspackTargetPluginConfig,
   rsDoctorPluginConfig,
+  sassPluginConfig,
   sentryPluginConfig,
   socketIoNoDepWarningsPluginConfig,
-  aliasConfigurationPlugin
+  stackblitzRspackTargetPluginConfig
 } from './src/siteConfig/pluginConfigs';
-import pageIndexPlugin from './packages/tdev/page-index/plugin';
-import { useTdevContentPath } from './src/siteConfig/helpers';
-import path from 'path';
-import {
-  recommendedBeforeDefaultRemarkPlugins,
-  recommendedRehypePlugins,
-  recommendedRemarkPlugins,
-} from './src/siteConfig/markdownPluginConfigs';
-import { remarkPdfPluginConfig } from '@tdev/remark-pdf';
-import { GlobExcludeDefault } from '@docusaurus/utils';
-import type { TdevCustomFields } from '@tdev/siteConfig/TdevCustomFields';
-import { resolveEditUrl } from '@tdev/material-sync/src/helpers/resolveEditUrl';
+import { applyTransformers } from './src/siteConfig/transformers';
+import { withSiteConfig } from './src/siteConfig/withSiteConfig';
 
 const BUILD_LOCATION = __dirname;
 const GIT_COMMIT_SHA = process.env.GITHUB_SHA || Math.random().toString(36).substring(7);

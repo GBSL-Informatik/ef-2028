@@ -1,6 +1,5 @@
 import { Document as DocumentProps, Factory } from '@tdev-api/document';
 import { Props as CodeEditorProps } from '@tdev-components/documents/CodeEditor';
-import _ from 'es-toolkit/compat';
 import { default as iScriptMeta } from '@tdev-models/documents/iCode/iCodeMeta';
 import Script from './Script';
 
@@ -15,6 +14,6 @@ export const createModel: Factory = (data, store) => {
 
 export class ScriptMeta extends iScriptMeta<'script'> {
     constructor(props: Partial<Omit<CodeEditorProps, 'id' | 'className'>>) {
-        super('script', props);
+        super('script', { lang: 'py', title: 'Python', ...props });
     }
 }
