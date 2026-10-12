@@ -1,7 +1,7 @@
 import { type Access, type Document, type DocumentType } from '@tdev-api/document';
-import api from './base';
-import { AxiosPromise } from 'axios';
 import { TypeMeta } from '@tdev-models/DocumentRoot';
+import { AxiosPromise } from 'axios';
+import api from './base';
 
 export interface DocumentPresentation<Type extends DocumentType = DocumentType> {
     document: Document<Type>;
@@ -57,7 +57,7 @@ export function update(
 }
 
 export function addUser(id: string, userId: string, signal: AbortSignal): AxiosPromise<StudentGroup[]> {
-    return api.post(`/studentGroups/${id}/members/${userId}`, { signal });
+    return api.post(`/studentGroups/${id}/members/${userId}`, {}, { signal });
 }
 
 export function removeUser(id: string, userId: string, signal: AbortSignal): AxiosPromise<StudentGroup[]> {

@@ -1,0 +1,103 @@
+.notifications {
+    margin-bottom: 0.75rem;
+    --ifm-alert-padding-vertical: 0.25rem;
+}
+.container {
+    --file-tree-height: var(--desktop-file-tree-height, 450px);
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    position: relative;
+    &.resizing {
+        cursor: ew-resize;
+        user-select: none;
+        .selectedFile {
+            pointer-events: none;
+        }
+    }
+    .panSidebar {
+        flex-shrink: 0;
+        align-self: stretch;
+    }
+    .sidebar {
+        z-index: var(--ifm-z-index-fixed);
+        flex-shrink: 0;
+        overflow: hidden;
+        width: var(--file-tree-width);
+    }
+
+    .mobileHeader,
+    .desktopCollapsed {
+        display: none;
+    }
+    .divider {
+        min-height: 48px;
+    }
+    .selectedFile {
+        flex-grow: 1;
+        flex-shrink: 1;
+        flex-basis: 300px;
+        min-width: 0;
+        max-width: 1200px;
+        max-height: calc(var(--tdev-personal-space-max-content-height, 95vh) - 5rem);
+        overflow: auto;
+    }
+    .filePath {
+        position: absolute;
+        bottom: -1em;
+        left: 0;
+        font-family: var(--ifm-font-family-monospace);
+        font-style: italic;
+        &.collapsed {
+            bottom: -1.4em;
+        }
+    }
+    &.standalone {
+        .filePath {
+            bottom: -2em;
+            &.collapsed {
+                bottom: -3.5em;
+            }
+        }
+    }
+
+    @media screen and (max-width: 768px) {
+        --file-tree-height: min(40dvh, 320px);
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+
+        .mobileHeader {
+            position: sticky;
+            top: var(--ifm-navbar-height);
+            display: flex;
+        }
+        &.standalone .mobileHeader {
+            position: static;
+        }
+        .panSidebar {
+            display: contents;
+        }
+        .sidebar {
+            width: 100%;
+        }
+        .tree.desktopCollapsed {
+            display: block;
+        }
+        .sidebar.mobileCollapsed {
+            display: none;
+        }
+        .divider {
+            display: none;
+        }
+        .selectedFile {
+            flex: 0 1 auto;
+            width: 100%;
+            max-height: none;
+            overflow: visible;
+        }
+        .filePath {
+            display: none;
+        }
+    }
+}

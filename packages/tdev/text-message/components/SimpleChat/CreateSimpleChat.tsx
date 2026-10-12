@@ -1,13 +1,14 @@
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { ModelMeta } from '@tdev/text-message/models/SimpleChat/ModelMeta';
+import { NotCreated } from '@tdev-components/Rooms';
+import Button from '@tdev-components/shared/Button';
 import { useCreateDocument } from '@tdev-hooks/useCreateDocument';
 import { useStore } from '@tdev-hooks/useStore';
-import Button from '@tdev-components/shared/Button';
 import { ApiState } from '@tdev-stores/iStore';
+import { ModelMeta } from '@tdev/text-message/models/SimpleChat/ModelMeta';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
 import ChatName from './ChatName';
+import styles from './styles.module.scss';
 
 interface Props {
     id: string;
@@ -20,7 +21,12 @@ const CreateSimpleChat = observer((props: Props) => {
     const meta = React.useMemo(() => new ModelMeta({ name: props.name }), [props.id, props.name]);
     const { create, apiState } = useCreateDocument(props.id, meta, true);
     if (!userStore.current?.hasElevatedAccess) {
-        return null;
+        return (
+            <>
+                <ChatName name={props.name} documentRootId={props.id} />
+                <NotCreated message="Kein Chat vorhanden - warten auf die Lehrperson, bis der Chat erstellt wurde." />
+            </>
+        );
     }
     return (
         <div className={clsx(styles.simpleChatContainer)}>

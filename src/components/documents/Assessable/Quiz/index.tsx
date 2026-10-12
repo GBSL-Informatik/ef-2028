@@ -1,17 +1,19 @@
-import { observer } from 'mobx-react-lite';
-import React from 'react';
+import { AssessableType } from '@tdev-api/document';
 import LoginRequiredForDocumentType from '@tdev-components/shared/Alert/LoginRequiredForDocumentType';
-import styles from './styles.module.scss';
 import { DocumentRootIdContext } from '@tdev-hooks/useContextDocumentRootId';
+import { isDummyId } from '@tdev-hooks/useDummyId';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import useLinkedMetaModel from '@tdev-hooks/useLinkedMetaModel';
+import { useScrollTo } from '@tdev-hooks/useScrollTo';
 import { AssessableComponentProps } from '@tdev-models/documents/Assessable/AssessableMeta';
 import { ModelMeta } from '@tdev-models/documents/Assessable/Quiz';
-import useLinkedMetaModel from '@tdev-hooks/useLinkedMetaModel';
-import { AssessableType } from '@tdev-api/document';
-import QuizControls from './QuizControls';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import { QuizScore } from '../Feedback/QuizScore';
 import clsx from 'clsx';
-import { useScrollTo } from '@tdev-hooks/useScrollTo';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import { QuizScore } from '../Feedback/QuizScore';
+import OfflineQuiz from './OfflineQuiz';
+import QuizControls from './QuizControls';
+import styles from './styles.module.scss';
 
 export interface Props extends AssessableComponentProps<AssessableType> {
     id: string;
@@ -28,12 +30,15 @@ export interface Props extends AssessableComponentProps<AssessableType> {
 
 const Quiz = observer((props: Props) => {
     const meta = React.useMemo(() => new ModelMeta(props), [props.id]);
-    const doc = useFirstRealMainDocument(props.id, meta);
+    const doc = useFirstMainDocument(props.id, meta);
     const [ref, animate] = useScrollTo(doc, 'end');
     useLinkedMetaModel(doc, meta);
 
     if (!doc) {
         return <LoginRequiredForDocumentType type={meta.type} />;
+    }
+    if (doc.isDummy || isDummyId(doc.id)) {
+        return <OfflineQuiz documentRootId={props.id}>{props.children}</OfflineQuiz>;
     }
 
     return (

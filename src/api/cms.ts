@@ -1,5 +1,5 @@
-import api from './base';
 import { AxiosPromise } from 'axios';
+import api from './base';
 
 export interface CmsSettings {
     id: string;
@@ -28,5 +28,5 @@ export function githubToken(token: string, signal: AbortSignal): AxiosPromise<Cm
 }
 
 export function logout(signal: AbortSignal): AxiosPromise<CmsSettings> {
-    return api.post(`/cms/logout`, { signal });
+    return api.post(`/cms/logout`, {}, { signal });
 }

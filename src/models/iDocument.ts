@@ -1,11 +1,11 @@
-import { action, computed, IReactionDisposer, observable, observableRef, reaction } from 'mobx';
-import { Document as DocumentProps, TypeDataMapping, DocumentType } from '@tdev-api/document';
+import { Document as DocumentProps, DocumentType, TypeDataMapping } from '@tdev-api/document';
+import { isDummyId, isTempId } from '@tdev-hooks/useDummyId';
 import DocumentStore from '@tdev-stores/DocumentStore';
-import { debounce, isEqual, type DebouncedFunc } from 'es-toolkit/compat';
 import { ApiState } from '@tdev-stores/iStore';
+import { debounce, isEqual, type DebouncedFunc } from 'es-toolkit/compat';
+import { action, computed, IReactionDisposer, observable, observableRef, reaction } from 'mobx';
 import { NoneAccess, ROAccess, RWAccess } from './helpers/accessPolicy';
 import type iSideEffect from './SideEffects/iSideEffect';
-import { isDummyId, isTempId } from '@tdev-hooks/useDummyId';
 
 /**
  * normally, save only once all 1000ms
@@ -17,12 +17,15 @@ export enum Source {
     API = 'api'
 }
 abstract class iDocument<Type extends DocumentType> {
+    readonly localObjectId: string;
     readonly store: DocumentStore;
     readonly id: string;
     readonly authorId: string;
     readonly parentId: string | null | undefined;
     readonly documentRootId: string;
     readonly type: Type;
+    readonly uniqOnRoot: string | null;
+    readonly uniqOnParent: string | null;
     @observableRef accessor _pristine: TypeDataMapping[Type];
 
     readonly createdAt: Date;
@@ -36,6 +39,7 @@ abstract class iDocument<Type extends DocumentType> {
      * Edits    :    |||  |            |||   ||  |  |     ||  ||||  |||    ||  ||| |||||
      */
     saveFn: DebouncedFunc<typeof iDocument.prototype._save>;
+    private isSavePending: boolean = false;
 
     @observable accessor state: ApiState = ApiState.IDLE;
 
@@ -48,9 +52,12 @@ abstract class iDocument<Type extends DocumentType> {
         store: DocumentStore,
         saveDebounceTime: number = SAVE_DEBOUNCE_TIME
     ) {
+        this.localObjectId = crypto.randomUUID();
         this.store = store;
         this.id = props.id;
         this.authorId = props.authorId;
+        this.uniqOnRoot = props.uniqOnRoot ? props.uniqOnRoot : null;
+        this.uniqOnParent = props.uniqOnParent ? props.uniqOnParent : null;
         this.parentId = props.parentId;
         this.documentRootId = props.documentRootId;
         this.type = props.type;
@@ -151,7 +158,7 @@ abstract class iDocument<Type extends DocumentType> {
 
     @computed
     get isMain() {
-        return !this.parentId && this.root?.type === this.type;
+        return this.uniqOnRoot === 'main' && this.root?.type === this.type;
     }
 
     @computed
@@ -229,13 +236,14 @@ abstract class iDocument<Type extends DocumentType> {
         this.stateDisposer();
         if (deep) {
             this.children.forEach((c) => {
-                this.store.removeFromStore(c);
+                this.store.removeFromStore(c, true);
             });
         }
     }
 
     @action
     save(skipStreamUpdate: boolean = false, onBeforeSave?: (() => Promise<void>) | undefined) {
+        this.isSavePending = true;
         const res = this.saveFn(onBeforeSave);
         if (!skipStreamUpdate) {
             this.streamUpdate();
@@ -259,12 +267,15 @@ abstract class iDocument<Type extends DocumentType> {
 
     @action
     saveNow() {
-        this.save();
+        if (!this.isSavePending) {
+            this.save();
+        }
         return this.saveFn.flush() ?? Promise.resolve();
     }
 
     @action
     _save(onBeforeSave: () => Promise<void> = () => Promise.resolve()) {
+        this.isSavePending = false;
         /**
          * call the api to save the code...
          */

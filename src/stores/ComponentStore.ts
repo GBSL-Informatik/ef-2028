@@ -1,23 +1,24 @@
-import { CodeMeta } from '@tdev-models/documents/Code';
-import { RootStore } from './rootStore';
 import {
-    type CodeType,
-    type DocumentType,
+    DocumentModelType,
+    TaskableType,
     TypeModelMapping,
+    type CodeType,
     type ContainerType,
     type ContainerTypeModelMapping,
-    TaskableType
+    type DocumentType
 } from '@tdev-api/document';
+import { TypeMeta } from '@tdev-models/DocumentRoot';
+import { ModelMeta as ChoiceMeta } from '@tdev-models/documents/Assessable/ChoiceAnswer';
+import { ModelMeta as QuizMeta } from '@tdev-models/documents/Assessable/Quiz';
+import { ModelMeta as TrueFalseMeta } from '@tdev-models/documents/Assessable/TrueFalseAnswer';
+import { CodeMeta } from '@tdev-models/documents/Code';
 import { ContainerMeta } from '@tdev-models/documents/DynamicDocumentRoots/ContainerMeta';
 import iCodeMeta, { MetaInit } from '@tdev-models/documents/iCode/iCodeMeta';
-import { computed } from 'mobx';
-import React from 'react';
-import { TypeMeta } from '@tdev-models/DocumentRoot';
 import { ModelMeta as ProgressStateMeta } from '@tdev-models/documents/ProgressState';
 import { TaskMeta as TaskStateMeta } from '@tdev-models/documents/TaskState';
-import { ModelMeta as QuizMeta } from '@tdev-models/documents/Assessable/Quiz';
-import { ModelMeta as ChoiceMeta } from '@tdev-models/documents/Assessable/ChoiceAnswer';
-import { ModelMeta as TrueFalseMeta } from '@tdev-models/documents/Assessable/TrueFalseAnswer';
+import { computed } from 'mobx';
+import React from 'react';
+import { RootStore } from './rootStore';
 
 export type LiveCode = `live_${string}`;
 
@@ -57,6 +58,7 @@ class ComponentStore {
     readonly root: RootStore;
     components = new Map<ContainerType, ContainerComponent>();
     editorComponents = new Map<CodeType, EditorComponent>();
+    documentViews = new Map<DocumentType, React.ComponentType<{ document: DocumentModelType }>>();
     taskableDocumentsMeta = new Map<DocumentType, TypeMeta<TaskableType>>([
         ['task_state', new TaskStateMeta({})],
         ['progress_state', new ProgressStateMeta({})],
@@ -130,6 +132,13 @@ class ComponentStore {
 
     registerEditorComponent<T extends CodeType>(type: T, component: EditorComponent<T>) {
         this.editorComponents.set(type, component as EditorComponent<any>);
+    }
+
+    registerDocumentView<T extends DocumentType>(
+        type: T,
+        component: React.ComponentType<{ document: TypeModelMapping[T] }>
+    ) {
+        this.documentViews.set(type, component as React.ComponentType<{ document: DocumentModelType }>);
     }
 
     createEditorMeta<T extends CodeType>(type: T, props: Partial<MetaInit>): iCodeMeta<T> {

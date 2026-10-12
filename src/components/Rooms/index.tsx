@@ -1,23 +1,23 @@
-import clsx from 'clsx';
 import Layout from '@theme/Layout';
+import clsx from 'clsx';
 
-import { matchPath, useLocation } from '@docusaurus/router';
 import BrowserOnly from '@docusaurus/BrowserOnly';
-import { observer } from 'mobx-react-lite';
-import Loader from '@tdev-components/Loader';
-import Icon from '@mdi/react';
+import { matchPath, useLocation } from '@docusaurus/router';
 import { mdiEmoticonSad } from '@mdi/js';
-import { useStore } from '@tdev-hooks/useStore';
-import styles from './styles.module.scss';
-import React from 'react';
-import type DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
-import { default as DynamicDocumentRootsComponent } from '@tdev-components/documents/DynamicDocumentRoots';
-import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoots';
-import PermissionsPanel from '@tdev-components/PermissionsPanel';
-import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
-import NoAccess from '@tdev-components/shared/NoAccess';
+import Icon from '@mdi/react';
 import { ContainerType } from '@tdev-api/document';
-import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
+import { default as DynamicDocumentRootsComponent } from '@tdev-components/documents/DynamicDocumentRoots';
+import Loader from '@tdev-components/Loader';
+import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import NoAccess from '@tdev-components/shared/NoAccess';
+import { useGlobalFirstMainDocument } from '@tdev-hooks/useGlobalFirstMainDocument';
+import { useStore } from '@tdev-hooks/useStore';
+import type DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
+import { ModelMeta } from '@tdev-models/documents/DynamicDocumentRoots';
+import { NoneAccess } from '@tdev-models/helpers/accessPolicy';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import styles from './styles.module.scss';
 
 const NoRoom = () => {
     return (
@@ -37,11 +37,11 @@ const NoType = ({ dynamicRoot }: { dynamicRoot: DynamicDocumentRoots<ContainerTy
     );
 };
 
-export const NotCreated = () => {
+export const NotCreated = ({ message }: { message?: React.ReactNode }) => {
     return (
         <div className={clsx('alert alert--warning', styles.alert)} role="alert">
             <Icon path={mdiEmoticonSad} size={1} color="var(--ifm-color-warning)" />
-            Dieser Dokument-Container wurde noch nicht erzeugt. Warten auf die Lehrperson.
+            {message ?? 'Dieser Dokument-Container wurde noch nicht erzeugt. Warten auf die Lehrperson.'}
             <div style={{ flexGrow: 1, flexBasis: 0 }} />
             <Loader noLabel />
         </div>
@@ -112,7 +112,7 @@ interface WithModelProps {
 const WithDocumentRoot = observer((props: WithModelProps): React.ReactNode => {
     const { rootId, docContainerId } = props;
     const meta = React.useMemo(() => new ModelMeta({ type: 'dummy' as ContainerType }), []);
-    const dynDoc = useFirstMainDocument(rootId, meta, false) as DynamicDocumentRoots<ContainerType> | null;
+    const dynDoc = useGlobalFirstMainDocument(rootId, meta, false);
 
     if (!rootId || !dynDoc) {
         return <NoRoom />;

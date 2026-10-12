@@ -1,13 +1,13 @@
 import { AssessableType, Document as DocumentProps } from '@tdev-api/document';
+import { IfmColors } from '@tdev-components/shared/Colors';
+import { isDummyId } from '@tdev-hooks/useDummyId';
 import iDocument from '@tdev-models/iDocument';
+import { iTaskableDocument } from '@tdev-models/iTaskableDocument';
 import DocumentStore from '@tdev-stores/DocumentStore';
 import { action, computed, observable, observableRef } from 'mobx';
 import React from 'react';
 import { AssessableMeta, ExpandedOption } from './AssessableMeta';
 import Quiz from './Quiz';
-import { iTaskableDocument } from '@tdev-models/iTaskableDocument';
-import { mdiTooltipQuestionOutline } from '@mdi/js';
-import { IfmColors } from '@tdev-components/shared/Colors';
 
 export enum Correctness {
     Correct = 'correct',
@@ -50,15 +50,15 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         super(props, store, 50);
         this._assessed = props.data?.assessed || false;
         this.qid = props.data.qid;
-        this._checkIntegrity();
     }
 
     @computed
     get linkedMeta() {
-        if (!this._linkedMeta && this.quiz) {
-            // try getting a linked meta from the quiz
+        if (!this._linkedMeta) {
+            // Share page metadata across authors using a persisted quiz or question model.
             const refMeta = this.root?.allDocuments.find(
-                (doc) => doc.type === this.type && !!doc._linkedMeta && doc.qid === this.qid
+                (doc) =>
+                    !isDummyId(doc.id) && doc.type === this.type && !!doc._linkedMeta && doc.qid === this.qid
             ) as iAssessable<T> | undefined;
             return refMeta?._linkedMeta;
         }
@@ -67,6 +67,9 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
 
     @action
     setLinkedMeta(metadata: AssessableMeta<T>) {
+        if (this.type !== metadata.type) {
+            return;
+        }
         this._linkedMeta = metadata;
         this.onLinkedMetaChange();
     }
@@ -288,55 +291,6 @@ abstract class iAssessable<T extends AssessableType> extends iDocument<T> implem
         }
         if (this.root?.type === this.type) {
             return this.root.meta as AssessableMeta<T>;
-        }
-    }
-
-    @action
-    _checkIntegrity() {
-        const user = this.store.root.userStore.current;
-        if (user && this.authorId !== user.id) {
-            return;
-        }
-        if (this.inQuiz && this.quiz) {
-            if (this.quiz.questionCount === 0) {
-                // A real quiz always has at least one questionId. If this is empty, the quiz hasn't loaded yet
-                // and we shouldn't delete anything.
-                return;
-            }
-            // ensure the current document is unique for the given qid and authorId
-            if (!this.quiz.questionIds.has(this.qid!)) {
-                this._destroy();
-            } else {
-                // check for duplicates
-                const duplicates = this.quiz.questions.filter(
-                    (q) => q.qid === this.qid && q.authorId === this.authorId
-                );
-                if (duplicates.length > 1) {
-                    // only keep the oldest one, delete the rest
-                    const sorted = duplicates.sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
-                    const toDelete = sorted.slice(1);
-                    toDelete.forEach((doc) => {
-                        doc._destroy();
-                    });
-                }
-            }
-        }
-    }
-
-    @action
-    _destroy() {
-        const user = this.store.root.userStore.current;
-        if (user && this.authorId !== user?.id) {
-            return;
-        }
-        // for now, only allow deletion of nested docs
-        if (!this.inQuiz) {
-            return;
-        }
-        if (user) {
-            this.store.apiDelete(this);
-        } else {
-            this.store.removeFromStore(this);
         }
     }
 }

@@ -1,11 +1,11 @@
+import { useGlobalFirstMainDocument } from '@tdev-hooks/useGlobalFirstMainDocument';
+import { ModelMeta } from '@tdev/text-message/models/SimpleChat/ModelMeta';
 import clsx from 'clsx';
-import styles from './styles.module.scss';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
-import { ModelMeta } from '@tdev/text-message/models/SimpleChat/ModelMeta';
-import { default as SimpleChatComponent } from './SimpleChat';
-import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import CreateSimpleChat from './CreateSimpleChat';
+import { default as SimpleChatComponent } from './SimpleChat';
+import styles from './styles.module.scss';
 
 interface Props {
     id: string;
@@ -16,7 +16,7 @@ interface Props {
 const SimpleChat = observer((props: Props): React.ReactNode => {
     const { id, name } = props;
     const meta = React.useMemo(() => new ModelMeta({ name }), [id, name]);
-    const simpleChat = useFirstMainDocument(id, meta, false);
+    const simpleChat = useGlobalFirstMainDocument(id, meta, false);
     if (!simpleChat || simpleChat.isDummy) {
         return <CreateSimpleChat id={id} name={name} />;
     }

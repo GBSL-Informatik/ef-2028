@@ -1,19 +1,19 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import { useFirstRealMainDocument } from '@tdev-hooks/useFirstRealMainDocument';
-import {
-    MetaInit,
-    ModelMeta,
-    default as DynamicDocumentRootsModel
-} from '@tdev-models/documents/DynamicDocumentRoots';
-import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { Access, ContainerType } from '@tdev-api/document';
-import { useStore } from '@tdev-hooks/useStore';
-import AddDynamicDocumentRoot from './AddDynamicDocumentRoot';
+import PermissionsPanel from '@tdev-components/PermissionsPanel';
 import { NotCreated } from '@tdev-components/Rooms';
+import { useGlobalFirstMainDocument } from '@tdev-hooks/useGlobalFirstMainDocument';
+import { useStore } from '@tdev-hooks/useStore';
+import {
+    default as DynamicDocumentRootsModel,
+    MetaInit,
+    ModelMeta
+} from '@tdev-models/documents/DynamicDocumentRoots';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import AddDynamicDocumentRoot from './AddDynamicDocumentRoot';
 import DocumentContainer from './DocumentContainer';
+import styles from './styles.module.scss';
 
 interface Props<T extends ContainerType> extends MetaInit<T> {
     id: string;
@@ -23,7 +23,7 @@ const DynamicDocumentRoots = observer((props: Props<ContainerType>) => {
     const meta = React.useMemo(() => new ModelMeta({ type: props.type }), [props.id]);
     const userStore = useStore('userStore');
     const user = userStore.current;
-    const doc = useFirstRealMainDocument(props.id, meta, user?.hasElevatedAccess, {
+    const doc = useGlobalFirstMainDocument(props.id, meta, user?.hasElevatedAccess, false, {
         access: Access.RO_DocumentRoot,
         /**
          * there is only one document root for dynamic document roots
@@ -34,11 +34,14 @@ const DynamicDocumentRoots = observer((props: Props<ContainerType>) => {
         sharedAccess: Access.RW_DocumentRoot
     }) as DynamicDocumentRootsModel<ContainerType> | undefined;
     React.useEffect(() => {
+        if (doc?.isDummy) {
+            return;
+        }
         if (doc && doc.linkedDocumentContainersMap.size === 0) {
             doc.loadDocumentRoots();
         }
     }, [doc]);
-    if (!doc) {
+    if (!doc || doc.isDummy) {
         return (
             <div>
                 <PermissionsPanel documentRootId={props.id} />

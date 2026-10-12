@@ -1,26 +1,24 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import Popup from 'reactjs-popup';
 import {
-    mdiFileCode,
     mdiFileDocument,
     mdiFolderOpenOutline,
     mdiFolderPlus,
     mdiLanguagePython,
     mdiPlusCircleOutline
 } from '@mdi/js';
-import Button from '@tdev-components/shared/Button';
-import { useStore } from '@tdev-hooks/useStore';
-import { DocumentType } from '@tdev-api/document';
-import Directory from '@tdev-models/documents/FileSystem/Directory';
-import { Delta } from 'quill/core';
-import DocumentStore from '@tdev-stores/DocumentStore';
 import Icon from '@mdi/react';
+import Button from '@tdev-components/shared/Button';
 import TextInput from '@tdev-components/shared/TextInput';
+import { useStore } from '@tdev-hooks/useStore';
+import Directory from '@tdev-models/documents/FileSystem/Directory';
+import DocumentStore from '@tdev-stores/DocumentStore';
 import { ExcalidrawColor, mdiExcalidraw } from '@tdev/excalidoc/Component';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import { Delta } from 'quill/core';
+import React from 'react';
+import Popup from 'reactjs-popup';
 import { PopupActions } from 'reactjs-popup/dist/types';
+import styles from './styles.module.scss';
 
 interface Props {
     directory: Directory;
@@ -38,14 +36,12 @@ const withFile = async (store: DocumentStore, rootId: string, parentId: string, 
     });
 };
 
-const SUPPORTED_EXTENSIONS = ['.py', '.svg', '.html', '.pbm', '.pgm', '.ppm'];
-
 const asCodeName = (name?: string) => {
     if (!name) {
         return 'programm.py';
     }
     const extension = name.split('.').pop();
-    if (SUPPORTED_EXTENSIONS.includes(`.${extension}`)) {
+    if (extension?.toLowerCase() === 'py') {
         return name;
     }
     return `${name}.py`;
@@ -84,10 +80,10 @@ const NewItem = observer((props: Props) => {
                 <div className={clsx('card__body', styles.body)}>
                     <TextInput onChange={setName} placeholder="Name" />
                     <Button
-                        text={isPyScript ? 'Neues Python Snippet' : 'Neues Snippet'}
+                        text={'Neues Python Snippet'}
                         color="rgb(19, 165, 0)"
                         size={0.8}
-                        icon={isPyScript ? mdiLanguagePython : mdiFileCode}
+                        icon={mdiLanguagePython}
                         iconSide="left"
                         onClick={async () => {
                             withFile(documentStore, rootId, directory.id, asCodeName(name))

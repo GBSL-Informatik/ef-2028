@@ -1,18 +1,20 @@
-import React from 'react';
-import clsx from 'clsx';
-import styles from './styles.module.scss';
-import { observer } from 'mobx-react-lite';
-import { CodeMeta } from '@tdev-models/documents/Code';
-import { MetaProps } from '@tdev/theme/CodeBlock';
-import PermissionsPanel from '@tdev-components/PermissionsPanel';
-import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
-import CodeEditorComponent from '..';
 import ErrorBoundary from '@docusaurus/ErrorBoundary';
-import CodeBlock from '@theme/CodeBlock';
-import Card from '@tdev-components/shared/Card';
-import Button from '@tdev-components/shared/Button';
 import useIsBrowser from '@docusaurus/useIsBrowser';
+import { CodeType } from '@tdev-api/document';
+import PermissionsPanel from '@tdev-components/PermissionsPanel';
+import Button from '@tdev-components/shared/Button';
+import Card from '@tdev-components/shared/Card';
+import { useFirstMainDocument } from '@tdev-hooks/useFirstMainDocument';
 import { useStore } from '@tdev-hooks/useStore';
+import { CodeMeta } from '@tdev-models/documents/Code';
+import iCode from '@tdev-models/documents/iCode';
+import { MetaProps } from '@tdev/theme/CodeBlock';
+import CodeBlock from '@theme/CodeBlock';
+import clsx from 'clsx';
+import { observer } from 'mobx-react-lite';
+import React from 'react';
+import CodeEditorComponent from '..';
+import styles from './styles.module.scss';
 
 export interface Props extends Omit<Partial<MetaProps>, 'live_jsx' | 'live_py' | 'title'> {
     title?: string;
@@ -24,7 +26,6 @@ export interface Props extends Omit<Partial<MetaProps>, 'live_jsx' | 'live_py' |
 
 const SvgEditor = observer((props: Props) => {
     const id = props.slim ? undefined : props.id;
-    const userStore = useStore('userStore');
     const [meta] = React.useState(
         new CodeMeta({ title: 'SVG', ...props, code: props.code || '', lang: 'svg' })
     );
@@ -33,10 +34,21 @@ const SvgEditor = observer((props: Props) => {
     if (!isBrowser || !doc) {
         return <CodeBlock language="svg">{props.code}</CodeBlock>;
     }
-    if (!doc.canDisplay && props.id && !userStore.isUserSwitched) {
+
+    return <SvgEditorComponent doc={doc} />;
+});
+
+interface ComponentProps<T extends CodeType> {
+    doc: iCode<T>;
+}
+
+export const SvgEditorComponent = observer(<T extends CodeType>(props: ComponentProps<T>) => {
+    const { doc } = props;
+    const userStore = useStore('userStore');
+    if (!doc.canDisplay && !userStore.isUserSwitched) {
         return (
             <div>
-                <PermissionsPanel documentRootId={props.id} />
+                <PermissionsPanel documentRootId={doc.documentRootId} />
             </div>
         );
     }

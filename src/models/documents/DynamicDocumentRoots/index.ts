@@ -1,14 +1,14 @@
-import { action, computed, observable } from 'mobx';
-import iDocument, { Source } from '@tdev-models/iDocument';
 import {
-    Document as DocumentProps,
-    TypeDataMapping,
     Access,
     ContainerType,
-    ContainerTypeModelMapping
+    ContainerTypeModelMapping,
+    Document as DocumentProps,
+    TypeDataMapping
 } from '@tdev-api/document';
-import DocumentStore from '@tdev-stores/DocumentStore';
 import DocumentRoot, { TypeMeta } from '@tdev-models/DocumentRoot';
+import iDocument, { Source } from '@tdev-models/iDocument';
+import DocumentStore from '@tdev-stores/DocumentStore';
+import { action, computed, observable } from 'mobx';
 import { v4 as uuidv4 } from 'uuid';
 import { ContainerMeta } from './ContainerMeta';
 
@@ -142,7 +142,8 @@ class DynamicDocumentRoots<Type extends ContainerType> extends iDocument<'dynami
                             return this.store.create({
                                 documentRootId: id,
                                 type: this.containerType,
-                                data: meta.defaultData
+                                data: meta.defaultData,
+                                uniqOnRoot: 'main'
                             });
                         })
                         .then((success) => {
@@ -218,7 +219,7 @@ class DynamicDocumentRoots<Type extends ContainerType> extends iDocument<'dynami
         return this.linkedDynamicDocumentRoots
             .flatMap(
                 (dr) =>
-                    dr.documentsByType.get(this.containerType)?.[0] as
+                    dr.mainConstrainedDocuments.find((doc) => doc.type === this.containerType) as
                         ContainerTypeModelMapping[Type] | undefined
             )
             .filter((d) => !!d);
@@ -229,7 +230,9 @@ class DynamicDocumentRoots<Type extends ContainerType> extends iDocument<'dynami
         return new Map<string, ContainerTypeModelMapping[Type]>(
             this.linkedDynamicDocumentRoots.map((dr) => [
                 dr.id,
-                dr.documentsByType.get(this.containerType)?.[0] as ContainerTypeModelMapping[Type]
+                dr.mainConstrainedDocuments.find(
+                    (doc) => doc.type === this.containerType
+                ) as ContainerTypeModelMapping[Type]
             ])
         );
     }

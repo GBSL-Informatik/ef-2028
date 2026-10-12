@@ -1,30 +1,29 @@
-import type ScriptVersion from '@tdev-models/documents/ScriptVersion';
-import type TaskState from '@tdev-models/documents/TaskState';
-import type String from '@tdev-models/documents/String';
-import api from './base';
-import { AxiosPromise } from 'axios';
-import QuillV2 from '@tdev-models/documents/QuillV2';
-import { Delta } from 'quill/core';
-import Solution from '@tdev-models/documents/Solution';
+import { Color } from '@tdev-components/shared/Colors';
+import type ChoiceAnswer from '@tdev-models/documents/Assessable/ChoiceAnswer';
+import type Quiz from '@tdev-models/documents/Assessable/Quiz';
+import type TrueFalseAnswer from '@tdev-models/documents/Assessable/TrueFalseAnswer';
+import iAssessable from '@tdev-models/documents/Assessable/iAssessable';
+import CmsText from '@tdev-models/documents/CmsText';
+import Code from '@tdev-models/documents/Code';
+import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
 import Directory from '@tdev-models/documents/FileSystem/Directory';
 import File from '@tdev-models/documents/FileSystem/File';
-import Restricted from '@tdev-models/documents/Restricted';
 import MdxComment from '@tdev-models/documents/MdxComment';
-import { Color } from '@tdev-components/shared/Colors';
-import CmsText from '@tdev-models/documents/CmsText';
-import DynamicDocumentRoots from '@tdev-models/documents/DynamicDocumentRoots';
 import ProgressState from '@tdev-models/documents/ProgressState';
-import type DocumentStore from '@tdev-stores/DocumentStore';
-import iDocumentContainer from '@tdev-models/iDocumentContainer';
-import iViewStore from '@tdev-stores/ViewStores/iViewStore';
-import Code from '@tdev-models/documents/Code';
-import { iTaskableDocument } from '@tdev-models/iTaskableDocument';
-import type ChoiceAnswer from '@tdev-models/documents/Assessable/ChoiceAnswer';
-import type TrueFalseAnswer from '@tdev-models/documents/Assessable/TrueFalseAnswer';
-import type Quiz from '@tdev-models/documents/Assessable/Quiz';
-import iAssessable from '@tdev-models/documents/Assessable/iAssessable';
-import iDocument from '@tdev-models/iDocument';
+import QuillV2 from '@tdev-models/documents/QuillV2';
+import Restricted from '@tdev-models/documents/Restricted';
+import type ScriptVersion from '@tdev-models/documents/ScriptVersion';
+import Solution from '@tdev-models/documents/Solution';
+import type String from '@tdev-models/documents/String';
+import type TaskState from '@tdev-models/documents/TaskState';
 import Unknown from '@tdev-models/documents/Unknown';
+import iDocumentContainer from '@tdev-models/iDocumentContainer';
+import { iTaskableDocument } from '@tdev-models/iTaskableDocument';
+import type DocumentStore from '@tdev-stores/DocumentStore';
+import iViewStore from '@tdev-stores/ViewStores/iViewStore';
+import { AxiosPromise } from 'axios';
+import { Delta } from 'quill/core';
+import api from './base';
 
 export enum Access {
     RO_DocumentRoot = 'RO_DocumentRoot',
@@ -234,8 +233,21 @@ export interface Document<Type extends DocumentType> {
 
     data: TypeDataMapping[Type];
 
+    /**
+     * A unique identifier for the document within its root document.
+     */
+    uniqOnRoot?: string | null | undefined;
+    /**
+     * A unique identifier for the document within its parent document (only has an effect when parentId is set).
+     */
+    uniqOnParent?: string | null | undefined;
+
     createdAt: string;
     updatedAt: string;
+}
+export interface UniquenessConstraints {
+    uniqOnRoot?: string | null;
+    uniqOnParent?: string | null;
 }
 
 export type Factory<Type extends DocumentType = DocumentType> = (
@@ -253,15 +265,11 @@ export function find<Type extends DocumentType>(
 export function create<Type extends DocumentType>(
     data: Partial<Document<Type>>,
     onBehalfOf: boolean,
-    isMain: boolean,
     signal: AbortSignal
 ): AxiosPromise<Document<Type>> {
     const queryParams: string[] = [];
     if (onBehalfOf) {
         queryParams.push('onBehalfOf=true');
-    }
-    if (isMain) {
-        queryParams.push('uniqueMain=true');
     }
     return api.post(`/documents${queryParams.length > 0 ? `?${queryParams.join('&')}` : ''}`, data, {
         signal
@@ -293,5 +301,13 @@ export function linkTo<Type extends DocumentType>(
     linkToId: string,
     signal: AbortSignal
 ): AxiosPromise<Document<Type>> {
-    return api.put(`/documents/${id}/linkTo/${linkToId}`, { signal });
+    return api.put(`/documents/${id}/linkTo/${linkToId}`, {}, { signal });
+}
+
+export function updateConstraints<Type extends DocumentType>(
+    id: string,
+    constraints: UniquenessConstraints,
+    signal: AbortSignal
+): AxiosPromise<Document<Type>> {
+    return api.put(`/documents/${id}/constraints`, { data: constraints }, { signal });
 }
