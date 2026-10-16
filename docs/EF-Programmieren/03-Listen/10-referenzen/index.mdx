@@ -4,9 +4,12 @@ sidebar_custom_props:
     name: sdg
     ref: 'https://gitlab.gbsl.website/gymbefin23/material/-/snippets/12'
 page_id: f839a724-40ce-47c0-89ec-8e1262e8920d
-draft: true
 ---
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+import { multipleChoicePoints, noPoints, points } from '@tdev-components/documents/Assessable/helpers/scoring';
+import Quiz from '@tdev-components/documents/Assessable/Quiz';
 import CodeBlock from '@theme/CodeBlock';
+
 
 # Referenzen
 
@@ -201,7 +204,7 @@ Neben den Datentypen mit fester Anzahl Bytes gibt es aber auch Datentypen, deren
 ### Referenzen und Objekte
 Um das obige Problem zu umgehen, verwendet Python ein indirektes Verfahren, um von einer Variable zu den gespeicherten Werten zu gelangen:
 - Am Ort der Variablen ist nur eine Adresse gespeichert. Unter dieser Adresse findet man dann den eigentlichen Wert. Diese Adresse wird als **Referenz** bezeichnet.
-- Der eigentliche Wert, kann nun beliebig gross sein. Sie werden in Python (und vielen anderen Programmiersprachen) als **Objekt** bezeichnet. Bei der Speicherung eines neuen Objektes sucht Python im Speicher nach einer Stelle, wo es genug Platz hat und trägt dan bei der Variablen die Adresse des Objektes ein.
+- Der eigentliche Wert, kann nun beliebig gross sein. Sie werden in Python (und vielen anderen Programmiersprachen) als **Objekt** bezeichnet. Bei der Speicherung eines neuen Objektes sucht Python im Speicher nach einer Stelle, wo es genug Platz hat und trägt dann bei der Variablen die Adresse des Objektes ein.
 Das sieht dann so aus:
 
 ![Speicherreferenzen](./images/ReferenzenSpeicher.png)
@@ -220,9 +223,56 @@ Das sieht dann so aus:
 
 ## Selbsttest
 
-<Answer type="state" id="19a0c129-989b-42a2-bb91-db4265c51c4d">
+:::aufgabe[Referenzen]
+Welche Ausgabe wird auf der Konsole angezeigt?
 
-Selbsttest bestanden?
-</Answer>
+<Quiz scoring={points(1)} randomizeQuestions randomizeOptions id="fb28684d-7d53-4eaf-a3aa-a4f936a4c5eb">
+  <ChoiceAnswer correct={[2]}>
+    ```py
+    a = 13
+    b = []
+    c = b
+    b.append(a)
+    a = 14
 
-<iframe src="https://learningapps.org/watch?v=pg5k2c8pj22" style={{border:'0px',width:'100%',height:'500px'}} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true"></iframe>
+    print(a, b, c)
+    ```
+
+    1. `14 [14] [14]`
+    2. `14 [13] [13]`
+    3. `14 [14] [13]`
+    4. `14 [13] []`
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[2]}>
+    ```py
+    a = 'Hoppla'
+    b = 10
+    c = [a]
+    d = [c, b]
+    c.append(11)
+
+    print(d)
+    ```
+
+    1. `[['Hoppla', 11], [10]]`
+    2. `[['Hoppla', 11], 10]`
+    3. `['Hoppla', 11, 10]`
+    4. `[['Hoppla'], [11, 10]]`
+    5. `[['Hoppla'], 10]`
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[1]}>
+    ```py
+    namen = ['Globi', 'Mickey', 'Daisy']
+    kopie = namen
+    kopie[0] = namen[1]
+
+    print(namen, kopie)
+    ```
+
+    1. `['Mickey', 'Mickey', 'Daisy'] ['Mickey', 'Mickey', 'Daisy']`
+    2. `['Globi', 'Mickey', 'Daisy'] ['Globi', 'Mickey', 'Daisy']`
+    3. `['Mickey', 'Mickey', 'Daisy'] ['Globi', 'Mickey', 'Daisy']`
+    4. `['Globi', 'Mickey', 'Daisy'] ['Mickey', 'Mickey', 'Daisy']`
+  </ChoiceAnswer>
+</Quiz>
+:::
