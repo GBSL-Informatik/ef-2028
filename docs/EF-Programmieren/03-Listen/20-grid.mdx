@@ -25,7 +25,6 @@ Mit `board[zeile][spalte]` greifst du auf ein Feld zu. Weise ihm einen Farbtext 
 from grid import Grid
 
 board = Grid(5, 8, 'skyblue')
-board.draw()
 board[1][2] = 'yellow'
 board[3][6] = 'red'
 ```
@@ -99,6 +98,23 @@ board[1][2] = 'yellow'
 ```
 :::
 
+## Text in Zellen
+
+Es kann simpler Text zu Zellen hinzugefügt werden:
+
+:::def[`Cell.text` `Cell.text_color` `Cell.text_scale`]
+```py live_py slim
+from grid import Grid
+board = Grid(3, 3, 'skyblue')
+board[1][1].text = 'X'
+board[1][2].color = 'red'
+board[1][2].text = 'O'
+board[1][2].text_color = 'white'
+board[2][1].text = '='
+board[2][1].text_scale = 0.5
+```
+:::
+
 ## Gitter aus Text
 
 :::def[`Grid.from_text(text, colors)`]
@@ -142,21 +158,18 @@ from grid import Grid
 from game import gameloop, sleep
 
 board = Grid(3, 3, 'white')
-board.draw()
-
-zustand = 'black'
+board[1][1].text_color = 'white'
 
 @gameloop
 def update(dt):
-	global zustand
-	if zustand == 'black':
-		zustand = 'white'
+	board[1][1].text = f'{dt // 1000}s'
+	if board[1][1].color == 'black':
+		board[1][1].color = 'gray'
 	else:
-		zustand = 'black'
-
-	board[1][1] = zustand
+		board[1][1].color = 'black'
 	sleep(1)
 
 update()
 ```
 :::
+
