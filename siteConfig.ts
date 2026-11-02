@@ -2,21 +2,23 @@
 // Use it to override or extend your app configuration.
 
 import { mdiSourceCommit } from '@mdi/js';
+import type { PluginOptions as PyodidePluginOptions } from '@tdev/pyodide-code/plugin';
 import type { SiteConfigProvider } from '@tdev/siteConfig/siteConfig';
-import {
-    accountSwitcher,
-    loginProfileButton,
-    requestTarget,
-    taskStateOverview,
-    devModeAccessLocalFS,
-    personalSpaceOverlay
-} from './src/siteConfig/navbarItems';
-import { brythonCodePluginConfig, yamlLoaderPluginConfig } from './src/siteConfig/pluginConfigs';
+import path from 'node:path';
 import { themes as prismThemes } from 'prism-react-renderer';
 import {
-    recommendedRemarkPlugins,
-    codeAsAttributePluginConfig
+    codeAsAttributePluginConfig,
+    recommendedRemarkPlugins
 } from './src/siteConfig/markdownPluginConfigs';
+import {
+    accountSwitcher,
+    devModeAccessLocalFS,
+    loginProfileButton,
+    personalSpaceOverlay,
+    requestTarget,
+    taskStateOverview
+} from './src/siteConfig/navbarItems';
+import { brythonCodePluginConfig, yamlLoaderPluginConfig } from './src/siteConfig/pluginConfigs';
 
 const RemarkPlugins = [
     ...recommendedRemarkPlugins.filter((p) => p !== codeAsAttributePluginConfig),
@@ -132,7 +134,22 @@ const getSiteConfig: SiteConfigProvider = () => {
                 defer: true
             }
         ],
-        plugins: [brythonCodePluginConfig(), yamlLoaderPluginConfig],
+        plugins: [
+            brythonCodePluginConfig(),
+            [
+                require.resolve('@tdev/pyodide-code/plugin'),
+                {
+                    extensions: [
+                        path.join(__dirname, 'website/pyodide/clock'),
+                        path.join(__dirname, 'website/pyodide/cookie-klicker'),
+                        path.join(__dirname, 'website/pyodide/snowfall-game'),
+                        path.join(__dirname, 'website/pyodide/led_control'),
+                        path.join(__dirname, 'website/pyodide/grid')
+                    ]
+                } satisfies PyodidePluginOptions
+            ],
+            yamlLoaderPluginConfig
+        ],
         docs: {
             lastVersion: 'current',
             routeBasePath: '/',
