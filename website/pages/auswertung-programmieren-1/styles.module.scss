@@ -1,0 +1,241 @@
+.main {
+    max-width: 1600px;
+    width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.title {
+    margin-bottom: 1rem;
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.5rem 1rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: var(--ifm-global-radius);
+    background: var(--ifm-color-emphasis-100);
+    position: sticky;
+    top: var(--ifm-navbar-height);
+    z-index: 10;
+}
+
+.groupSelect {
+    display: flex;
+    flex-direction: column;
+    font-size: 0.85rem;
+    font-weight: bold;
+    select {
+        margin-top: 0.2rem;
+        min-width: 16rem;
+        padding: 0.3rem 0.5rem;
+        font-size: 1rem;
+        border-radius: var(--ifm-global-radius);
+        border: 1px solid var(--ifm-color-emphasis-400);
+        background: var(--ifm-background-color);
+        color: var(--ifm-font-color-base);
+    }
+}
+
+.hint {
+    color: var(--ifm-color-emphasis-700);
+}
+
+.solutionEditor {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+.editableItem {
+    margin-bottom: 1rem;
+}
+
+.task {
+    margin-bottom: 1.5rem;
+    h3 {
+        margin: 0.5rem 0;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid var(--ifm-color-emphasis-300);
+    }
+}
+
+/* ------------------------------------- Auswertung ------------------------------------------- */
+
+.student {
+    margin-bottom: 3rem;
+    padding-top: 1rem;
+    border-top: 4px solid var(--ifm-color-primary);
+}
+
+.studentHeader {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+    h2 {
+        margin: 0;
+    }
+    .meta {
+        display: flex;
+        gap: 1rem;
+        font-size: 0.85rem;
+        color: var(--ifm-color-emphasis-700);
+    }
+    .warning {
+        color: var(--ifm-color-danger);
+        font-weight: bold;
+    }
+}
+
+.row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+    &.compact {
+        margin-bottom: 0.2rem;
+    }
+}
+
+.columnHeader {
+    font-weight: bold;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    color: var(--ifm-color-emphasis-700);
+}
+
+.cell {
+    min-width: 0;
+    :global(.theme-code-block) {
+        margin-bottom: 0;
+    }
+}
+
+.solution {
+    padding-left: 0.75rem;
+    border-left: 3px solid var(--ifm-color-success);
+}
+
+.empty {
+    padding: 0.5rem;
+    border: 1px dashed var(--ifm-color-emphasis-400);
+    border-radius: var(--ifm-global-radius);
+    color: var(--ifm-color-emphasis-600);
+    font-style: italic;
+    text-align: center;
+}
+
+.text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    min-width: 0;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 0.85rem;
+}
+
+.grading {
+    display: grid;
+    grid-template-columns: auto 6rem auto 1fr;
+    align-items: end;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    font-weight: bold;
+    .gradingLine {
+        border-bottom: 1px solid var(--ifm-color-emphasis-500);
+        height: 1.5rem;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .row {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .columnHeader {
+        display: none;
+    }
+    .solution {
+        padding-left: 0;
+        padding-top: 0.5rem;
+        border-left: none;
+        border-top: 3px solid var(--ifm-color-success);
+    }
+}
+
+/* --------------------------------------- Print ---------------------------------------------- */
+
+@media print {
+    @page {
+        size: A4 landscape;
+        margin: 12mm;
+    }
+
+    :global(.navbar),
+    :global(.footer),
+    :global(.theme-back-to-top-button),
+    :global(.theme-code-block) :global(button),
+    :global([class*='buttonGroup']),
+    .controls,
+    .title,
+    .hint {
+        display: none !important;
+    }
+
+    .main {
+        max-width: none;
+        padding: 0;
+        font-size: 10pt;
+    }
+
+    .student {
+        break-before: page;
+        page-break-before: always;
+        border-top: none;
+        padding-top: 0;
+        margin-bottom: 0;
+        &:first-of-type {
+            break-before: auto;
+            page-break-before: auto;
+        }
+    }
+
+    .studentHeader {
+        border-bottom: 2px solid black;
+        padding-bottom: 0.2rem;
+    }
+
+    .task h3 {
+        break-after: avoid;
+        page-break-after: avoid;
+    }
+
+    .row {
+        break-inside: avoid;
+        page-break-inside: avoid;
+    }
+
+    .cell {
+        pre,
+        code {
+            white-space: pre-wrap !important;
+            word-break: break-word;
+            overflow: visible !important;
+            max-height: none !important;
+            font-size: 8.5pt;
+        }
+        :global(.theme-code-block) {
+            box-shadow: none;
+            border: 1px solid #ccc;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+    }
+}
