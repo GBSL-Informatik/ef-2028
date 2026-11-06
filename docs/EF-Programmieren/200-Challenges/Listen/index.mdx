@@ -1,0 +1,217 @@
+---
+page_id: eedf22bf-320d-411e-b469-6bfc152c94c7
+---
+
+import ProgressState from '@tdev-components/documents/ProgressState';
+import CookieComponent from '@tdev/pyodide/cookie-klicker/src/components/Cookie';
+import IconGame from '@tdev/pyodide/icon-game/src/components/IconGame';
+
+# ⭐ Listen
+
+## Icon-Szene
+
+::::aufgabe[Szene mit fünf Icons]
+<Answer type="state" id="2c581fe6-76ca-4683-a385-a90abadaa41f" />
+
+In der untenstehenden Aufgabe geht es darum, mittels den in Zeilen 6-9 vorgegebenen Listen die Szene aufzubauen.
+Gehen Sie dabei wie folgt vor:
+<ProgressState id="df0bdbd2-cf39-4f46-85fc-9fe37f285e2c" confirm>
+1. Untersuchen Sie die Zeilen 11-14 und verstehen Sie, wie ein Icon eingefügt wird.
+2. Offensichtlich stammen die Eigenschaften des Snowboard-Icons aus den vier Listen. Schreiben Sie die Zeilen 11-14 so um, dass sie die Werte von den Listen beziehen, bspw. `ico.color = colors[0]`.
+3. Jede Liste enthält fünf Elemente - an erster Stelle stehen die Eigenschaften des ersten Icons, an zweiter Stelle die Eigenschaften des zweiten Icons usw. Erstellen Sie nun alle fünf Icons - natürlich mit einer Schleife (vgl. [Schleife über Listen-Indices](#schleife-über-listen-indices)).
+4. Stimmt alles? Markieren Sie die Aufgabe als erledigt.
+</ProgressState>
+
+<IconGame sceneId="fünf" />
+
+```py live_pyo id=a5631359-af7c-4ad8-b18a-35177898ac7d title=five.py
+from icon_game import use_scene
+scene = use_scene('fünf')
+scene.configure(width=400, height=400, background_color='black', show_fps=False)
+scene.render()
+
+icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-club']
+koordinaten_x = [80, 320, 200, 80, 320]
+koordinaten_y = [80, 80, 200, 320, 320]
+colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
+
+ico = scene.add_icon('snowboard')
+ico.color = 'teal'
+ico.x = 80
+ico.y = 80
+scene.render()
+```
+
+**Erweiterung**: Nun soll bei jedem Klick auf die Szene das mittlere Icon um einen zufälligen Winkel zwischen 0 und 360 Grad gedreht werden. Damit dies funktioniert, muss die Szene interaktiv gemacht werden. Führen Sie dazu folgendes Programm aus und untersuchen Sie es ausführlich:
+
+```py live_pyo slim
+from icon_game import use_scene
+from webio import on_click, run
+
+scene = use_scene('fünf')
+scene.add_icon('weather-sunny')
+
+scene.render()
+
+@on_click(scene)
+def click(e):
+    scene.icons[0].rotation = scene.icons[0].rotation + 30
+    scene.render()
+
+await run()
+```
+
+<Solution id="15520d96-ef9c-4769-b7f8-ba4b6b03854a">
+```py live_pyo slim
+from icon_game import use_scene
+scene = use_scene('fünf')
+scene.configure(width=400, height=400, background_color='black', show_fps=False)
+scene.render()
+
+koordinaten_x = [80, 320, 200, 80, 320]
+koordinaten_y = [80, 80, 200, 320, 320]
+icons = ['snowboard', 'ski', 'rocket-launch', 'bicycle-penny-farthing', 'cards-club']
+colors = ['teal', 'lightblue', 'blue', 'lime', 'turquoise']
+
+for i in range(5):
+    ico = scene.add_icon(icons[i])
+    ico.color = colors[i]
+    ico.x = koordinaten_x[i]
+    ico.y = koordinaten_y[i]
+
+scene.render()
+
+@on_click(scene)
+def onclick(e):
+    scene.icons[2].rotation = randint(0, 360)
+    scene.render()
+
+await run()
+```
+</Solution>
+::::
+
+
+
+## Cookie-Klicker
+
+::::aufgabe[Klickgeschwindigkeiten]
+:::info[Ziel]
+Ein Klickgeschwindigkeits-Spiel, bei welchem die Spieler:in so schnell wie möglich 10x auf ein Cookie klicken muss. Immer nach 10 Klicks soll eine kleine Statistik über die letzten 10 Klicks angezeigt werden mit:
+- der Durchschnitt der Reaktionszeiten berechnet und ausgegeben
+- die schnellste und die langsamste Reaktionszeit ausgegeben
+:::
+
+
+<ProgressState id="b9d4ab9a-bc6c-4d19-907a-c1762f0b5a66" confirm>
+1. fügen Sie der Liste `zeiten` immer die aktuelle Reaktionszeit (`event.payload.time_since_last_click`) hinzu. Printen Sie zudem die Liste `zeiten` nach jedem Klick.
+2. Sobald die Liste `zeiten` 10 Elemente enthält soll sie gelöscht werden. Die Ausgabe sollte ca. wie folgt aussehen:
+    ::video[./images/klick-log.mp4]{maxWidth="500px" loop autoplay controls=false}
+3. Nun geben Sie die Statistik der letzten 10 Klicks aus, bevor Sie die Liste löschen.
+4. Erweitern Sie das Hinzufügen von Messungen, so dass diese nur dann beachtet werden, wenn sie z.B. zwischen 0 und 1 Sekunden liegen. So werden versehentliche Doppelklicks oder Klicks nach längerer Pause nicht berücksichtigt.
+5. Optional: Löschen Sie die aktuelle Statistik, bevor Sie die neue Statistik ausgeben, indem Sie `system('clear')` verwenden.
+    ```py
+    from os import system
+    system('clear')
+    ```
+</ProgressState>
+
+
+<CookieComponent cookieId="cookie" />
+
+```py live_pyo id=b3c4a6f5-22d4-4e3b-bb59-63562ca17460 title=reaction.py
+from cookie_klicker import use_cookie
+from webio import on_click, run
+cookie = use_cookie('cookie')
+zeiten = []
+
+@on_click(cookie)
+def drehen(event):
+    cookie.set_rotation(cookie.rotation + 36)
+    print(event.payload.time_since_last_click)
+
+await run()
+```
+
+<Solution id="f03be09f-d812-4a0d-9391-8ec16be17dd2">
+```py live_pyo slim
+from cookie_klicker import use_cookie
+from webio import on_click, run
+
+cookie = use_cookie('cookie')
+zeiten = []
+
+@on_click(cookie)
+def drehen(event):
+    cookie.set_rotation(cookie.rotation + 36)
+    if 0 < event.payload.time_since_last_click < 1:
+        zeiten.append(event.payload.time_since_last_click)
+    if len(zeiten) >= 10:
+        print('Durchschnittliche Reaktionszeit', sum(zeiten) / len(zeiten), 's')
+        print('Schnellste Reaktionszeit', min(zeiten), 's')
+        print('Langsamste Reaktionszeit', max(zeiten), 's')
+        zeiten.clear()
+
+await run()
+```
+</Solution>
+::::
+
+
+## Icon-Game
+
+<IconGame sceneId="game" />
+
+```py live_pyo id=f90a944e-bc62-47b3-a97d-4c09b3256c02 title=game.py
+from icon_game import use_scene
+
+scene = use_scene('game')
+scene.configure(width=400, height=400, background_color='black', show_fps=False)
+ico = scene.add_icon('mdiSnowflake')
+ico.x = 200
+ico.y = 0
+ico.speed_x = 10
+ico.speed_y = 80
+ico.color = 'lightblue'
+ico.rotation = 0
+
+@gameloop(fps=30, sources=[scene])
+def update(ctx):
+    for ico in scene.icons:
+        ico.x = ico.x + 1
+        ico.y = ico.y + 2
+    scene.render()
+await run()
+```
+
+### API
+
+icons
+: finden Sie unter https://efi.gbsl.website/mdi/
+`ctx.dt`
+: ist die seit dem letzten Frame verstrichene Zeit in Sekunden. `render()` überträgt den aktuellen Zustand als eine Nachricht an die Anzeige. Änderungen an Icons werden bis dahin nur im Worker gespeichert.
+`configure(show_fps=False)`
+: Blendet die kleine FPS-Anzeige oben rechts aus; mit `show_fps=True` wird sie wieder eingeblendet. Standard: `True`. Die Anzeige misst die Aufrufe von `scene.render()` im Worker über ungefähr eine halbe Sekunde. Die Einstellung wird mit dem nächsten `scene.render()` sichtbar. Ohne laufendes Programm zeigt die Anzeige `0 FPS`.
+`scene.add_icon(name, x=width/2, y=height/2, size=width*0.1, color='white', speed_x=0, speed_y=0, rotation=0)`
+: Erzeugt ein MDI-Icon mit Mittelpunkt `(x, y)` und halber Symbolgrösse `size`. `name` unterstützt Camel-Case und Dash-Case mit oder ohne MDI-Präfix: `'mdiAlarmPlus'`, `'alarmPlus'`, `'mdi-alarm-plus'` und `'alarm-plus'` ergeben dasselbe Icon. Das gilt auch beim Ändern von `icon.name`; der Handle behält die eingegebene Schreibweise. Unbekannte Namen werden abgewiesen. `color`, `speed_x`, `speed_y` und `rotation` sind benannte Argumente.
+`scene.add_icon('alarm-plus')`
+: Ohne Positions- und Grössenangaben liegt das Icon in der Mitte der aktuellen Szene: `x = scene.width / 2`, `y = scene.height / 2`, `size = scene.width * 0.1`. `size` bleibt die halbe Symbolgrösse. Die Standardwerte werden beim Hinzufügen berechnet; spätere Änderungen der Szenengrösse verändern bestehende Icons nicht.
+`icon.name`, `icon.x`, `icon.y`, `icon.size`, `icon.speed_x`, `icon.speed_y`, `icon.color`, `icon.rotation`
+: Veränderbare Eigenschaften eines Handles. `rotation` ist die Drehung in Grad um die Mitte, positiv im Uhrzeigersinn; Standard ist `0`. Negative Werte und Werte über `360` sind erlaubt, sofern sie endlich sind. Bewegung und Drehung werden im Python-Code aktualisiert.
+`icon.size`
+: Veränderbare halbe Symbolgrösse in Pixeln. Mit `icon.size += 2 * ctx.dt` wächst das Icon in der Update-Funktion. Die Grösse muss positiv und endlich bleiben; `scene.render()` zeigt die Änderung an.
+`icon.name_short`
+: Schreibgeschützter Name in Dash-Case ohne MDI-Präfix, beispielsweise `'alarm-plus'`. Wird aus `icon.name` abgeleitet und passt sich bei Namensänderungen automatisch an.
+`speed_x`, `speed_y`
+: Veränderbare Geschwindigkeiten in Pixeln pro Sekunde; beide standardmässig `0`. Positive Werte zeigen nach rechts bzw. unten. Der Python-Code aktualisiert `x` und `y` mit der jeweiligen Geschwindigkeit und `ctx.dt`.
+`scene.icons`
+: Momentaufnahme der Handles. Während der Iteration können Elemente entfernt werden. Später hinzugefügte Icons werden über früheren gezeichnet.
+`scene.remove_icon(icon)`
+: Entfernt den angegebenen Handle aus der Szene.
+`scene.reset()`
+: Entfernt alle Icons und behält die Szenenkonfiguration.
+`scene.render()`
+: Überträgt Symbolnamen, Positionen, Grössen, Drehungen und CSS-Farben gemeinsam an die Anzeige.
+
+Punkte werden mit `scene.add_icon('mdiCircle', x, y, size)` erstellt. Ein Symbol lässt sich beispielsweise mit `icon.name = 'mdiRocketLaunch'` ändern; `icon.rotation = 90` dreht es. Änderungen werden beim nächsten `scene.render()` sichtbar.
+
