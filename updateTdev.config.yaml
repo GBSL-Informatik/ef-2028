@@ -7,6 +7,8 @@ trackedElements:
     dst: tsconfig.package.json
   - src: tsconfig.tdev.json
     dst: tsconfig.json
+  - src: .agents/
+    dst: .agents/
   - src: src/
     dst: src
     ignore:

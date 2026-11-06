@@ -27,3 +27,6 @@ yarn-error.log*
 
 # Sentry Config File
 .sentryclirc
+
+# `ln -s .agents/skills .claude/skills`
+.claude/skills
