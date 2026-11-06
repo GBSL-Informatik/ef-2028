@@ -1,4 +1,4 @@
-import { DocumentModelType } from '@tdev-api/document';
+import { allDocuments as apiAllDocuments, DocumentModelType } from '@tdev-api/document';
 import Answer from '@tdev-components/Answer';
 import CmsCode from '@tdev-components/documents/CmsText/Code';
 import { QuillV2Component } from '@tdev-components/documents/QuillV2';
@@ -13,6 +13,7 @@ import CodeBlock from '@theme/CodeBlock';
 import Layout from '@theme/Layout';
 import clsx from 'clsx';
 import { orderBy } from 'es-toolkit/array';
+import { runInAction } from 'mobx';
 import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { documentRootIds, EXAM, ExamItem, ExamTask } from './_exam';
@@ -32,6 +33,11 @@ const DOC_TYPE: { [kind in ExamItem['kind']]: (item: ExamItem) => string } = {
     text: () => 'quill_v2',
     cms: () => 'cms_text'
 };
+
+/** document typen, die für die Auswertung benötigt werden (u.a. ohne `script_version`) */
+const NEEDED_DOC_TYPES = new Set<string>(
+    EXAM.tasks.flatMap((task) => task.items.map((item) => DOC_TYPE[item.kind](item)))
+);
 
 const highlightLang = (lang: string) => (lang === 'py' ? 'python' : lang);
 
@@ -306,10 +312,32 @@ const ExamEvaluation = observer(() => {
     }, []);
 
     const evaluate = (evaluationMode: EvaluationMode) => {
+        if (!current) {
+            return;
+        }
         setLoadState('loading');
-        documentStore
-            .apiLoadDocumentsFrom(documentRootIds(EXAM))
-            .then(() => {
+        /** nur Dokumente der gewählten Gruppe (bzw. eigene beim Testdruck) und der Lehrperson */
+        const authorIds = new Set<string>([current.id]);
+        if (evaluationMode === 'group' && group) {
+            group.students.forEach((student) => authorIds.add(student.id));
+        }
+        /**
+         * Nicht `documentStore.apiLoadDocumentsFrom` verwenden: Das lädt alle Dokumente aller
+         * Autor:innen inkl. sämtlicher `script_version`s und fügt sie einzeln in den Store ein,
+         * was bei versionierten Code-Blöcken sehr langsam ist.
+         */
+        const controller = new AbortController();
+        apiAllDocuments(documentRootIds(EXAM), controller.signal)
+            .then(({ data }) => {
+                const needed = data.filter(
+                    (doc) =>
+                        NEEDED_DOC_TYPES.has(doc.type) &&
+                        /** cms-texte können auch von einer Lehrperson für alle erfasst sein */
+                        (authorIds.has(doc.authorId) || doc.type === 'cms_text')
+                );
+                runInAction(() => {
+                    needed.forEach((doc) => documentStore.addToStore(doc));
+                });
                 setLoadState('done');
                 setMode(evaluationMode);
             })
@@ -336,6 +364,10 @@ const ExamEvaluation = observer(() => {
                                     value={groupId}
                                     onChange={(e) => {
                                         setGroupId(e.target.value);
+                                        /** Abgaben der neuen Gruppe sind noch nicht geladen */
+                                        if (mode === 'group') {
+                                            setMode(null);
+                                        }
                                     }}
                                 >
                                     <option value="">– Lerngruppe wählen –</option>

@@ -112,15 +112,7 @@ export const EXAM: Exam = {
         },
         {
             title: 'Aufgabe 5',
-            items: [
-                {
-                    kind: 'cms',
-                    id: 'de555f92-e415-49fa-a009-90797bc2953b',
-                    label: 'Zahlen-Liste',
-                    lang: 'python'
-                },
-                py('fd582889-5570-4d00-b84f-fb31f5c3db90')
-            ]
+            items: [py('fd582889-5570-4d00-b84f-fb31f5c3db90')]
         },
         {
             title: 'Aufgabe 6',
