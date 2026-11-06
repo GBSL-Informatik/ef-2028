@@ -53,6 +53,14 @@
     margin-bottom: 1rem;
 }
 
+.placeholder {
+    padding: 0.5rem;
+    border: 1px dashed var(--ifm-color-emphasis-400);
+    border-radius: var(--ifm-global-radius);
+    color: var(--ifm-color-emphasis-600);
+    font-style: italic;
+}
+
 .task {
     margin-bottom: 1.5rem;
     h3 {
@@ -63,6 +71,25 @@
 }
 
 /* ------------------------------------- Auswertung ------------------------------------------- */
+
+/**
+ * Die Auswertung wird am Bildschirm in derselben Breite (A4 hochformat abzüglich Seitenränder)
+ * und Schriftgrösse wie im Druck dargestellt. Nur so kann `_pagination.ts` die Seitenzahl pro
+ * Schüler:in berechnen. Werte müssen mit `@page` unten übereinstimmen.
+ */
+$page-content-width: 210mm - 2 * 12mm;
+
+.evaluation {
+    width: $page-content-width;
+    max-width: 100%;
+    margin: 0 auto;
+    font-size: 10pt;
+}
+
+.unit {
+    break-inside: avoid;
+    page-break-inside: avoid;
+}
 
 .student {
     margin-bottom: 3rem;
@@ -77,13 +104,16 @@
     justify-content: space-between;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+    padding-bottom: 0.2rem;
+    border-bottom: 2px solid var(--ifm-color-emphasis-800);
     h2 {
         margin: 0;
     }
     .meta {
         display: flex;
+        flex-wrap: wrap;
         gap: 1rem;
-        font-size: 0.85rem;
+        font-size: 0.85em;
         color: var(--ifm-color-emphasis-700);
     }
     .warning {
@@ -92,19 +122,29 @@
     }
 }
 
+.evaluation .task {
+    margin-bottom: 0.8rem;
+    h3 {
+        margin: 0.3rem 0;
+    }
+}
+
 .row {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 1rem;
-    margin-bottom: 0.5rem;
+    gap: 0.6rem;
+    margin-bottom: 0.4rem;
     &.compact {
         margin-bottom: 0.2rem;
+    }
+    &.fullWidth {
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
 .columnHeader {
     font-weight: bold;
-    font-size: 0.85rem;
+    font-size: 0.85em;
     text-transform: uppercase;
     color: var(--ifm-color-emphasis-700);
 }
@@ -113,16 +153,26 @@
     min-width: 0;
     :global(.theme-code-block) {
         margin-bottom: 0;
+        box-shadow: none;
+        border: 1px solid var(--ifm-color-emphasis-300);
+    }
+    pre,
+    code {
+        white-space: pre-wrap !important;
+        word-break: break-word;
+        overflow: visible !important;
+        max-height: none !important;
+        font-size: 8pt;
     }
 }
 
 .solution {
-    padding-left: 0.75rem;
+    padding-left: 0.5rem;
     border-left: 3px solid var(--ifm-color-success);
 }
 
 .empty {
-    padding: 0.5rem;
+    padding: 0.3rem;
     border: 1px dashed var(--ifm-color-emphasis-400);
     border-radius: var(--ifm-global-radius);
     color: var(--ifm-color-emphasis-600);
@@ -139,12 +189,13 @@
 
 .label {
     font-weight: bold;
-    font-size: 0.85rem;
+    font-size: 0.85em;
 }
 
 .grading {
     display: grid;
-    grid-template-columns: auto 6rem auto 1fr;
+    grid-template-columns: auto 6rem auto 6rem;
+    justify-content: end;
     align-items: end;
     gap: 0.5rem;
     margin-top: 1rem;
@@ -155,26 +206,21 @@
     }
 }
 
-@media screen and (max-width: 768px) {
-    .row {
-        grid-template-columns: minmax(0, 1fr);
-    }
-    .columnHeader {
-        display: none;
-    }
-    .solution {
-        padding-left: 0;
-        padding-top: 0.5rem;
-        border-left: none;
-        border-top: 3px solid var(--ifm-color-success);
-    }
+/** Höhe wird vor dem Drucken berechnet (`_pagination.ts`), am Bildschirm ohne Höhe */
+.spacer {
+    height: 0;
+}
+
+/** wird nur gedruckt, wenn die vorangehende Prüfung eine ungerade Seitenzahl hat */
+.blankPage {
+    display: none;
 }
 
 /* --------------------------------------- Print ---------------------------------------------- */
 
 @media print {
     @page {
-        size: A4 landscape;
+        size: A4 portrait;
         margin: 12mm;
     }
 
@@ -192,7 +238,10 @@
     .main {
         max-width: none;
         padding: 0;
-        font-size: 10pt;
+    }
+
+    .evaluation {
+        width: 100%;
     }
 
     .student {
@@ -205,37 +254,24 @@
             break-before: auto;
             page-break-before: auto;
         }
-    }
-
-    .studentHeader {
-        border-bottom: 2px solid black;
-        padding-bottom: 0.2rem;
-    }
-
-    .task h3 {
-        break-after: avoid;
-        page-break-after: avoid;
-    }
-
-    .row {
-        break-inside: avoid;
-        page-break-inside: avoid;
-    }
-
-    .cell {
-        pre,
-        code {
-            white-space: pre-wrap !important;
-            word-break: break-word;
-            overflow: visible !important;
-            max-height: none !important;
-            font-size: 8.5pt;
+        &[data-pad='true'] + .blankPage {
+            display: block;
+            break-before: page;
+            page-break-before: always;
+            padding-top: 120mm;
+            text-align: center;
+            font-style: italic;
+            color: #999;
         }
-        :global(.theme-code-block) {
-            box-shadow: none;
-            border: 1px solid #ccc;
-            -webkit-print-color-adjust: exact;
-            print-color-adjust: exact;
-        }
+    }
+
+    .spacer {
+        height: var(--print-spacer-height, 0);
+    }
+
+    .cell :global(.theme-code-block) {
+        border-color: #ccc;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
     }
 }
