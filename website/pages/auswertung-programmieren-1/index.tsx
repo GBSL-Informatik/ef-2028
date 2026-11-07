@@ -4,7 +4,6 @@ import CmsCode from '@tdev-components/documents/CmsText/Code';
 import { QuillV2Component } from '@tdev-components/documents/QuillV2';
 import Button from '@tdev-components/shared/Button';
 import { useStore } from '@tdev-hooks/useStore';
-import type CmsTextModel from '@tdev-models/documents/CmsText';
 import type iCode from '@tdev-models/documents/iCode';
 import type QuillV2Model from '@tdev-models/documents/QuillV2';
 import type User from '@tdev-models/User';
@@ -34,9 +33,12 @@ const DOC_TYPE: { [kind in ExamItem['kind']]: (item: ExamItem) => string } = {
     cms: () => 'cms_text'
 };
 
+/** cms-texte werden in der Auswertung nicht angezeigt */
+const evaluatedItems = (task: ExamTask) => task.items.filter((item) => item.kind !== 'cms');
+
 /** document typen, die für die Auswertung benötigt werden (u.a. ohne `script_version`) */
 const NEEDED_DOC_TYPES = new Set<string>(
-    EXAM.tasks.flatMap((task) => task.items.map((item) => DOC_TYPE[item.kind](item)))
+    EXAM.tasks.flatMap((task) => evaluatedItems(task).map((item) => DOC_TYPE[item.kind](item)))
 );
 
 const highlightLang = (lang: string) => (lang === 'py' ? 'python' : lang);
@@ -160,14 +162,9 @@ const StaticItem = observer(({ item, doc }: { item: ExamItem; doc?: DocumentMode
                 </div>
             );
         }
-        case 'cms': {
-            const text = (doc as unknown as CmsTextModel).text ?? '';
-            return (
-                <CodeBlock language={highlightLang(item.lang)} title={item.label}>
-                    {text}
-                </CodeBlock>
-            );
-        }
+        case 'cms':
+            /** wird in der Auswertung nicht angezeigt */
+            return null;
     }
 });
 
@@ -179,15 +176,6 @@ interface RowProps {
 
 const Row = observer(({ item, studentId, teacherId }: RowProps) => {
     const findDoc = useFindDoc();
-    if (item.kind === 'cms') {
-        return (
-            <div className={clsx(styles.row, styles.fullWidth)}>
-                <div className={clsx(styles.cell)}>
-                    <StaticItem item={item} doc={findDoc(item, studentId)} />
-                </div>
-            </div>
-        );
-    }
     return (
         <div className={clsx(styles.row, item.kind !== 'code' && styles.compact)}>
             <div className={clsx(styles.cell)}>
@@ -215,7 +203,7 @@ const TaskEvaluation = ({
     studentId: string;
     teacherId: string;
 }) => {
-    const [first, ...rest] = task.items;
+    const [first, ...rest] = evaluatedItems(task);
     return (
         <section className={clsx(styles.task)}>
             <div className={clsx(styles.unit)} {...unit}>
@@ -330,10 +318,7 @@ const ExamEvaluation = observer(() => {
         apiAllDocuments(documentRootIds(EXAM), controller.signal)
             .then(({ data }) => {
                 const needed = data.filter(
-                    (doc) =>
-                        NEEDED_DOC_TYPES.has(doc.type) &&
-                        /** cms-texte können auch von einer Lehrperson für alle erfasst sein */
-                        (authorIds.has(doc.authorId) || doc.type === 'cms_text')
+                    (doc) => NEEDED_DOC_TYPES.has(doc.type) && authorIds.has(doc.authorId)
                 );
                 runInAction(() => {
                     needed.forEach((doc) => documentStore.addToStore(doc));
