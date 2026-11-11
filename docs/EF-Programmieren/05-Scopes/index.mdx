@@ -1,0 +1,190 @@
+---
+page_id: cfa77099-ec76-4866-b726-1e7cbd3bef21
+---
+
+import QuillV2 from '@tdev-components/documents/QuillV2'
+import Quiz from '@tdev-components/documents/Assessable/Quiz';
+import ChoiceAnswer from '@tdev-components/documents/Assessable/ChoiceAnswer';
+import Hint from '@tdev-components/documents/Assessable/Feedback/Hint';
+import { points } from '@tdev-components/documents/Assessable/helpers/scoring';
+
+# 4. Scopes in Python
+
+## Ausgangslage
+Wieso kann die Variable `word` auf Zeile 1 nicht verändert werden?
+```py live_py slim
+word = 'test'
+
+def reset():
+    word = 'hangman'
+    print(word)
+
+def play():
+    print(word)
+    reset()
+    print(word)
+play()
+```
+
+## Präsentation
+
+<iframe src="/slides/python-scopes.html" style={{border:'0px',width:'100%',height:'500px'}} allowFullScreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" />
+
+## Notizen
+
+<QuillV2 placeholder="✍️ Notizen..." id="3b9a5576-4d7c-4b0a-98d4-e1aac110677c" />
+
+
+## Quiz
+
+Lesen Sie in den folgenden Beispielen jeweils das Programm durch und entscheiden Sie, was ausgegeben wird.
+
+<Quiz scoring={points(1)} randomizeQuestions randomizeOptions keepExpanded={"correct"} resetMode='incorrect' id="38d3bf30-8515-45e5-97b5-4021bbee5040">
+  <ChoiceAnswer correct={[1]}>
+    ```py
+    x = 55
+
+    def hallo():
+        return x
+
+    print(hallo())
+    ```
+
+    1. `55`
+    2. `None`
+    3. `NameError: name 'x' is not defined`
+    4. `x`
+
+    <Hint when={['correct']}>
+      Die Variable `x` ist im globalen Scope definiert. Globale Variablen können überall im Programm gelesen werden, also auch im lokalen Scope einer Funktion.
+    </Hint>
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[1]}>
+    ```py
+    def sinnlos():
+        z = 77
+        return z
+
+    print(sinnlos())
+    ```
+
+    1. `77`
+    2. `None`
+    3. `NameError: name 'z' is not defined`
+    4. `z`
+
+    <Hint when={['correct']}>
+      Die Variable `z` ist im lokalen Scope der Funktion `sinnlos()` definiert. Innerhalb dieser Funktion kann überall auf `z` zugegriffen werden.
+    </Hint>
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[3]}>
+    ```py
+    def stuhl():
+        pp = 99
+        return pp
+
+    stuhl()
+
+    print(pp)
+    ```
+
+    1. `99`
+    2. `None`
+    3. `NameError: name 'pp' is not defined`
+    4. Keine Ausgabe
+
+    <Hint when={['correct']}>
+      Die Variable `pp` wird in der Funktion `stuhl()` definiert. Sie hat deshalb einen lokalen Scope und kann nur innerhalb von `stuhl()` verwendet werden. Ausserhalb der Funktion existiert `pp` nicht. Der Rückgabewert von `stuhl()` wird zudem nirgends gespeichert.
+    </Hint>
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[2]}>
+    ```py
+    ii = 50
+
+    def ventilator():
+        ii = 100
+        return ii
+
+    print(ventilator())
+    ```
+
+    1. `50`
+    2. `100`
+    3. `150`
+    4. `NameError: name 'ii' is not defined`
+
+    <Hint when={['correct']}>
+      Die Variable `ii` wird zuerst im globalen Scope definiert und dann im lokalen Scope der Funktion `ventilator()` neu definiert. Gibt es eine lokale und eine globale Variable mit demselben Namen, wird innerhalb der Funktion die lokale verwendet.
+    </Hint>
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[1]}>
+    ```py
+    qq = 3
+
+    def fahrrad():
+        qq = 7
+
+    fahrrad()
+
+    print(qq)
+    ```
+
+    1. `3`
+    2. `7`
+    3. `None`
+    4. `NameError: name 'qq' is not defined`
+    5. Keine Ausgabe
+
+    <Hint when={['correct']}>
+      Die Zuweisung `qq = 7` in `fahrrad()` erzeugt eine neue, lokale Variable `qq`, die nur innerhalb der Funktion existiert. Die globale Variable `qq` wird dabei gar nicht verändert und hat beim `print` immer noch den Wert `3`.
+    </Hint>
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[2]}>
+    ```py
+    nn = 9
+
+    if True:
+        nn = 16
+
+    print(nn)
+    ```
+
+    1. `9`
+    2. `16`
+    3. `NameError: name 'nn' is not defined`
+    4. Keine Ausgabe
+
+    <Hint when={['correct']}>
+      `nn` erhält im globalen Scope zuerst den Wert `9` und wird dann im Codeblock des `if` auf `16` gesetzt. Anders als Funktionen erzeugen `if`-Anweisungen keinen neuen, lokalen Scope: Der Code im `if`-Block läuft im bestehenden Scope.
+    </Hint>
+  </ChoiceAnswer>
+  <ChoiceAnswer correct={[1]}>
+    ```py
+    cc = 2
+
+    if False:
+        cc = 66
+
+    def helm():
+        if True:
+            cc = 40
+
+    helm()
+
+    print(cc)
+    ```
+
+    1. `2`
+    2. `66`
+    3. `40`
+    4. `None`
+    5. `NameError: name 'cc' is not defined`
+
+    <Hint when={['correct']}>
+      `cc` erhält zuerst den Wert `2`. Die Bedingung `if False` ist nie erfüllt, deshalb wird `cc = 66` nie ausgeführt. Die Zuweisung `cc = 40` in `helm()` wird zwar ausgeführt, aber im lokalen Scope der Funktion, nicht im globalen. Im globalen Scope hat `cc` deshalb weiterhin den Wert `2`.
+    </Hint>
+  </ChoiceAnswer>
+</Quiz>
+
+
+Quizziz (im Unterricht gespielt am 4.11.2022) 👉 https://quizizz.com/admin/quiz/6364e3f4a495f3001e2cc3f2/scope-of-variables-in-python
