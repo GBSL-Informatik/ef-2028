@@ -317,7 +317,25 @@ Der Debugger in VS Code zeigt den Call Stack direkt an. Wie Sie den Debugger sta
 - **Step Into** :mdi[debug-step-into]{.blue}: Springt in die Funktion hinein, die auf der aktuellen Zeile aufgerufen wird.
 - **Step Out** :mdi[debug-step-out]{.blue}: Führt die aktuelle Funktion zu Ende und springt zurück zur aufrufenden Stelle.
 
-In der Seitenleiste von **Run and Debug** sehen Sie den Bereich **Call Stack** mit allen Frames (oben das aktuelle) und den Bereich **Variables** mit den Variablen des ausgewählten Frames (**Locals**) und den globalen Variablen (**Globals**). Wenn Sie im Call Stack auf ein anderes Frame klicken, zeigt **Variables** dessen Variablen an.
+In der Seitenleiste von **Run and Debug** sehen Sie den Bereich **Call Stack** mit allen Frames (oben das aktuelle) und den Bereich **Variables** mit den Variablen des ausgewählten Frames (**Locals**) und den globalen Variablen (**Globals**).
+
+Im folgenden Beispiel hält der Debugger beim Programm aus der [Ausgangslage](#ausgangslage) auf Zeile 5 an, also in `reset()`, wie im dritten Schritt oben:
+
+- :mdi[numeric-1-circle-outline]{.red} Der **Call Stack** enthält drei Frames: `reset` (oben, aktuell), `play` und `<module>`. `<module>` ist das globale Frame.
+- :mdi[numeric-2-circle-outline]{.red} Unter **Locals** steht das lokale `word` aus dem Frame von `reset()`.
+- :mdi[numeric-3-circle-outline]{.red} Unter **Globals** steht das globale `word`, das unverändert `'test'` ist.
+- :mdi[numeric-4-circle-outline]{.red} Die gelb markierte Zeile wird als Nächstes ausgeführt.
+- :mdi[numeric-5-circle-outline]{.red} Hier finden Sie **Step Into** :mdi[debug-step-into]{.blue} und **Step Out** :mdi[debug-step-out]{.blue}.
+
+![Debugger hält in `reset()` an: Call Stack mit drei Frames, Locals und Globals](./images/debugger-call-stack.png)
+
+Wenn Sie im Call Stack auf ein anderes Frame klicken, zeigt **Variables** dessen Variablen an:
+
+- :mdi[numeric-1-circle-outline]{.red} Das Frame `play` ist ausgewählt.
+- :mdi[numeric-2-circle-outline]{.red} **Locals** ist leer, denn `play()` hat keine lokalen Variablen.
+- :mdi[numeric-3-circle-outline]{.red} Die grün markierte Zeile zeigt, wo `play()` gerade wartet: beim Aufruf `reset()`. Ist `reset()` fertig, geht es dort weiter.
+
+![Frame `play()` im Call Stack ausgewählt: Locals ist leer, Zeile 9 ist grün markiert](./images/debugger-call-stack-play.png)
 
 ::::aufgabe[Call Stack im Debugger]
 <Answer type="state" id="c2830ba8-e95a-4f35-b089-65ba368feb13" />
