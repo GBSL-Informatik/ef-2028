@@ -216,8 +216,8 @@ Dateiname
    print(noten)
    print(resultat, summe, ergebnis)
    ```
-2. Setzen Sie einen Breakpoint auf **Zeile 22** und starten Sie den Debugger. Gehen Sie mit **Step Into** :mdi[debug-step-into]{.blue} Schritt für Schritt durch das Programm und beobachten Sie, wie im **Call Stack** Frames dazukommen und wieder verschwinden. Probieren Sie auch **Step Out** :mdi[debug-step-out]{.blue} aus.
-3. Entfernen Sie den Breakpoint auf Zeile 22 und setzen Sie einen neuen auf **Zeile 2**. Starten Sie den Debugger neu. Sobald das Programm in `runden()` hält, beantworten Sie die folgenden Fragen.
+2. Setzen Sie einen Breakpoint auf Zeile 22 und starten Sie den Debugger. Gehen Sie mit **Step Into** :mdi[debug-step-into]{.blue} Schritt für Schritt durch das Programm und beobachten Sie, wie im **Call Stack** Frames dazukommen und wieder verschwinden. Probieren Sie auch **Step Out** :mdi[debug-step-out]{.blue} aus.
+3. Entfernen Sie den Breakpoint auf Zeile 22 und setzen Sie einen neuen auf Zeile 2. Starten Sie den Debugger neu. Sobald das Programm in `runden()` hält, beantworten Sie die folgenden Fragen.
 
    <Quiz scoring={points(1)} randomizeOptions keepExpanded={"correct"} resetMode='incorrect' id="21b266fa-5c9d-49a8-a510-9101a1aa3565">
      <ChoiceAnswer correct={[4]}>
@@ -267,7 +267,7 @@ Dateiname
        </Hint>
      </ChoiceAnswer>
      <ChoiceAnswer correct={[1]}>
-       Führen Sie das Programm mit **Continue** :mdi[step-forward]{.blue} zu Ende. Was gibt **Zeile 24** aus?
+       Führen Sie das Programm mit **Continue** :mdi[step-forward]{.blue} zu Ende. Was gibt Zeile 24 aus?
 
        1. `0 100 5.0`
        2. `5.0 24.5 5.0`
@@ -280,7 +280,7 @@ Dateiname
      </ChoiceAnswer>
    </Quiz>
 
-4. In Zeile `23` wird `[4.5, 5, 3.5, 5.5, 6]` ausgegeben. Die globale Liste `noten` wurde also durch die Funktion `auswerten` verändert, die globalen Variablen `resultat` und `summe` aber nicht. Erklären dieses Verhalten mit Bezug auf Frames und Objekte.
+4. In Zeile 23 wird `[4.5, 5, 3.5, 5.5, 6]` ausgegeben. Die globale Liste `noten` wurde also durch die Funktion `auswerten` verändert, die globalen Variablen `resultat` und `summe` aber nicht. Erklären dieses Verhalten mit Bezug auf Frames und Objekte.
 
    <Answer type="text" id="132a2fee-651c-4b73-97c8-8949c3403dbe" />
 
