@@ -202,25 +202,113 @@ Die Variablen in den Frames verweisen auf **Objekte**, die ausserhalb der Frames
 
 ### Beispiel aus der Ausgangslage
 
-So sieht der Call Stack für das Programm aus der [Ausgangslage](#ausgangslage) Schritt für Schritt aus:
+So sieht der Call Stack für das Programm aus der [Ausgangslage](#ausgangslage) Schritt für Schritt aus. Die gelb markierte Zeile mit dem Pfeil ist die Zeile, die als Nächstes ausgeführt wird, wie beim Debugger.
 
-![Zeile 11: Nur das globale Frame mit word](./images/call-stack-1.png)
+:::details[① Zeile 11: `play()` wird aufgerufen]
+![](./images/call-stack-1.png)
 
-![Zeile 8: Frame von play() liegt auf dem globalen Frame](./images/call-stack-2.png)
+Bevor `play()` aufgerufen wird, gibt es nur das globale Frame. Darin zeigt `word` auf das Objekt `'test'`.
+:::
 
-![Zeile 5: Frame von reset() mit eigenem word](./images/call-stack-3.png)
+:::details[② Zeile 8: `print(word)` in `play()`]
+![](./images/call-stack-2.png)
 
-![Zeile 10: Frame von reset() wurde entfernt](./images/call-stack-4.png)
+Der Aufruf `play()` hat ein neues Frame auf den Call Stack gelegt. `play()` hat keine lokalen Variablen. Für `word` sucht Python deshalb im globalen Frame weiter und findet `'test'`.
+:::
 
-Mit dem Call Stack lassen sich die Regeln aus der Präsentation und dem Quiz erklären:
+:::details[③ Zeile 5: `print(word)` in `reset()`]
+![](./images/call-stack-3.png)
 
-| Beobachtung | Erklärung mit dem Call Stack |
-|---|---|
-| Nach dem Aufruf von `stuhl()` gibt `print(pp)` einen `NameError` | Das Frame von `stuhl()` wurde entfernt, `pp` existiert nicht mehr. |
-| `fahrrad()` ändert das globale `qq` nicht | `qq = 7` erstellt eine neue Variable im Frame von `fahrrad()`. Das globale `qq` bleibt unverändert. |
-| In `play()` wird das globale `word` gefunden | Im Frame von `play()` gibt es kein `word`, also sucht Python im globalen Frame weiter. |
-| Eine Liste kann in einer Funktion verändert werden | Der Parameter im Frame der Funktion und die globale Variable zeigen auf **dasselbe Listen-Objekt**. |
-| Der Rückgabewert bleibt nach dem Aufruf erhalten | Das Frame wird entfernt, das zurückgegebene Objekt aber nicht. |
+`play()` hat in Zeile 9 `reset()` aufgerufen: Ein weiteres Frame liegt jetzt zuoberst. Die Zuweisung `word = 'hangman'` in Zeile 4 hat ein **lokales** `word` im Frame von `reset()` erstellt. Python findet es im obersten Frame zuerst, deshalb wird `hangman` ausgegeben. Das globale `word` bleibt unverändert.
+:::
+
+:::details[④ Zeile 10: `print(word)` in `play()`]
+![](./images/call-stack-4.png)
+
+`reset()` ist fertig: Ihr Frame wurde vom Call Stack entfernt, und mit ihm das lokale `word`. Auf das Objekt `'hangman'` zeigt keine Variable mehr. In `play()` findet Python wieder das globale `word` mit dem Wert `'test'`.
+:::
+
+Mit dem Call Stack lassen sich auch die Beispiele aus dem Quiz und der Präsentation erklären. Die markierte Zeile ist jeweils die entscheidende Stelle.
+
+::::info[Lokale Variablen sind nach dem Aufruf weg]
+:::flex{basis=240px}
+```py {6}
+def stuhl():
+    pp = 99
+    return pp
+
+stuhl()
+print(pp)
+```
+::br
+**Ausgabe:** `NameError: name 'pp' is not defined`\
+`pp` liegt im Frame von `stuhl()`. Nach dem Aufruf wird dieses Frame vom Call Stack entfernt, und mit ihm `pp`. Im globalen Frame gibt es kein `pp`.
+:::
+::::
+
+::::info[Eine Zuweisung in der Funktion erstellt eine lokale Variable]
+:::flex{basis=240px}
+```py {4}
+qq = 3
+
+def fahrrad():
+    qq = 7
+
+fahrrad()
+print(qq)
+```
+::br
+**Ausgabe:** `3`\
+`qq = 7` erstellt ein neues `qq` im Frame von `fahrrad()`. Das `qq` im globalen Frame wird dabei nicht verändert.
+:::
+::::
+
+::::info[Lesen geht auch aus dem globalen Frame]
+:::flex{basis=240px}
+```py {4}
+x = 55
+
+def hallo():
+    return x
+
+print(hallo())
+```
+::br
+**Ausgabe:** `55`\
+Im Frame von `hallo()` gibt es kein `x`. Python sucht deshalb im globalen Frame weiter und findet dort `x`.
+:::
+::::
+
+::::info[Listen können in einer Funktion verändert werden]
+:::flex{basis=240px}
+```py {2}
+def umbenennen(liste):
+    liste[0] = 'Melanie'
+
+namen = ['Fred']
+umbenennen(namen)
+print(namen)
+```
+::br
+**Ausgabe:** `['Melanie']`\
+Der Parameter `liste` im Frame von `umbenennen()` und die globale Variable `namen` zeigen auf **dasselbe Listen-Objekt**. Die Änderung am Objekt ist deshalb auch über `namen` sichtbar.
+:::
+::::
+
+::::info[Der Rückgabewert überlebt das Frame]
+:::flex{basis=240px}
+```py {3}
+def sinnlos():
+    z = 77
+    return z
+
+print(sinnlos())
+```
+::br
+**Ausgabe:** `77`\
+Nach dem `return` wird das Frame von `sinnlos()` samt `z` entfernt. Das Objekt `77` bleibt aber bestehen und wird an die aufrufende Stelle zurückgegeben.
+:::
+::::
 
 ### Den Call Stack im Debugger beobachten
 
