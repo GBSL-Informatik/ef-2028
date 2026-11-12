@@ -158,19 +158,27 @@ In der Seitenleiste von **Run and Debug** sehen Sie den Bereich **Call Stack** m
 
 Im folgenden Beispiel hält der Debugger beim Programm aus der [Ausgangslage](../index.mdx#ausgangslage) auf Zeile 5 an, also in `reset()`, wie im dritten Schritt oben:
 
-- :mdi[numeric-1-circle-outline]{.red} Der **Call Stack** enthält drei Frames: `reset` (oben, aktuell), `play` und `<module>`. `<module>` ist das globale Frame.
-- :mdi[numeric-2-circle-outline]{.red} Unter **Locals** steht das lokale `word` aus dem Frame von `reset()`.
-- :mdi[numeric-3-circle-outline]{.red} Unter **Globals** steht das globale `word`, das unverändert `'test'` ist.
-- :mdi[numeric-4-circle-outline]{.red} Die gelb markierte Zeile wird als Nächstes ausgeführt.
-- :mdi[numeric-5-circle-outline]{.red} Hier finden Sie **Step Into** :mdi[debug-step-into]{.blue} und **Step Out** :mdi[debug-step-out]{.blue}.
+:mdi[numeric-1-circle-outline]
+: Der **Call Stack** enthält drei Frames: `reset` (oben, aktuell), `play` und `<module>`. `<module>` ist das globale Frame.
+:mdi[numeric-2-circle-outline]
+: Unter **Locals** steht das lokale `word` aus dem Frame von `reset()`.
+:mdi[numeric-3-circle-outline]
+: Unter **Globals** steht das globale `word`, das unverändert `'test'` ist.
+:mdi[numeric-4-circle-outline]
+: Die gelb markierte Zeile wird als Nächstes ausgeführt.
+:mdi[numeric-5-circle-outline]
+: Hier finden Sie **Step Into** :mdi[debug-step-into]{.blue} und **Step Out** :mdi[debug-step-out]{.blue}.
 
 ![Debugger hält in `reset()` an: Call Stack mit drei Frames, Locals und Globals](./images/debugger-call-stack.png)
 
 Wenn Sie im Call Stack auf ein anderes Frame klicken, zeigt **Variables** dessen Variablen an:
 
-- :mdi[numeric-1-circle-outline]{.red} Das Frame `play` ist ausgewählt.
-- :mdi[numeric-2-circle-outline]{.red} **Locals** ist leer, denn `play()` hat keine lokalen Variablen.
-- :mdi[numeric-3-circle-outline]{.red} Die grün markierte Zeile zeigt, wo `play()` gerade wartet: beim Aufruf `reset()`. Ist `reset()` fertig, geht es dort weiter.
+:mdi[numeric-1-circle-outline]
+: Das Frame `play` ist ausgewählt.
+:mdi[numeric-2-circle-outline]
+: **Locals** ist leer, denn `play()` hat keine lokalen Variablen.
+:mdi[numeric-3-circle-outline]
+: Die grün markierte Zeile zeigt, wo `play()` gerade wartet: beim Aufruf `reset()`. Ist `reset()` fertig, geht es dort weiter.
 
 ![Frame `play()` im Call Stack ausgewählt: Locals ist leer, Zeile 9 ist grün markiert](./images/debugger-call-stack-play.png)
 
@@ -209,7 +217,7 @@ Dateiname
    print(resultat, summe, ergebnis)
    ```
 2. Setzen Sie einen Breakpoint auf **Zeile 22** und starten Sie den Debugger. Gehen Sie mit **Step Into** :mdi[debug-step-into]{.blue} Schritt für Schritt durch das Programm und beobachten Sie, wie im **Call Stack** Frames dazukommen und wieder verschwinden. Probieren Sie auch **Step Out** :mdi[debug-step-out]{.blue} aus.
-3. Entfernen Sie den Breakpoint auf Zeile 22 und setzen Sie einen neuen auf **Zeile 2**. Starten Sie den Debugger neu. Beantworten Sie die folgenden Fragen für den Moment, in dem das Programm **zum ersten Mal auf Zeile 2 anhält**.
+3. Entfernen Sie den Breakpoint auf Zeile 22 und setzen Sie einen neuen auf **Zeile 2**. Starten Sie den Debugger neu. Sobald das Programm in `runden()` hält, beantworten Sie die folgenden Fragen.
 
    <Quiz scoring={points(1)} randomizeOptions keepExpanded={"correct"} resetMode='incorrect' id="21b266fa-5c9d-49a8-a510-9101a1aa3565">
      <ChoiceAnswer correct={[4]}>
@@ -226,7 +234,7 @@ Dateiname
        </Hint>
      </ChoiceAnswer>
      <ChoiceAnswer correct={[1]}>
-       Welche Variablen zeigt **Locals** im Frame von `runden` an?
+       Welche **lokalen** Variablen gibt es im Frame von `runden`?
 
        1. `wert = 4.9`
        2. `wert = 4.9` und `gerundet = 5.0`
@@ -245,13 +253,9 @@ Dateiname
        3. `24.5`
        4. `100`
        5. `4.9`
-
-       <Hint when={['correct']}>
-         Die Schleife ist fertig: `4.5 + 5 + 3.5 + 5.5 + 6 = 24.5`. Die `6` wurde in `auswerten` an die Liste angehängt. Das globale `summe` mit dem Wert `100` ist eine andere Variable in einem anderen Frame.
-       </Hint>
      </ChoiceAnswer>
      <ChoiceAnswer correct={[1]}>
-       Klicken Sie im Call Stack auf das Frame `auswerten`. Welche Variablen zeigt **Locals** an?
+       Klicken Sie im Call Stack auf das Frame `auswerten`. Welche **lokalen** Variablen gibt es in diesem Frame?
 
        1. Nur `liste`
        2. `liste` und `resultat`
@@ -259,11 +263,11 @@ Dateiname
        4. Keine
 
        <Hint when={['correct']}>
-         `resultat` erhält erst einen Wert, wenn `schnitt(liste)` fertig ist. Dieser Aufruf läuft aber noch, deshalb existiert `resultat` im Frame von `auswerten` noch nicht. `noten` gehört zum globalen Frame.
+         `resultat` erhält erst einen Wert, wenn `schnitt(liste)` fertig ist. Dieser Aufruf läuft aber gerade, und deshalb existiert `resultat` im Frame von `auswerten` noch nicht.
        </Hint>
      </ChoiceAnswer>
      <ChoiceAnswer correct={[1]}>
-       Führen Sie das Programm mit **Continue** zu Ende. Was gibt **Zeile 24** aus?
+       Führen Sie das Programm mit **Continue** :mdi[step-forward]{.blue} zu Ende. Was gibt **Zeile 24** aus?
 
        1. `0 100 5.0`
        2. `5.0 24.5 5.0`
@@ -276,15 +280,15 @@ Dateiname
      </ChoiceAnswer>
    </Quiz>
 
-4. Zeile 23 gibt `[4.5, 5, 3.5, 5.5, 6]` aus: Die globale Liste `noten` wurde also durch die Funktion `auswerten` verändert, die globalen Variablen `resultat` und `summe` aber nicht. Erklären Sie mithilfe von Frames und Objekten, warum.
+4. In Zeile `23` wird `[4.5, 5, 3.5, 5.5, 6]` ausgegeben. Die globale Liste `noten` wurde also durch die Funktion `auswerten` verändert, die globalen Variablen `resultat` und `summe` aber nicht. Erklären dieses Verhalten mit Bezug auf Frames und Objekte.
 
    <Answer type="text" id="132a2fee-651c-4b73-97c8-8949c3403dbe" />
 
-5. Fügen Sie die Änderungen hinzu und pushen Sie sie in Ihr Repository.
+5. Committen & pushen.
 
 <Solution id="638c6ce2-7d1d-42e6-b290-0f51a3c248eb">
-Beim Aufruf `auswerten(noten)` wird im Frame von `auswerten` der Parameter `liste` erstellt. `liste` zeigt auf **dasselbe Listen-Objekt** wie die globale Variable `noten`. `liste.append(6)` verändert dieses Objekt, deshalb sieht man die Änderung auch über `noten`.
+Beim Aufruf `auswerten(noten)` wird im Frame von `auswerten` der Parameter `liste` erstellt. `liste` zeigt auf **dasselbe Listen-Objekt** (also auf dieselbe Start-Speicheradresse) wie die globale Variable `noten`. `liste.append(6)` verändert dieses Objekt, weshalb man die Änderung auch in `noten` sieht.
 
-`resultat = schnitt(liste)` und `summe = 0` erstellen dagegen **neue Variablen** im jeweiligen Frame (`auswerten` bzw. `schnitt`). Die gleichnamigen globalen Variablen werden dabei nicht verändert. Wenn die Funktionen fertig sind, werden ihre Frames samt diesen lokalen Variablen entfernt.
+`resultat = schnitt(liste)` und `summe = 0` erstellen dagegen **neue Variablen** im jeweiligen Frame (`auswerten` bzw. `schnitt`). Die gleichnamigen globalen Variablen werden dabei nicht verändert. Wenn die Funktionen fertig sind, werden ihre Frames inklusive dieser lokalen Variablen wieder entfernt.
 </Solution>
 ::::
