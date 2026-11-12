@@ -17,7 +17,7 @@ Formatierter Text kann mehrere Texte zusammenfügen und dabei auch Zahlen oder L
 ```py live_py slim
 name = 'Maria'
 jahrgang = 1999
-print(f'Hallo {name}, du bist heute {2022 - jahrgang} Jahre alt')
+print(f'Hallo {name}, du bist heute {2026 - jahrgang} Jahre alt')
 ```
 :::
 
@@ -52,7 +52,7 @@ def sqrt(zahl):
 print('Wurzel 2 = ', sqrt(2))
 ```
 ::br
-**Beispiel**: Ursprünglich wurde die Funktion `sqrt` selber implementiert. Nun brauchen Sie diese vermutlich nicht mehr, das diese aus der Bibliothek `math` importiert wird. Vorerst wollen Sie die eigene Funktion aber noch nicht löschten :mdi[arrow-right] vorerst **kommentieren** Sie diese.
+**Beispiel**: Ursprünglich wurde die Funktion `sqrt` selber implementiert. Nun brauchen Sie diese vermutlich nicht mehr, das diese aus der Bibliothek `math` importiert wird. Vorerst wollen Sie die eigene Funktion aber noch nicht löschen :mdi[arrow-right] vorerst **kommentieren** Sie diese lediglich aus.
 :::
 ::::
 :::::
@@ -236,7 +236,7 @@ print(joke)
 ```
 
 :::details[Hinweis]
-Der 3. Buchstabe ist das `P` in der Liste und kann mit `joke[2]` abgefragt werden.
+Der 3. Buchstabe ist das `P` in diesem String und kann mit `joke[2]` abgefragt werden.
 :::
 ::::
 
@@ -310,7 +310,7 @@ else:
 :::def[`.find(wort)`]
 Findet ein `wort` im String und gibt den Startindex des erstmaligen Auftretens zurück. Bei `'Hallo'.find('l')` wäre dies also der Startindex `2`, da bei `'Hallo'[2]` erstmalig ein `l` vorkommt.
 
-Wird das `wort` nicht gefunden, so gibt die Method `-1` zurück.
+Wird das `wort` nicht gefunden, so gibt die Methode `-1` zurück.
 
 ```py live_py slim
 passwort = 'p4ssw*rt'
@@ -347,8 +347,7 @@ print(original, klein)
 :::
 
 :::def[`.strip(<zeichen>)`]
-Entfernt jeglichen *White-Space* ("weisse Zeichen", daher Leerschläge, Tabulatoren, Neue Zeilen)  entfernt Leerschläge am Start und Ende des Strings. 
-
+Entfernt jeglichen *White-Space* ("weisse Zeichen", daher Leerschläge, Tabulatoren, Neue Zeilen) am Start und Ende des Strings. 
 
 ```py live_py slim
 vorname = '''   
@@ -422,7 +421,7 @@ print('Wochentage: ', tage)
 woche = ' '.join(tage)
 print('Wochentage: ', woche)
 
-datum = ['18', '11', '2022']
+datum = ['18', '11', '2026']
 datum = '-'.join(datum)
 print('Heute ist der ', datum)
 ```
@@ -459,7 +458,7 @@ text = '''\
 print(text)
 ```
 1. Was bezwecken die beiden `\` auf Zeile 1 und 7?
-2. Erzeugen Sie ein in obigem Programm folgende Ausgabe, ohne dabei `text` zu verändern.
+2. Erzeugen Sie im obigen Programm folgende Ausgabe, ohne dabei `text` zu verändern.
     ```
     *----------*
     -*--------*-

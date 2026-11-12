@@ -7,7 +7,7 @@ draft: true
 
 ![--width=400px ???](./images/io-joke-3.webp)
 
-Was soll ein Programm tun, wenn er mit unpassenden Daten oder Eingaben konfrontiert wird? Normalerweise: Abstürzen :mdi[emoticon-cry].
+Was soll ein Programm tun, wenn es mit unpassenden Daten oder Eingaben konfrontiert wird? Normalerweise: Abstürzen :mdi[emoticon-cry].
 
 Damit das Programm nicht abstürzt, ist es unerlässlich, die Benutzerabfragen so gut es geht in die richtige Form umzuwandeln und dann auf Richtigkeit zu überprüfen!
 
@@ -30,7 +30,7 @@ Es gibt in Python eine Möglichkeit dem Interpreter zu sagen: "Es ist okay wenn 
 
 Dieses Konstrukt nennt sich ein _Try-Except Block_ und kann folgendermassen aussehen:
 ```py
-eingabe = input('Geben sie eine Zahl ein')
+eingabe = input('Geben Sie eine Zahl ein')
 try:
     eingabe = int(eingabe)
 except:
@@ -56,7 +56,7 @@ def transform_input(raw):
     try:
         zahl = int(raw[:4])
         if zahl < 1000:
-            raise 'Zu kleine Zahl'
+            raise ValueError('Zu kleine Zahl')
         kategorie = raw[4]
         hexa = int(raw[5:9], base=16)
         return [zahl, kategorie, hexa]
@@ -145,10 +145,10 @@ Benutzereingaben sind mühsam...
 :::finding
 Es gibt keine klaren Regeln, welche Variante im Umgang mit Fehlern besser ist - entweder vorbeugen durch Sicherheitsabfragen oder Fehlerbehandlung mit `try-except`. Die Wahl ist oft auch einfach durch die Philosophie des Programmierers bedingt. 
 
-Um die Lesbarkeit und Wartbarkeit des Programms zu verbessern, können Gewisse Richtlinien befolgt werden:
+Um die Lesbarkeit und Wartbarkeit des Programms zu verbessern, können gewisse Richtlinien befolgt werden:
 - Wenn der Fehler durch eine einfache `if`-Abfrage umgangen werden kann, ist dies meist die bessere Lösung. 
 - Wenn die nötige(n) `if` Abfrage(n) um dem Fehler vorzubeugen, sehr lange und unübersichtlich wäre, kann ein `try-except` Block die bessere Wahl sein.
-- Ein `try` Block sollte maximal ein par Zeilen beinhalten. Die Idee ist also nicht, ganze Funktionen in ein `try` packen!
+- Ein `try` Block sollte maximal ein paar Zeilen beinhalten. Die Idee ist also nicht, ganze Funktionen in ein `try` packen!
 :::
 
 
