@@ -7,7 +7,7 @@ coverage
 .github
 .drone.yml
 versioned_docs
-
+static
 *.md
 *.mdx
 docs/**/*.py
