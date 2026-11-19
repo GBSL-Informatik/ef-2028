@@ -27,4 +27,16 @@ uhr.set_time(90, 180, 270)
 
 Die Winkel für Stunden-, Minuten- und Sekundenzeiger werden in Grad angegeben.
 
+### Eigenes Zifferblatt
+
+```mdx
+<Clock clockId="hundert-uhr" ticks={100} majorTickEvery={10} hideHours hideMinutes />
+```
+
+```python
+uhr = use_clock('hundert-uhr')
+uhr.set_pointer('seconds', 50)  # zeigt bei 100 Strichen auf 180°
+uhr.set_pointer('seconds', 30, within=0.3)  # animiert innerhalb von 0.3 Sekunden
+```
+
 Die [Package-Dokumentation](https://github.com/GBSL-Informatik/teaching-dev/blob/main/packages/tdev/pyodide-code/docs/README.mdx) beschreibt die Erweiterungs-API.

@@ -30,6 +30,28 @@ while True:
 ```
 </CodeShowcase>
 
+## Eigenes Zifferblatt
+
+Mit `ticks` wird die Anzahl Striche auf dem Zifferblatt festgelegt, mit `majorTickEvery` jeder wievielte Strich fett gezeichnet wird. Einzelne Zeiger lassen sich mit `hideHours`, `hideMinutes` und `hideSeconds` ausblenden.
+
+`set_pointer(zeiger, tick)` setzt einen Zeiger direkt auf einen Strich des Zifferblatts. Bei 100 Strichen (0 bis 99) zeigt `set_pointer('seconds', 50)` also auf 180°. Mit `within` dreht sich der Zeiger animiert innerhalb der angegebenen Anzahl Sekunden an die neue Position.
+
+<CodeShowcase lang="md" imports={[`import Clock from '@tdev/pyodide/clock/src/components/Clock';`]}>
+<Clock clockId="hundert-uhr" ticks={100} majorTickEvery={10} hideHours hideMinutes />
+
+```py live_pyo id=08bbe062-1e53-4790-b329-dd3c5dc03054 title=Hundert_Striche
+from clock import use_clock
+from time import sleep
+uhr = use_clock("hundert-uhr")
+
+for tick in range(101):
+    uhr.set_pointer('seconds', tick)
+    sleep(0.05)
+
+uhr.set_pointer('seconds', 50, within=1)  # zurück auf 180°, Animation während 1 Sekunde
+```
+</CodeShowcase>
+
 ## Auf der eigenen Website einrichten
 
 Voraussetzung ist das [installierte Pyodide-Package](../../README.mdx#installation).
@@ -58,16 +80,21 @@ Die Uhr verwendet die allgemeine [Erweiterungs-API](../../README.mdx#eigene-erwe
 ### Gemeinsamer Nachrichtentyp
 
 ```ts title="website/pyodide/clock/protocol.ts"
+export type PointerName = 'hours' | 'minutes' | 'seconds';
+
 export interface ClockTime {
     hours: number;
     minutes: number;
     seconds: number;
 }
 
-export type ClockUpdate = Partial<ClockTime>;
+export type ClockUpdate = Partial<ClockTime> & {
+    /** pointer positions in ticks of the dial (e.g. 0-99 for a dial with 100 ticks) */
+    ticks?: Partial<Record<PointerName, number>>;
+};
 ```
 
-Eine Nachricht kann einzelne Zeiger oder die ganze Uhr ändern. Worker und Browser-Handler verwenden `ClockUpdate` als Typparameter.
+Eine Nachricht kann einzelne Zeiger oder die ganze Uhr ändern. Werte in `ticks` rechnet erst die React-Komponente anhand ihrer Strichanzahl in Winkel um. Worker und Browser-Handler verwenden `ClockUpdate` als Typparameter.
 
 ### Python-Modul im Worker
 
@@ -95,14 +122,27 @@ const clockStore = useExtensionStore(clockExtension);
 const clock = clockStore.useClock(clockId);
 ```
 
+## Komponente
+
+`clockId`
+: Verbindet die Komponente mit einem Python-Handle.
+`ticks` (Standard: `60`)
+: Anzahl Striche auf dem Zifferblatt.
+`majorTickEvery` (Standard: `5`)
+: Jeder wievielte Strich fett gezeichnet wird.
+`hideHours`, `hideMinutes`, `hideSeconds`
+: Blenden den jeweiligen Zeiger aus.
+
 ## Python-Handle
 
 `use_clock(id)`
 : Verbindet den Handle mit der `clockId` der React-Komponente. Jeder Aufruf erzeugt einen eigenen Handle mit lokalen Nullwerten.
 `hours`, `minutes`, `seconds`
-: Lesen die letzten Winkel dieses Handles, nicht den Browser-Store oder andere Handles.
+: Lesen die letzten Werte dieses Handles (Winkel bzw. Strich nach `set_pointer`), nicht den Browser-Store oder andere Handles.
 `set_hours(winkel)`, `set_minutes(winkel)`, `set_seconds(winkel)`
 : Ändern jeweils nur den zugehörigen Zeiger im Browser.
+`set_pointer(zeiger, tick, within=None)`
+: Setzt den Zeiger `'hours'`, `'minutes'` oder `'seconds'` auf einen Strich des Zifferblatts. Der Winkel ergibt sich aus `tick * 360 / ticks` der jeweiligen Komponente. Mit `within` (Sekunden) wird die Bewegung animiert, z.B. `set_pointer('seconds', 30, within=0.3)`.
 `set_time(stunden, minuten, sekunden)`
 : Setzt alle drei Zeiger. Die Argumente sind Winkel in Grad.
 `reset()`

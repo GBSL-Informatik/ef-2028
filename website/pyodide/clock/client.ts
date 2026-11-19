@@ -1,5 +1,5 @@
 import { defineClientExtension } from '@tdev/pyodide-code/extensions';
-import type { ClockUpdate } from './protocol';
+import { POINTER_NAMES, type ClockUpdate } from './protocol';
 import ClockStore from './src/stores/ClockStore';
 
 export default defineClientExtension<ClockUpdate, ClockStore>({
@@ -14,6 +14,14 @@ export default defineClientExtension<ClockUpdate, ClockStore>({
         }
         if (payload.seconds !== undefined) {
             clock.setSeconds(payload.seconds);
+        }
+        if (payload.ticks) {
+            for (const name of POINTER_NAMES) {
+                const tick = payload.ticks[name];
+                if (tick !== undefined) {
+                    clock.setPointer(name, tick, payload.transitionMs);
+                }
+            }
         }
     }
 });
