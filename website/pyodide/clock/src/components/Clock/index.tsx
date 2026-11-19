@@ -10,18 +10,28 @@ import styles from './styles.module.scss';
 
 interface ClockProps {
     clockId: string;
+    /** number of ticks on the dial, default: 60 */
+    ticks?: number;
+    /** every n-th tick is drawn bold, default: 5 */
+    majorTickEvery?: number;
+    hideHours?: boolean;
+    hideMinutes?: boolean;
+    hideSeconds?: boolean;
 }
 
 const CARD_CLASS_NAMES = { body: clsx(styles.clockCard), card: clsx(styles.card) };
-const CLOCK_TICKS = Array.from({ length: 60 }, (_, index) => (
-    <div
-        key={index}
-        className={clsx(styles.tick, index % 5 === 0 && styles.hourTick)}
-        style={{ transform: `rotate(${index * 6}deg)` }}
-    />
-));
 
-const Clock = observer(({ clockId }: ClockProps) => {
+const toPositiveInt = (value: number | undefined, fallback: number) => {
+    if (value === undefined || !Number.isFinite(value) || value < 1) {
+        return fallback;
+    }
+    return Math.round(value);
+};
+
+const Clock = observer((props: ClockProps) => {
+    const { clockId, hideHours, hideMinutes, hideSeconds } = props;
+    const ticks = toPositiveInt(props.ticks, 60);
+    const majorTickEvery = toPositiveInt(props.majorTickEvery, 5);
     const clockStore = useExtensionStore(clockExtension);
     const clock = clockStore.useClock(clockId);
     const header = useMemo(
@@ -32,13 +42,24 @@ const Clock = observer(({ clockId }: ClockProps) => {
         ),
         [clockId]
     );
+    const tickElements = useMemo(
+        () =>
+            Array.from({ length: ticks }, (_, index) => (
+                <div
+                    key={index}
+                    className={clsx(styles.tick, index % majorTickEvery === 0 && styles.hourTick)}
+                    style={{ transform: `rotate(${(index * 360) / ticks}deg)` }}
+                />
+            )),
+        [ticks, majorTickEvery]
+    );
     return (
         <Card classNames={CARD_CLASS_NAMES} header={header}>
             <div className={clsx(styles.dial)}>
-                {CLOCK_TICKS}
-                <Pointer clock={clock} type="hours" />
-                <Pointer clock={clock} type="minutes" />
-                <Pointer clock={clock} type="seconds" />
+                {tickElements}
+                {!hideHours && <Pointer clock={clock} type="hours" ticks={ticks} />}
+                {!hideMinutes && <Pointer clock={clock} type="minutes" ticks={ticks} />}
+                {!hideSeconds && <Pointer clock={clock} type="seconds" ticks={ticks} />}
             </div>
         </Card>
     );

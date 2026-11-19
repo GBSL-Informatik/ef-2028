@@ -1,5 +1,5 @@
 import { defineWorkerExtension } from '@tdev/pyodide-code/extensions';
-import type { ClockTime, ClockUpdate } from './protocol';
+import { POINTER_NAMES, type ClockTime, type ClockUpdate, type PointerName } from './protocol';
 
 export default defineWorkerExtension<ClockUpdate>((context) => ({
     clock: {
@@ -24,7 +24,16 @@ export default defineWorkerExtension<ClockUpdate>((context) => ({
                     update({ hours, minutes, seconds }),
                 set_hours: (hours: number) => update({ hours }),
                 set_minutes: (minutes: number) => update({ minutes }),
-                set_seconds: (seconds: number) => update({ seconds })
+                set_seconds: (seconds: number) => update({ seconds }),
+                set_pointer: (name: PointerName, tick: number) => {
+                    if (!POINTER_NAMES.includes(name)) {
+                        throw new Error(
+                            `Unbekannter Zeiger '${name}'. Erlaubt sind: ${POINTER_NAMES.join(', ')}`
+                        );
+                    }
+                    time[name] = tick;
+                    context.send(id, { ticks: { [name]: tick } });
+                }
             };
         }
     }
