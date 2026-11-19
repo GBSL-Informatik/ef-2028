@@ -1,0 +1,201 @@
+---
+page_id: 67f7b4eb-50e1-42ed-935f-381d25f84ea8
+draft: true
+---
+
+import Clock from '@tdev/pyodide/clock/src/components/Clock';
+import AdventOfCode, { Star } from './components/AdventOfCode';
+
+# 🔐 2025, Tag 1: Der geheime Eingang
+
+## Teil 1
+
+<AdventOfCode title="Tag 1: Der geheime Eingang" href="https://adventofcode.com/2025/day/1">
+Die Elfen haben eine gute und eine schlechte Nachricht.
+
+Die gute: Sie haben *Projektmanagement* entdeckt! Damit können sie endlich das alljährliche Weihnachts-Chaos verhindern. Sie wissen jetzt zum Beispiel, dass die Dekoration am Nordpol bald fertig sein muss, damit andere wichtige Arbeiten rechtzeitig starten können.
+
+Die schlechte: Laut ihrer Ressourcenplanung hat *niemand* von ihnen mehr Zeit, den Nordpol zu dekorieren!
+
+Um Weihnachten zu retten, müssen Sie die Dekoration bis zum *12. Dezember* übernehmen.
+
+Sammeln Sie *Sterne* <Star />, indem Sie Rätsel lösen. Jeden Tag gibt es zwei Rätsel; das zweite wird freigeschaltet, sobald Sie das erste gelöst haben. Jedes Rätsel bringt einen Stern. Viel Glück!
+
+---
+
+Sie stehen vor dem geheimen Eingang der Nordpol-Basis und wollen mit dem Dekorieren loslegen. Doch das Passwort wurde offenbar geändert &ndash; Sie kommen nicht hinein. Zum Glück klebt ein Zettel an der Wand:
+
+> «Wegen neuer Sicherheitsvorschriften liegt das Passwort im Tresor unten. Die neue Kombination steht im beigelegten Dokument.»
+
+Der Tresor hat ein Drehrad mit einem Pfeil. Rund um das Rad stehen der Reihe nach die Zahlen `0` bis `99`. Bei jeder Zahl, an der das Rad vorbeikommt, macht es leise *Klick*.
+
+Das beigelegte Dokument (Ihr *Rätsel-Input*) enthält eine Liste von Drehungen, eine pro Zeile:
+
+- Der Buchstabe am Anfang gibt die Richtung an: `L` heisst nach *links* (zu kleineren Zahlen), `R` nach *rechts* (zu grösseren Zahlen).
+- Die Zahl danach gibt an, um wie viele *Klicks* gedreht wird.
+
+Zeigt das Rad z.B. auf `11`, dann zeigt es nach der Drehung `R8` auf `19`. Ein anschliessendes `L19` bringt es auf `0`.
+
+Weil das Rad rund ist, kommt man von `0` mit einem Klick nach links auf `99` &ndash; und von `99` mit einem Klick nach rechts wieder auf `0`. Steht das Rad also auf `5`, zeigt es nach `L10` auf `95`. Ein anschliessendes `R5` bringt es auf `0`.
+
+Zu Beginn zeigt das Rad auf *`50`*.
+
+Jetzt kommt der Haken: Im obligatorischen Sicherheitsseminar haben Sie gelernt, dass der Tresor nur eine Attrappe ist. Das *eigentliche Passwort* ist die Anzahl Male, die das Rad *nach einer Drehung* auf `0` stehen bleibt.
+
+Angenommen, das Dokument enthält folgende Drehungen:
+
+```
+L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82
+```
+
+Dann bewegt sich das Rad so:
+
+- Das Rad zeigt zu Beginn auf `50`.
+- `L68` &rarr; zeigt auf `82`.
+- `L30` &rarr; zeigt auf `52`.
+- `R48` &rarr; zeigt auf *`0`*.
+- `L5` &rarr; zeigt auf `95`.
+- `R60` &rarr; zeigt auf `55`.
+- `L55` &rarr; zeigt auf *`0`*.
+- `L1` &rarr; zeigt auf `99`.
+- `L99` &rarr; zeigt auf *`0`*.
+- `R14` &rarr; zeigt auf `14`.
+- `L82` &rarr; zeigt auf `32`.
+
+Das Rad bleibt also *dreimal* auf `0` stehen. Das Passwort für dieses Beispiel ist somit *`3`*.
+
+*Werten Sie die Drehungen in Ihrem Dokument aus. Wie lautet das richtige Passwort?*
+</AdventOfCode>
+
+<Clock clockId="aoc-2025-01-teil-1" ticks={100} majorTickEvery={10} hideHours hideMinutes />
+
+```py live_pyo id=7860669f-302f-4538-a7d0-f2cdbe11f835 title=tag_01_teil_1.py
+from clock import use_clock
+from time import sleep
+
+uhr = use_clock('aoc-2025-01-teil-1')
+
+# Ersetzen Sie das Beispiel durch Ihren persönlichen Rätsel-Input
+
+raw = '''L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82'''
+
+# nur ein Platzhalter, muss aus RAW herausgelesen werden!
+data = [10, 120, 90, -40, 50, 30, 70, 180]
+
+# Dauer der Animation pro Drehung in Sekunden.
+# Für Ihren richtigen Input (tausende Zeilen) auf 0 setzen!
+ANIMATION = 0.5
+
+
+position = 50
+uhr.set_pointer('seconds', position)
+passwort = 0
+
+for zeile in data:
+    position = zeile
+    if ANIMATION > 0:
+        uhr.set_pointer('seconds', position, within=ANIMATION)
+        sleep(ANIMATION)
+
+print('Passwort:', passwort)
+```
+
+## Teil 2
+
+<AdventOfCode title="Teil 2" href="https://adventofcode.com/2025/day/1#part2">
+Sie sind sicher, dass das Passwort stimmt &ndash; aber die Tür geht nicht auf. Sie klopfen, doch niemand öffnet. Während Sie nachdenken, bauen Sie einen Schneemann.
+
+Beim Rollen der Schneekugeln finden Sie ein weiteres Dokument, das wohl in den Schnee gefallen ist:
+
+> «Wegen noch neuerer Sicherheitsvorschriften ist bis auf Weiteres die Passwort-Methode `0x434C49434B` zu verwenden.»
+
+Aus dem Seminar wissen Sie: Bei der Methode `0x434C49434B` wird gezählt, wie oft das Rad bei *irgendeinem Klick* auf `0` zeigt &ndash; egal, ob das *während* einer Drehung oder an ihrem *Ende* passiert.
+
+Mit denselben Drehungen wie oben zeigt das Rad nun ein paar Mal öfter auf `0`:
+
+- Das Rad zeigt zu Beginn auf `50`.
+- `L68` &rarr; zeigt auf `82`; *unterwegs* zeigt es einmal auf `0`.
+- `L30` &rarr; zeigt auf `52`.
+- `R48` &rarr; zeigt auf *`0`*.
+- `L5` &rarr; zeigt auf `95`.
+- `R60` &rarr; zeigt auf `55`; *unterwegs* zeigt es einmal auf `0`.
+- `L55` &rarr; zeigt auf *`0`*.
+- `L1` &rarr; zeigt auf `99`.
+- `L99` &rarr; zeigt auf *`0`*.
+- `R14` &rarr; zeigt auf `14`.
+- `L82` &rarr; zeigt auf `32`; *unterwegs* zeigt es einmal auf `0`.
+
+Das Rad bleibt also dreimal am Ende einer Drehung auf `0` stehen und zeigt dreimal zusätzlich während einer Drehung auf `0`. Das neue Passwort für dieses Beispiel ist somit *`6`*.
+
+Aufgepasst: Steht das Rad auf `50`, zeigt es bei einer einzigen Drehung `R1000` *zehnmal* auf `0`, bevor es wieder bei `50` landet!
+
+*Wie lautet das Passwort mit der Methode `0x434C49434B`?*
+</AdventOfCode>
+
+<Clock clockId="aoc-2025-01-teil-2" ticks={100} majorTickEvery={10} hideHours hideMinutes />
+
+```py live_pyo id=c3dcd367-a8b7-4f34-a887-6e3d2eaae819 title=tag_01_teil_2.py
+from clock import use_clock
+from time import sleep
+
+uhr = use_clock('aoc-2025-01-teil-2')
+
+# Ersetzen Sie das Beispiel durch Ihren persönlichen Rätsel-Input
+daten = """L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82"""
+
+# Dauer der Animation pro Drehung in Sekunden.
+# Für Ihren richtigen Input (tausende Zeilen) auf 0 setzen!
+ANIMATION = 0.5
+
+anzeige = 50  # nur für die Uhr: Position ohne Sprung von 99 auf 0
+def zeige(richtung, distanz):
+    global anzeige
+    if ANIMATION == 0:
+        return
+    if richtung == 'L':
+        anzeige = anzeige - distanz
+    else:
+        anzeige = anzeige + distanz
+    uhr.set_pointer('seconds', anzeige, within=ANIMATION)
+    sleep(ANIMATION)
+
+uhr.set_pointer('seconds', anzeige)
+
+position = 50
+passwort = 0
+
+for zeile in daten.splitlines():
+    richtung = zeile[0]
+    distanz = int(zeile[1:])
+    zeige(richtung, distanz)
+    # TODO: position aktualisieren und jeden Klick auf 0 zählen
+
+print('Passwort:', passwort)
+```

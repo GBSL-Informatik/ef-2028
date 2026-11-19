@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@300;400;700&display=swap');
+
+/* Farben und Schrift angelehnt an https://adventofcode.com */
+$aoc-bg: #0f0f23;
+$aoc-text: #cccccc;
+$aoc-bright: #ffffff;
+$aoc-link: #009900;
+$aoc-link-hover: #99ff99;
+$aoc-star: #ffff66;
+$aoc-code-bg: #10101a;
+$aoc-code-border: #333340;
+
+.aoc {
+    --ifm-heading-color: #{$aoc-bright};
+    --ifm-link-color: #{$aoc-link};
+    --ifm-link-hover-color: #{$aoc-link-hover};
+    --ifm-code-background: #{$aoc-code-bg};
+    --prism-background-color: #{$aoc-code-bg};
+    --prism-color: #{$aoc-text};
+
+    background: $aoc-bg;
+    color: $aoc-text;
+    font-family: 'Source Code Pro', monospace;
+    font-weight: 300;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    padding: 1.2em 1.5em;
+    margin-bottom: 1.5em;
+    border-radius: 4px;
+
+    .title {
+        color: $aoc-bright;
+        font-weight: normal;
+        margin-bottom: 1em;
+    }
+
+    .content {
+        > *:last-child {
+            margin-bottom: 0;
+        }
+    }
+
+    p {
+        margin-bottom: 1em;
+    }
+
+    a {
+        color: $aoc-link;
+        text-decoration: none;
+        &:hover,
+        &:focus {
+            color: $aoc-link-hover;
+        }
+    }
+
+    em,
+    strong {
+        color: $aoc-bright;
+        font-style: normal;
+        font-weight: normal;
+        text-shadow: 0 0 5px $aoc-bright;
+    }
+
+    .star {
+        color: $aoc-star;
+        text-shadow: 0 0 5px $aoc-star;
+    }
+
+    code {
+        font-family: 'Source Code Pro', monospace;
+        color: $aoc-text;
+        background: $aoc-code-bg;
+        border: 1px solid $aoc-code-border;
+        border-radius: 0;
+        padding: 0 2px;
+        font-size: inherit;
+        vertical-align: baseline;
+    }
+
+    em code,
+    strong code {
+        color: $aoc-bright;
+    }
+
+    pre,
+    :global(.theme-code-block) {
+        background: $aoc-code-bg;
+        border: 1px solid $aoc-code-border;
+        border-radius: 0;
+        box-shadow: none;
+        code {
+            border: none;
+            padding: 0;
+            background: transparent;
+        }
+    }
+
+    pre {
+        padding: 0.5em 1em;
+        margin: 0;
+    }
+
+    :global(.theme-code-block) {
+        margin-bottom: 1em;
+        max-width: 20em;
+        button {
+            display: none;
+        }
+    }
+
+    ul,
+    ol {
+        padding-left: 2em;
+        margin-bottom: 1em;
+    }
+
+    ul {
+        list-style-type: none;
+        li {
+            position: relative;
+            &::before {
+                content: '-';
+                position: absolute;
+                left: -1.5em;
+            }
+        }
+    }
+
+    blockquote {
+        border-left: 1px solid $aoc-code-border;
+        color: $aoc-text;
+        padding-left: 1em;
+        margin: 0 0 1em 0;
+        background: transparent;
+    }
+
+    hr {
+        border-color: $aoc-code-border;
+    }
+
+    .source {
+        margin-top: 1em;
+        font-size: 0.85em;
+        opacity: 0.8;
+    }
+}
