@@ -1,18 +1,22 @@
 ---
 page_id: 8fc53504-b063-431f-8c23-21e627af55fe
-draft: true
 ---
 
 # 6. Umgang mit Fehlern
 
 ![--width=400px ???](./images/io-joke-3.webp)
 
-Was soll ein Programm tun, wenn es mit unpassenden Daten oder Eingaben konfrontiert wird? Normalerweise: Abstürzen :mdi[emoticon-cry].
+Was soll ein Programm tun, wenn es mit unpassenden Daten oder Eingaben konfrontiert wird? Normalerweise: :mdi[lightning-bolt]{.red} Abstürzen :mdi[emoticon-cry-outline]{.blue}.
 
 Damit das Programm nicht abstürzt, ist es unerlässlich, die Benutzerabfragen so gut es geht in die richtige Form umzuwandeln und dann auf Richtigkeit zu überprüfen!
 
 Dabei gibt es zwei Ansätze:
-1. Das Programm anweisen, die Ausführung einer Sequenz zu **versuchen**. 
+
+## Fehlerhandling
+
+:::cards{minWidth="250px"}
+### Ansatz 1: `Try Except`
+ Das Programm anweisen, die Ausführung einer Sequenz zu **versuchen**, und mögliche Fehler **abzufangen**. 
 
     ```mermaid
     graph TD
@@ -20,19 +24,25 @@ Dabei gibt es zwei Ansätze:
         B -->|Ja| C[Eingabe ist schuld!]
         B -->|Nein| D[Eingabe war ok]
     ```
+::br
+### Ansatz 2: `if` Abfragen
+Die Eingabe bzgl. Randbedingungen **untersuchen** und überprüfen...
 
-2. Die Eingabe bzgl. Randbedingungen **untersuchen** und überprüfen...
+![](./images/detective.webp)
+:::
 
 
 ## Try Except
 
-Es gibt in Python eine Möglichkeit dem Interpreter zu sagen: "Es ist okay wenn hier ein Fehler auftaucht, wir erwarten das schon und haben eine Antwort darauf bereit".
+In fast jeder Programmiersprache gibt es die Möglichkeit, Fehler abzufangen und zu behandeln. So auch in Python, wo dem Interpreter gesagt wird: "Es ist okay wenn hier ein Fehler auftaucht, wir erwarten das schon und haben eine Antwort darauf bereit".
 
 Dieses Konstrukt nennt sich ein _Try-Except Block_ und kann folgendermassen aussehen:
-```py
+
+```py live_py slim
 eingabe = input('Geben Sie eine Zahl ein')
 try:
     eingabe = int(eingabe)
+    print('Die Zahl ist', eingabe)
 except:
     print('das ist keine Zahl')
 ```
@@ -45,12 +55,13 @@ Hier geschieht folgendes: Der code im `try` Segment wird normal der Reihe nach a
 Beispiel: Ein Produktcode eingeben...
 - muss genau 9 Zeichen enthalten
 - die ersten 4 Zeichen müssen Zahlen sein und grösser 1000 sein
-- 5. Zeichen muss ein Buchstabe sein
-- die letzten 4 Zeichen müssen eine Hexadezimalzahl sein (starten mit '0x' und dann zwei Zeichen mit den aus 0-9 oder A-F).
+- das 5. Zeichen muss ein Buchstabe sein
+- die letzten 4 Zeichen müssen eine Hexadezimalzahl sein (starten mit '0x' und dann zwei Zeichen aus den Bereichen `0-9` oder `A-F`).
 
 Beispiel: `1234A0xBC`
 
-:::cards
+:::flex{minWidth="400px"}
+### Ansatz 1: `Try Except`
 ```py live_py slim
 def transform_input(raw):
     try:
@@ -73,6 +84,7 @@ else:
 
 ```
 ::br
+### Ansatz 2: `if` Abfragen
 ```py live_py slim
 def transform_input(raw):
     raw = raw.upper().strip()
@@ -143,12 +155,12 @@ else:
 Benutzereingaben sind mühsam...
 
 :::finding
-Es gibt keine klaren Regeln, welche Variante im Umgang mit Fehlern besser ist - entweder vorbeugen durch Sicherheitsabfragen oder Fehlerbehandlung mit `try-except`. Die Wahl ist oft auch einfach durch die Philosophie des Programmierers bedingt. 
+Es gibt keine klaren Regeln, welche Variante im Umgang mit Fehlern besser ist - entweder vorbeugen durch Sicherheitsabfragen oder Fehlerbehandlung mit `try-except`. Die Wahl ist oft auch einfach durch die Philosophie der Programmierer:in bedingt. 
 
 Um die Lesbarkeit und Wartbarkeit des Programms zu verbessern, können gewisse Richtlinien befolgt werden:
 - Wenn der Fehler durch eine einfache `if`-Abfrage umgangen werden kann, ist dies meist die bessere Lösung. 
 - Wenn die nötige(n) `if` Abfrage(n) um dem Fehler vorzubeugen, sehr lange und unübersichtlich wäre, kann ein `try-except` Block die bessere Wahl sein.
-- Ein `try` Block sollte maximal ein paar Zeilen beinhalten. Die Idee ist also nicht, ganze Funktionen in ein `try` packen!
+- Ein `try` Block sollte maximal ein paar Zeilen beinhalten. Die Idee ist also nicht, ganze Funktionen in ein `try` zu packen!
 :::
 
 
