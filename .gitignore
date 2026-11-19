@@ -30,3 +30,4 @@ yarn-error.log*
 
 # `ln -s .agents/skills .claude/skills`
 .claude/skills
+**/*.gitignore.*
