@@ -1,9 +1,10 @@
 ---
 page_id: 67f7b4eb-50e1-42ed-935f-381d25f84ea8
-draft: true
 ---
 
+import Steps from '@tdev-components/Steps';
 import Clock from '@tdev/pyodide/clock/src/components/Clock';
+import CodeBlock from '@theme/CodeBlock';
 import AdventOfCode, { Star } from './components/AdventOfCode';
 
 # 🔐 2025, Tag 1: Der geheime Eingang
@@ -76,47 +77,53 @@ Das Rad bleibt also *dreimal* auf `0` stehen. Das Passwort für dieses Beispiel 
 *Werten Sie die Drehungen in Ihrem Dokument aus. Wie lautet das richtige Passwort?*
 </AdventOfCode>
 
+Für die untenstehenden Python-Programme , angenommen werden, dass sie wie folgt in einem Dateisystem angeordnet sind:
+
+:::tree
+- advent-of-code
+    - 2025
+        - demo.txt
+        - day-01.txt
+        - day-01-part1.py
+        - day-01-part2.py
+:::
+
+:::tip[Vorgehen]
+<Steps>
+1. Implementieren Sie den algorithmischen Teil zuerst mit den oben beschriebenen Beispieldaten in `demo.txt`.
+2. Falls es funktioniert, testen Sie es mit einer echten Input-Datei `day-01.txt` und überprüfen Sie, ob das Ergebnis korrekt ist.
+3. Erstellen Sie ihr eigenes Konto bei adventofcode.com und lösen Sie das Rätsel mit Ihrem persönlichen Input.
+4. Räumen Sie den Code auf und fügen ihn zum Repository hinzu. 🥳
+</Steps>
+:::
+
+import data from '!!raw-loader!./assets/day-01-data.py';
+import day01 from '!!raw-loader!./assets/day-01.py';
+
 <Clock clockId="aoc-2025-01-teil-1" ticks={100} majorTickEvery={10} hideHours hideMinutes />
 
-```py live_pyo id=7860669f-302f-4538-a7d0-f2cdbe11f835 title=tag_01_teil_1.py
-from clock import use_clock
-from time import sleep
-
-uhr = use_clock('aoc-2025-01-teil-1')
-
-# Ersetzen Sie das Beispiel durch Ihren persönlichen Rätsel-Input
-
-raw = '''L68
-L30
-R48
-L5
-R60
-L55
-L1
-L99
-R14
-L82'''
-
-# nur ein Platzhalter, muss aus RAW herausgelesen werden!
-data = [10, 120, 90, -40, 50, 30, 70, 180]
-
-# Dauer der Animation pro Drehung in Sekunden.
-# Für Ihren richtigen Input (tausende Zeilen) auf 0 setzen!
-ANIMATION = 0.5
+<CodeBlock language="py" showLineNumbers={true} metastring="live_pyo id=0a294a73-54bb-4795-8f23-bec79a5763dd title=day--01--part1.py">
+    {`${data}\n### PRE\n${day01}`}
+</CodeBlock>
 
 
-position = 50
-uhr.set_pointer('seconds', position)
-passwort = 0
+:::details[Hinweis 1: mehrzeilige Texte verarbeiten]{.orange}
+Mit Python können mehrzeilige Texte einfach in eine Liste von Zeilen umgewandelt werden:
 
-for zeile in data:
-    position = zeile
-    if ANIMATION > 0:
-        uhr.set_pointer('seconds', position, within=ANIMATION)
-        sleep(ANIMATION)
-
-print('Passwort:', passwort)
+```py live_py slim
+with open("./demo.txt", "w") as f:
+    f.write('L68\nL30\nR48\nL5\nR60\nL55\nL1\nL99\nR14\nL82')
+### PRE
+with open("./demo.txt") as file:
+    raw = file.read()
+data = raw.splitlines()
+print(data)
 ```
+:::
+
+<Answer type="string" label="Passwort?" solution="1034" id="8e91e929-23ba-4034-9310-948d1d96c08d" />
+
+<Answer type="state" states={['star-empty', 'star']} id="ca6db7aa-4ea1-4d28-bd7d-bbf6dd2a5b43" />
 
 ## Teil 2
 
@@ -152,50 +159,10 @@ Aufgepasst: Steht das Rad auf `50`, zeigt es bei einer einzigen Drehung `R1000` 
 
 <Clock clockId="aoc-2025-01-teil-2" ticks={100} majorTickEvery={10} hideHours hideMinutes />
 
-```py live_pyo id=c3dcd367-a8b7-4f34-a887-6e3d2eaae819 title=tag_01_teil_2.py
-from clock import use_clock
-from time import sleep
+<CodeBlock language="py" showLineNumbers={true} metastring="live_pyo id=04db19e2-d991-4843-9ac1-e296a0641b79 title=day--01--part2.py">
+    {`${data}\n### PRE\n${day01.replace('aoc-2025-01-teil-1', 'aoc-2025-01-teil-2')}`}
+</CodeBlock>
 
-uhr = use_clock('aoc-2025-01-teil-2')
+<Answer type="string" label="Passwort?" solution="6166" id="9e890b77-1ff2-4f3d-87fa-894dee1c98b8" />
 
-# Ersetzen Sie das Beispiel durch Ihren persönlichen Rätsel-Input
-daten = """L68
-L30
-R48
-L5
-R60
-L55
-L1
-L99
-R14
-L82"""
-
-# Dauer der Animation pro Drehung in Sekunden.
-# Für Ihren richtigen Input (tausende Zeilen) auf 0 setzen!
-ANIMATION = 0.5
-
-anzeige = 50  # nur für die Uhr: Position ohne Sprung von 99 auf 0
-def zeige(richtung, distanz):
-    global anzeige
-    if ANIMATION == 0:
-        return
-    if richtung == 'L':
-        anzeige = anzeige - distanz
-    else:
-        anzeige = anzeige + distanz
-    uhr.set_pointer('seconds', anzeige, within=ANIMATION)
-    sleep(ANIMATION)
-
-uhr.set_pointer('seconds', anzeige)
-
-position = 50
-passwort = 0
-
-for zeile in daten.splitlines():
-    richtung = zeile[0]
-    distanz = int(zeile[1:])
-    zeige(richtung, distanz)
-    # TODO: position aktualisieren und jeden Klick auf 0 zählen
-
-print('Passwort:', passwort)
-```
+<Answer type="state" states={['star-empty', 'star']} id="9ad21df2-2b8d-42d6-8e39-65869329981b" />
