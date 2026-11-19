@@ -9,6 +9,12 @@ export class Clock {
     @observable accessor hours: number = 0;
     @observable accessor minutes: number = 0;
     @observable accessor seconds: number = 0;
+    /** per pointer animation duration, overrides `transitionDurationMs` when set */
+    @observableRef accessor transitionsMs: Readonly<Record<PointerName, number | undefined>> = {
+        hours: undefined,
+        minutes: undefined,
+        seconds: undefined
+    };
     @observableRef accessor units: Readonly<Record<PointerName, PointerUnit>> = {
         hours: 'deg',
         minutes: 'deg',
@@ -22,6 +28,10 @@ export class Clock {
             return 0;
         }
         return 1000 / this.animationSpeed;
+    }
+
+    pointerTransitionMs(name: PointerName) {
+        return this.transitionsMs[name] ?? this.transitionDurationMs;
     }
 
     /**
@@ -46,8 +56,11 @@ export class Clock {
     }
 
     @action
-    private setValue(name: PointerName, value: number, unit: PointerUnit) {
+    private setValue(name: PointerName, value: number, unit: PointerUnit, transitionMs?: number) {
         this[name] = value;
+        if (this.transitionsMs[name] !== transitionMs) {
+            this.transitionsMs = { ...this.transitionsMs, [name]: transitionMs };
+        }
         if (this.units[name] !== unit) {
             this.units = { ...this.units, [name]: unit };
         }
@@ -70,10 +83,11 @@ export class Clock {
 
     /**
      * point the given pointer to a tick of the dial (independent of the number of ticks)
+     * @param transitionMs optional animation duration for this movement
      */
     @action
-    setPointer(name: PointerName, tick: number) {
-        this.setValue(name, tick, 'tick');
+    setPointer(name: PointerName, tick: number, transitionMs?: number) {
+        this.setValue(name, tick, 'tick', transitionMs);
     }
 
     @action

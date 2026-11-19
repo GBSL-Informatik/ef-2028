@@ -11,4 +11,6 @@ export interface ClockTime {
 export type ClockUpdate = Partial<ClockTime> & {
     /** pointer positions in ticks of the dial (e.g. 0-99 for a dial with 100 ticks) */
     ticks?: Partial<Record<PointerName, number>>;
+    /** animation duration in ms for the pointers given in `ticks` */
+    transitionMs?: number;
 };

@@ -17,7 +17,7 @@ const Pointer = observer(({ clock, type, ticks }: PointerProps) => {
         <div
             className={clsx(styles.pointer, styles[type])}
             style={{
-                transitionDuration: `${clock.transitionDurationMs}ms`,
+                transitionDuration: `${clock.pointerTransitionMs(type)}ms`,
                 transform: `rotate(${angle}deg)`
             }}
         />

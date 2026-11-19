@@ -19,7 +19,7 @@ export default defineClientExtension<ClockUpdate, ClockStore>({
             for (const name of POINTER_NAMES) {
                 const tick = payload.ticks[name];
                 if (tick !== undefined) {
-                    clock.setPointer(name, tick);
+                    clock.setPointer(name, tick, payload.transitionMs);
                 }
             }
         }

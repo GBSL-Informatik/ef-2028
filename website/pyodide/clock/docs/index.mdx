@@ -34,7 +34,7 @@ while True:
 
 Mit `ticks` wird die Anzahl Striche auf dem Zifferblatt festgelegt, mit `majorTickEvery` jeder wievielte Strich fett gezeichnet wird. Einzelne Zeiger lassen sich mit `hideHours`, `hideMinutes` und `hideSeconds` ausblenden.
 
-`set_pointer(zeiger, tick)` setzt einen Zeiger direkt auf einen Strich des Zifferblatts. Bei 100 Strichen (0 bis 99) zeigt `set_pointer('seconds', 50)` also auf 180°.
+`set_pointer(zeiger, tick)` setzt einen Zeiger direkt auf einen Strich des Zifferblatts. Bei 100 Strichen (0 bis 99) zeigt `set_pointer('seconds', 50)` also auf 180°. Mit `within` dreht sich der Zeiger animiert innerhalb der angegebenen Anzahl Sekunden an die neue Position.
 
 <CodeShowcase lang="md" imports={[`import Clock from '@tdev/pyodide/clock/src/components/Clock';`]}>
 <Clock clockId="hundert-uhr" ticks={100} majorTickEvery={10} hideHours hideMinutes />
@@ -47,6 +47,8 @@ uhr = use_clock("hundert-uhr")
 for tick in range(101):
     uhr.set_pointer('seconds', tick)
     sleep(0.05)
+
+uhr.set_pointer('seconds', 50, within=1)  # zurück auf 180°, Animation während 1 Sekunde
 ```
 </CodeShowcase>
 
@@ -139,8 +141,8 @@ const clock = clockStore.useClock(clockId);
 : Lesen die letzten Werte dieses Handles (Winkel bzw. Strich nach `set_pointer`), nicht den Browser-Store oder andere Handles.
 `set_hours(winkel)`, `set_minutes(winkel)`, `set_seconds(winkel)`
 : Ändern jeweils nur den zugehörigen Zeiger im Browser.
-`set_pointer(zeiger, tick)`
-: Setzt den Zeiger `'hours'`, `'minutes'` oder `'seconds'` auf einen Strich des Zifferblatts. Der Winkel ergibt sich aus `tick * 360 / ticks` der jeweiligen Komponente.
+`set_pointer(zeiger, tick, within=None)`
+: Setzt den Zeiger `'hours'`, `'minutes'` oder `'seconds'` auf einen Strich des Zifferblatts. Der Winkel ergibt sich aus `tick * 360 / ticks` der jeweiligen Komponente. Mit `within` (Sekunden) wird die Bewegung animiert, z.B. `set_pointer('seconds', 30, within=0.3)`.
 `set_time(stunden, minuten, sekunden)`
 : Setzt alle drei Zeiger. Die Argumente sind Winkel in Grad.
 `reset()`
