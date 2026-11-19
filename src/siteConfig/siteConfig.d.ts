@@ -1,5 +1,6 @@
 import { FooterLinkItem, NavbarItem } from '@docusaurus/theme-common';
-import type { PluginConfig, PluginOptions, RouteConfig } from '@docusaurus/types';
+import type { PluginConfig, RouteConfig } from '@docusaurus/types';
+import type { Pluggable } from 'unified';
 import { ConfigTransformer } from './transformers';
 
 import type { Options as BlogPluginOptions } from '@docusaurus/plugin-content-blog';
@@ -101,13 +102,21 @@ export interface SiteConfig {
 
     /**
      * the URL to the CMS to edit the page. Defaults to '/cms/', but can be
-     * redirected to a different path
+     * redirected to a different path or to the CMS of another website, e.g.
+     * when this website does not install the `@hfr/github-cms` package.
      * @default '/cms/'
      * @example 'https://teaching-dev.gbsl.website/cms/'
      *
      * OrganizationName and ProjectName will be appended automatically.
      */
     editThisPageCmsUrl?: string;
+
+    /**
+     * whether the CMS edit link opens in a new tab.
+     * When not set, links to another website open in a new tab and links
+     * to this website in the same tab.
+     */
+    editThisPageCmsNewTab?: boolean;
 
     /**
      * the config of the blog plugin. It will be merged with the default options in docusaurus.config.ts
@@ -184,13 +193,13 @@ export interface SiteConfig {
     themes?: PluginConfig[];
 
     /** List of plugins to be loaded before the default remark plugins. */
-    beforeDefaultRemarkPlugins?: PluginOptions[];
+    beforeDefaultRemarkPlugins?: Pluggable[];
 
     /** List of remark plugins to be loaded. */
-    remarkPlugins?: PluginOptions[];
+    remarkPlugins?: Pluggable[];
 
     /** List of rehype plugins to be loaded. */
-    rehypePlugins?: PluginOptions[];
+    rehypePlugins?: Pluggable[];
 
     /** docusaurus markdown config */
     markdown?: DeepPartial<MarkdownConfig>;
@@ -238,8 +247,11 @@ export interface SiteConfig {
      * import { rootStore } from '@tdev-stores/rootStore';
      * import { createModel } from './model';
      * const register = () => {
-     *   rootStore.documentStore.registerFactory('text_message', createModel);
-     *   rootStore.socketStore.registerRecordToCreate('text_message');
+     *   rootStore.documentStore.registerDocumentType({
+     *     type: 'text_message',
+     *     factory: createModel,
+     *     createOnNewRecord: true
+     *   });
      * };
      * register();
      * ```
