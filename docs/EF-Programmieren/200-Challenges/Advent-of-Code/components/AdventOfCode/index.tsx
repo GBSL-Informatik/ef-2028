@@ -17,7 +17,7 @@ interface Props {
 const AdventOfCode = (props: Props) => {
     const { title, href, className, children } = props;
     return (
-        <article className={clsx(styles.aoc, className)}>
+        <article className={clsx(styles.aoc, 'noComment', className)}>
             {title && <div className={clsx(styles.title)}>--- {title} ---</div>}
             <div className={clsx(styles.content)}>{children}</div>
             {href && (

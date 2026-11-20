@@ -6,6 +6,7 @@ import Steps from '@tdev-components/Steps';
 import Clock from '@tdev/pyodide/clock/src/components/Clock';
 import CodeBlock from '@theme/CodeBlock';
 import AdventOfCode, { Star } from './components/AdventOfCode';
+import HideUntil from './components/HideUntil';
 
 # 🔐 2025, Tag 1: Der geheime Eingang
 
@@ -127,6 +128,8 @@ print(data)
 
 ## Teil 2
 
+<HideUntil stringId="8e91e929-23ba-4034-9310-948d1d96c08d" placeholder="Teil 2 wird freigeschaltet, sobald Sie Teil 1 gelöst haben.">
+
 <AdventOfCode title="Teil 2" href="https://adventofcode.com/2025/day/1#part2">
 Sie sind sicher, dass das Passwort stimmt &ndash; aber die Tür geht nicht auf. Sie klopfen, doch niemand öffnet. Während Sie nachdenken, bauen Sie einen Schneemann.
 
@@ -166,3 +169,4 @@ Aufgepasst: Steht das Rad auf `50`, zeigt es bei einer einzigen Drehung `R1000` 
 <Answer type="string" label="Passwort?" solution="6166" id="9e890b77-1ff2-4f3d-87fa-894dee1c98b8" />
 
 <Answer type="state" states={['star-empty', 'star']} id="9ad21df2-2b8d-42d6-8e39-65869329981b" />
+</HideUntil>
