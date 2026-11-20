@@ -1,11 +1,48 @@
 ---
 page_id: ff5ad3cd-fa0f-4566-b030-1b6d8f17203c
 ---
+
 import ProgressState from '@tdev-components/documents/ProgressState';
 import CodeBlock from '@theme/CodeBlock';
-
+import Steps from '@tdev-components/Steps';
 
 # Spielstart & Eingabe
+
+::::note[Recap Spielfeld]
+Das Spielfeld ist Voraussetzung für dieses Kapitel. Damit alle eine gute Ausgangslage haben, überprüfen Sie folgende Punkt:
+
+<Steps>
+  1. **(Für alle)**: Das Spielfeld soll wie im Beispiel unten mit einer verschachtelten Liste beschrieben werden. Die Zahlen können Sie selber wählen.
+  2. **(Wer das eigene Spielfeld noch nicht fertig hat)**: Den untenstehenden Code übernehmen und Zeile für Zeile analysieren und kommentieren. Insbesondere sollte Ihnen wieder klar werden, was folgende Syntax bezweckt (sollte nach dem Kahoot klar sein :mdi[emoticon-wink-outline]{color="orange"})
+     - Was macht `f'|{zelle}'` ?
+     - was macht das `end=''`?
+  3. &#x20;Commiten und Pushen
+</Steps>
+
+:::details[Programm]
+```py live_pyo slim
+board = [
+    [2, 4, 1, 8, 8],
+    [4, 2, 8, 2, 1],
+    [4, 4, 8, 4, 2],
+    [2, 8, 1, 4, 1],
+    [2, 4, 4, 4, 4]
+]
+
+for zeile in board:
+    for zelle in zeile:
+        print(' -', end='')
+    print(' ')
+    for zelle in zeile:
+        print(f'|{zelle}', end='')
+    print('|')
+
+for zelle in board[0]:
+    print(' -', end='')
+print(' ')
+```
+:::
+::::
 
 Nun wird's interaktiv 🥳 Eine Gamer:in soll ein Feld auswählen können.
 
