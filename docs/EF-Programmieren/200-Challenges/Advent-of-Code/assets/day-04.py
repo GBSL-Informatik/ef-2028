@@ -1,3 +1,4 @@
+import numpy as np
 from grid import Grid
 from time import sleep
 
@@ -11,22 +12,23 @@ with open("./demo.txt") as file:
 print(raw)
 
 zeilen = raw.splitlines()
-board = Grid(len(zeilen), len(zeilen[0]), grid_id='aoc-2025-04-teil-1')
+
+# Farben: Index 0 = leer, Index 1 = Papierrolle
+board = Grid(len(zeilen), len(zeilen[0]), grid_id='aoc-2025-04-teil-1', palette=['whitesmoke', 'peru'])
+_angezeigt = np.zeros(board.size, dtype=np.uint8)
 
 def zeige(plan):
     """
     Stellt den Plan im Gitter dar.
     plan ist eine Liste von Zeilen, z.B. ['..@@.', '@@@.@'] oder [['.', '.', '@'], ...]
     """
-    for zeile_nr, zeile in enumerate(plan):
-        for spalte_nr, zeichen in enumerate(zeile):
-            cell = board[zeile_nr][spalte_nr]
-            if zeichen == '@':
-                cell.color = 'peru'
-                cell.text = '@'
-            else:
-                cell.color = 'whitesmoke'
-                cell.text = ''
+    zustand = np.array([[1 if zeichen == '@' else 0 for zeichen in zeile] for zeile in plan], dtype=np.uint8)
+    # alle Farben auf einmal setzen
+    board.set_cells(zustand)
+    # Text nur bei den Zellen anpassen, die sich verändert haben
+    for zeile_nr, spalte_nr in np.argwhere(zustand != _angezeigt):
+        board[zeile_nr][spalte_nr].text = '@' if zustand[zeile_nr, spalte_nr] else ''
+    _angezeigt[:] = zustand
     board.show()
     if ANIMATION > 0:
         sleep(ANIMATION)

@@ -79,16 +79,18 @@ Für die untenstehenden Python-Programme kann angenommen werden, dass sie wie fo
 import data from '!!raw-loader!./assets/day-04-data.py';
 import day04 from '!!raw-loader!./assets/day-04.py';
 
+:::cards
 <Grid gridId="aoc-2025-04-teil-1" />
+:::
 
-<CodeBlock language="py" showLineNumbers={true} metastring="live_pyo id=f724e380-8187-4004-be1c-af035008ea3e title=day--04--part1.py">
+<CodeBlock language="py" showLineNumbers metastring="live_pyo id=f724e380-8187-4004-be1c-af035008ea3e title=day--04--part1.py">
     {`${data}\n### PRE\n${day04}`}
 </CodeBlock>
 
 :::details[Hinweis 1: Den Plan als zweidimensionale Liste speichern]{.orange}
 Mit `splitlines()` erhalten Sie eine Liste von Zeilen. Mit `list(...)` wird aus jeder Zeile eine Liste von einzelnen Zeichen. Mit `plan[zeile][spalte]` kann so jedes Feld abgefragt werden:
 
-```py live_py slim
+```py live_pyo slim
 with open("./demo.txt", "w") as f:
     f.write('..@@.@@@@.\n@@@.@.@.@@\n@@@@@.@.@@\n@.@@@@..@.\n@@.@@@@.@@\n.@@@@@@@.@\n.@.@.@.@@@\n@.@@@.@@@@\n.@@@@@@@@.\n@.@.@@@.@.')
 ### PRE
