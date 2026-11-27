@@ -36,6 +36,8 @@ await board.render()
 : Übernimmt einen zusammenhängenden zweidimensionalen Integer-Buffer mit der Form `(rows, cols)`. Die Werte sind Indizes der bei `Grid(..., palette=colors)` oder bei `set_cells()` angegebenen Farbliste.
 `await board.render()`
 : Überträgt den vollständigen Zustand. Warte den Aufruf ab, bevor du erneut renderst. Farben und Text werden bis dahin nur im Worker geändert.
+`board.show()`
+: Überträgt den Zustand ohne zu warten. Geeignet für Skripte ohne `async`/`await`, z.B. mit `time.sleep()`.
 
 Für grosse Gitter werden die Zellen kompakt gespeichert. NumPy erlaubt eine Berechnung ohne Python-Schleife über jede Zelle:
 

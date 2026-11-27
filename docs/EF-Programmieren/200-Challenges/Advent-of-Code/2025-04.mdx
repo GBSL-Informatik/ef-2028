@@ -1,0 +1,184 @@
+---
+page_id: e31ce487-f1d1-4bf5-b656-2a045c8ec5fc
+---
+
+import Steps from '@tdev-components/Steps';
+import Grid from '@tdev/pyodide/grid/src/components/Grid';
+import CodeBlock from '@theme/CodeBlock';
+import AdventOfCode, { Star } from './components/AdventOfCode';
+import HideUntil from './components/HideUntil';
+
+# 🧻 2025, Tag 4: Die Druckerei
+
+## Teil 1
+
+<AdventOfCode title="Tag 4: Die Druckerei" href="https://adventofcode.com/2025/day/4">
+Weil die Aufzüge nicht funktionieren, fahren Sie mit der Rolltreppe hinunter in die Druckerei. Hier bereitet man sich eindeutig auf Weihnachten vor: Überall stehen grosse *Papierrollen*, und in der Ecke steht sogar ein riesiger Drucker (für die wirklich grossen Druckaufträge).
+
+Dekorieren wird hier einfach &ndash; die Elfen können ihre Dekoration selbst drucken. Was Sie wirklich brauchen, ist ein Weg, um tiefer in die Nordpol-Basis vorzudringen, solange die Aufzüge ausser Betrieb sind.
+
+«Vielleicht können wir da helfen», meint einer der Elfen, als Sie um Hilfe bitten. «Wir sind ziemlich sicher, dass hinter der hinteren Wand die Cafeteria liegt. Wenn wir die Wand durchbrechen könnten, kämen Sie weiter. Schade nur, dass alle unsere Gabelstapler damit beschäftigt sind, die grossen Papierrollen herumzufahren.»
+
+Wenn Sie die Arbeit der Gabelstapler optimieren, hätten diese vielleicht Zeit, die Wand zu durchbrechen.
+
+Die Papierrollen (`@`) stehen auf einem grossen Raster. Die Elfen haben sogar einen praktischen Plan (Ihr *Rätsel-Input*), auf dem eingezeichnet ist, wo alles steht. Zum Beispiel:
+
+```
+..@@.@@@@.
+@@@.@.@.@@
+@@@@@.@.@@
+@.@@@@..@.
+@@.@@@@.@@
+.@@@@@@@.@
+.@.@.@.@@@
+@.@@@.@@@@
+.@@@@@@@@.
+@.@.@@@.@.
+```
+
+Ein Gabelstapler kommt nur an eine Papierrolle heran, wenn auf den *acht benachbarten Feldern* (waagrecht, senkrecht und diagonal) *weniger als vier* Papierrollen stehen. Wenn Sie herausfinden, welche Rollen zugänglich sind, verbringen die Gabelstapler weniger Zeit mit Suchen und mehr Zeit damit, die Wand zur Cafeteria einzureissen.
+
+In diesem Beispiel sind *`13`* Papierrollen für einen Gabelstapler zugänglich (mit `x` markiert):
+
+```
+..xx.xx@x.
+x@@.@.@.@@
+@@@@@.x.@@
+@.@@@@..@.
+x@.@@@@.@x
+.@@@@@@@.@
+.@.@.@.@@@
+x.@@@.@@@@
+.@@@@@@@@.
+x.x.@@@.x.
+```
+
+*Werten Sie Ihren vollständigen Plan aus. Wie viele Papierrollen sind für einen Gabelstapler zugänglich?*
+</AdventOfCode>
+
+Für die untenstehenden Python-Programme kann angenommen werden, dass sie wie folgt in einem Dateisystem angeordnet sind:
+
+:::tree
+- advent-of-code
+    - 2025
+        - demo.txt
+        - day-04.txt
+        - day-04-part1.py
+        - day-04-part2.py
+:::
+
+:::tip[Vorgehen]
+<Steps>
+1. Implementieren Sie den algorithmischen Teil zuerst mit den oben beschriebenen Beispieldaten in `demo.txt`.
+2. Falls es funktioniert, testen Sie es mit einer echten Input-Datei `day-04.txt` und überprüfen Sie, ob das Ergebnis korrekt ist.
+3. Erstellen Sie ihr eigenes Konto bei adventofcode.com und lösen Sie das Rätsel mit Ihrem persönlichen Input.
+4. Räumen Sie den Code auf und fügen ihn zum Repository hinzu. 🥳
+</Steps>
+:::
+
+import data from '!!raw-loader!./assets/day-04-data.py';
+import day04 from '!!raw-loader!./assets/day-04.py';
+
+:::cards
+<Grid gridId="aoc-2025-04-teil-1" />
+:::
+
+<CodeBlock language="py" showLineNumbers metastring="live_pyo id=f724e380-8187-4004-be1c-af035008ea3e title=day--04--part1.py">
+    {`${data}\n### PRE\n${day04}`}
+</CodeBlock>
+
+:::details[Hinweis 1: Den Plan als zweidimensionale Liste speichern]{.orange}
+Mit `splitlines()` erhalten Sie eine Liste von Zeilen. Mit `list(...)` wird aus jeder Zeile eine Liste von einzelnen Zeichen. Mit `plan[zeile][spalte]` kann so jedes Feld abgefragt werden:
+
+```py live_pyo slim
+with open("./demo.txt", "w") as f:
+    f.write('..@@.@@@@.\n@@@.@.@.@@\n@@@@@.@.@@\n@.@@@@..@.\n@@.@@@@.@@\n.@@@@@@@.@\n.@.@.@.@@@\n@.@@@.@@@@\n.@@@@@@@@.\n@.@.@@@.@.')
+### PRE
+with open("./demo.txt") as file:
+    raw = file.read()
+plan = [list(zeile) for zeile in raw.splitlines()]
+print(plan[0])
+print(plan[0][2])
+```
+:::
+
+:::details[Hinweis 2: Nachbarn zählen]{.orange}
+Die acht Nachbarn eines Feldes liegen um höchstens eine Zeile und eine Spalte verschoben. Mit zwei Schleifen über die Verschiebungen `-1`, `0` und `1` können Sie alle Nachbarn besuchen &ndash; die Verschiebung `(0, 0)` ist das Feld selbst und zählt nicht.
+
+Achtung am Rand: Felder ausserhalb des Plans enthalten keine Papierrolle. Prüfen Sie also, ob die Nachbarposition überhaupt im Plan liegt, bevor Sie darauf zugreifen. (Ein negativer Index wie `plan[-1]` ist in Python erlaubt und liefert die *letzte* Zeile &ndash; das wäre hier falsch!)
+
+Verwenden Sie zum Rechnen Ihre eigene Liste und nicht `board[...].get(...)` &ndash; das Gitter verbindet die gegenüberliegenden Ränder.
+:::
+
+<Answer type="string" label="Anzahl zugängliche Rollen?" solution="1553" id="d9e4a017-2fb3-4d4b-ad59-47d03dfe4c72" />
+
+<Answer type="state" states={['star-empty', 'star']} id="3ab08c00-25fc-44da-8610-0151e19282d8" />
+
+## Teil 2
+
+<HideUntil stringId="d9e4a017-2fb3-4d4b-ad59-47d03dfe4c72" placeholder="Teil 2 wird freigeschaltet, sobald Sie Teil 1 gelöst haben.">
+
+<AdventOfCode title="Teil 2" href="https://adventofcode.com/2025/day/4#part2">
+Jetzt brauchen die Elfen nur noch Hilfe, um an möglichst viel Papier heranzukommen.
+
+Sobald ein Gabelstapler an eine Papierrolle herankommt, kann diese *entfernt* werden. Ist eine Rolle entfernt, kommen die Gabelstapler vielleicht an weitere Rollen heran, die dann ebenfalls entfernt werden können. Wie viele Papierrollen können die Elfen insgesamt entfernen, wenn sie diesen Vorgang immer wiederholen?
+
+Mit demselben Beispiel wie oben lassen sich die Rollen zum Beispiel so entfernen. Ein `x` markiert eine Rolle, die gerade entfernt wird:
+
+```
+13 Rollen entfernen:    12 Rollen entfernen:    7 Rollen entfernen:
+..xx.xx@x.              .......x..              ..........
+x@@.@.@.@@              .@@.x.x.@x              .x@.....x.
+@@@@@.x.@@              x@@@@...@@              .@@@@...xx
+@.@@@@..@.              x.@@@@..x.              ..@@@@....
+x@.@@@@.@x              .@.@@@@.x.              .x.@@@@...
+.@@@@@@@.@              .x@@@@@@.x              ..@@@@@@..
+.@.@.@.@@@              .x.@.@.@@@              ...@.@.@@x
+x.@@@.@@@@              ..@@@.@@@@              ..@@@.@@@@
+.@@@@@@@@.              .x@@@@@@@.              ..x@@@@@@.
+x.x.@@@.x.              ....@@@...              ....@@@...
+
+5 Rollen entfernen:     2 Rollen entfernen:     1 Rolle entfernen:
+..........              ..........              ..........
+..x.......              ..........              ..........
+.x@@@.....              ..x@@.....              ...@@.....
+..@@@@....              ..@@@@....              ..x@@@....
+...@@@@...              ...@@@@...              ...@@@@...
+..x@@@@@..              ...@@@@@..              ...@@@@@..
+...@.@.@@.              ...@.@.@@.              ...@.@.@@.
+..x@@.@@@x              ...@@.@@@.              ...@@.@@@.
+...@@@@@@.              ...@@@@@x.              ...@@@@@..
+....@@@...              ....@@@...              ....@@@...
+
+1 Rolle entfernen:      1 Rolle entfernen:      1 Rolle entfernen:
+..........              ..........              ..........
+..........              ..........              ..........
+...x@.....              ....x.....              ..........
+...@@@....              ...@@@....              ...x@@....
+...@@@@...              ...@@@@...              ...@@@@...
+...@@@@@..              ...@@@@@..              ...@@@@@..
+...@.@.@@.              ...@.@.@@.              ...@.@.@@.
+...@@.@@@.              ...@@.@@@.              ...@@.@@@.
+...@@@@@..              ...@@@@@..              ...@@@@@..
+....@@@...              ....@@@...              ....@@@...
+```
+
+Hören Sie auf, sobald kein Gabelstapler mehr an eine Papierrolle herankommt. In diesem Beispiel können insgesamt *`43`* Papierrollen entfernt werden.
+
+*Beginnen Sie wieder mit dem ursprünglichen Plan. Wie viele Papierrollen können die Elfen mit ihren Gabelstaplern insgesamt entfernen?*
+</AdventOfCode>
+
+<Grid gridId="aoc-2025-04-teil-2" />
+
+<CodeBlock language="py" showLineNumbers={true} metastring="live_pyo id=707c5ef5-d434-489a-8b5e-e962fc9e2151 title=day--04--part2.py">
+    {`${data}\n### PRE\n${day04.replace('aoc-2025-04-teil-1', 'aoc-2025-04-teil-2')}`}
+</CodeBlock>
+
+:::details[Hinweis 3: Iterationen sichtbar machen]{.orange}
+Rufen Sie `zeige(plan)` nach *jeder* Iteration mit dem aktuellen Plan auf, nachdem Sie die zugänglichen Rollen entfernt haben. So sehen Sie im Gitter, wie sich die Papierrollen von aussen nach innen abbauen. Für den richtigen Input lohnt es sich, `ANIMATION` zu verkleinern.
+:::
+
+<Answer type="string" label="Anzahl entfernte Rollen?" solution="8442" id="2c0fc6a3-f246-4449-b3c2-ce63db7fcecd" />
+
+<Answer type="state" states={['star-empty', 'star']} id="705dd74c-b7e7-4a33-838b-b1be94b774ec" />
+</HideUntil>

@@ -87,6 +87,8 @@ Das Gitter speichert Farben als kompakte Palettenindizes. Ein Aufruf von `render
 : Füllt alle Zellen mit einer Farbe. Text bleibt erhalten.
 `await render()`
 : Überträgt Farben und Text an alle Ansichten derselben `gridId`. Auch nach dem Füllen oder Ändern einzelner Zellen ist dieser Aufruf nötig. Ein weiterer gleichzeitiger Render-Aufruf wird abgelehnt.
+`show()`
+: Überträgt den aktuellen Zustand wie `render()`, wartet aber nicht auf die Zeichenfläche. Damit lassen sich Gitter auch in Skripten ohne `async`/`await` anzeigen, beispielsweise zusammen mit `time.sleep()`. Folgen viele Aufrufe sehr schnell aufeinander, kann die Anzeige Zwischenstände überspringen.
 `copy(*, grid_id=None)`
 : Kopiert Zellfarben, Text und Skalierung. Ohne neue ID zeichnet die Kopie auf dieselbe Zeichenfläche.
 `to_list()`, `color_grid`, `grid`
