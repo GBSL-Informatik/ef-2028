@@ -145,6 +145,10 @@ class Grid:
     async def render(self):
         await self._handle.render()
 
+    def show(self):
+        """Zeigt den aktuellen Zustand an, ohne zu warten (für Skripte ohne async/await)."""
+        self._handle.show()
+
     def copy(self, *, grid_id=None):
         grid = Grid.__new__(Grid)
         grid._handle = self._handle.copy(self.grid_id if grid_id is None else grid_id)

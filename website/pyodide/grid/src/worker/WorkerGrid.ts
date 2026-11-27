@@ -116,19 +116,31 @@ export default class WorkerGrid {
         }
         this.rendering = true;
         try {
-            await this.context.sendAndWait(this.grid_id, {
-                rows: this.rows,
-                cols: this.cols,
-                scale: this.scale,
-                cells: this.cells.slice(),
-                palette: [...this.colors],
-                text: [...this.labels.values()]
-                    .filter(({ text }) => text !== '')
-                    .map((label) => ({ ...label }))
-            });
+            await this.context.sendAndWait(this.grid_id, this.frame());
         } finally {
             this.rendering = false;
         }
+    }
+
+    /**
+     * Sends the current state without waiting for the canvas.
+     * Works in synchronous scripts, e.g. together with `time.sleep()`.
+     */
+    show() {
+        this.context.send(this.grid_id, this.frame());
+    }
+
+    private frame(): GridFrame {
+        return {
+            rows: this.rows,
+            cols: this.cols,
+            scale: this.scale,
+            cells: this.cells.slice(),
+            palette: [...this.colors],
+            text: [...this.labels.values()]
+                .filter(({ text }) => text !== '')
+                .map((label) => ({ ...label }))
+        };
     }
 
     private validateDimensions(rows: number, cols: number, scale: number) {
