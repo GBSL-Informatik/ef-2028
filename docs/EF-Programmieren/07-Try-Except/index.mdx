@@ -153,45 +153,63 @@ else:
 
 ## Eingabe wiederholen
 
-Bisher wird bei einer fehlerhaften Eingabe eine Fehlermeldung ausgegeben und das Programm ist fertig. Oft möchte man aber, dass die Benutzer:in es **nochmals versuchen** kann, und zwar so lange, bis die Eingabe gültig ist. Da man nicht im Voraus weiss, wie viele Versuche es braucht, ist hier eine `while`-Schleife sinnvoll.
+Bisher wird bei einer fehlerhaften Eingabe eine Fehlermeldung ausgegeben und das Programm ist fertig. Oft möchte man aber, dass die Benutzer:in es **nochmals versuchen** kann, und zwar so lange, bis die Eingabe gültig ist. Da man nicht im Voraus weiss, wie viele Versuche es braucht, muss die Abfrage beliebig oft wiederholt werden können.
 
+In beiden Varianten wird die Abfrage in eine Funktion `zahl_abfragen(frage)` verpackt, die so lange nachfragt, bis eine Zahl eingegeben wurde. Sie unterscheiden sich nur darin, **wie wiederholt wird**: mit einer `while`-Schleife oder indem die Funktion sich selbst nochmals aufruft.
+
+::::flex{minWidth="400px"}
 ### Variante 1: Merkvariable
-
-Eine Variable merkt sich, ob schon eine gültige Eingabe gemacht wurde. Solange das nicht der Fall ist, wird erneut gefragt.
-
-```py live_pyo slim
-valide_eingabe = False 
-while not valide_eingabe:
-    eingabe = input('Wie alt sind Sie? ')
-    if eingabe.isnumeric():
-        alter = int(eingabe)
-        valide_eingabe = True
-    else:
-        print('Bitte nur Ziffern eingeben!')
-
-print('In 10 Jahren sind Sie', alter + 10, 'Jahre alt.')
-```
-
-### Variante 2: Funktion mit `while True` und `return`
-
-Die Abfrage wird in eine Funktion verpackt, die eine (eigentlich endlose) Schleife enthält. Sobald die Eingabe gültig ist, wird sie mit `return` zurückgegeben. Da `return` die Funktion **sofort** verlässt, ist damit auch die Schleife beendet. Dasselbe Muster kennen Sie bereits von der Funktion `lies_zahl()` im Kapitel [Funktionen](../04-Funktionen/index.mdx).
+Die Variable `valide_eingabe` merkt sich, ob schon eine gültige Eingabe gemacht wurde. Solange das nicht der Fall ist, wird erneut gefragt. Erst nach der Schleife wird die Zahl zurückgegeben.
 
 ```py live_pyo slim
 def zahl_abfragen(frage):
-    while True:
+    valide_eingabe = False
+    while not valide_eingabe:
         eingabe = input(frage)
         try:
-            return float(eingabe)
+            zahl = float(eingabe)
+            valide_eingabe = True
         except:
             print(f'"{eingabe}" ist keine Zahl, bitte nochmals!')
+    return zahl
+
+breite = zahl_abfragen('Breite in m: ')
+laenge = zahl_abfragen('Länge in m: ')
+print('Fläche:', breite * laenge, 'm²')
+```
+::br
+### Variante 2: Funktion ruft sich selbst auf
+Ist die Eingabe ungültig, ruft `zahl_abfragen()` sich **selbst nochmals auf** und fragt so erneut nach. Dieser neue Aufruf liefert irgendwann eine gültige Zahl, die dann mit `return` weitergegeben wird.
+
+```py live_pyo slim
+def zahl_abfragen(frage):
+    eingabe = input(frage)
+    try:
+        return float(eingabe)
+    except:
+        print(f'"{eingabe}" ist keine Zahl, bitte nochmals!')
+        return zahl_abfragen(frage)
 
 breite = zahl_abfragen('Breite in m: ')
 laenge = zahl_abfragen('Länge in m: ')
 print('Fläche:', breite * laenge, 'm²')
 ```
 
+:::warning[`return` nicht vergessen]
+Ruft sich die Funktion selbst auf, braucht es ein `return` vor dem Aufruf: `return zahl_abfragen(frage)`. Fehlt es, wird die gültige Zahl aus dem neuen Aufruf nicht weitergegeben, und nach einer falschen Eingabe gibt die Funktion `None` zurück.
+:::
+
+:::details[⭐️ Absturz trotzdem möglich]
+Bei jeder falschen Eingabe startet ein neuer Aufruf von `zahl_abfragen()`, während die vorherigen Aufrufe noch offen sind und auf das Resultat warten. Python erlaubt aber nur eine begrenzte Anzahl solcher verschachtelter Aufrufe (standardmässig rund 1000). Wer oft genug hintereinander etwas Falsches eingibt, bringt das Programm also trotzdem zum Absturz (`RecursionError: maximum recursion depth exceeded`).
+
+Von Hand passiert das kaum, bei automatisch erzeugten Eingaben (z.B. aus einer Datei) aber schon. Die `while`-Schleife aus Variante 1 hat diese Grenze nicht.
+:::
+::::
+
 :::finding
-Mit einer `while`-Schleife lässt sich eine gültige Eingabe **erzwingen**: Es geht erst weiter, wenn die Eingabe passt. Steckt die Abfrage in einer Funktion (Variante 2), kann sie für mehrere Eingaben wiederverwendet werden und das Hauptprogramm bleibt übersichtlich.
+Eine gültige Eingabe lässt sich **erzwingen**: Es geht erst weiter, wenn die Eingabe passt. Steckt die Abfrage in einer Funktion, kann sie für mehrere Eingaben wiederverwendet werden und das Hauptprogramm bleibt übersichtlich.
+
+Ob mit einer `while`-Schleife und Merkvariable wiederholt wird oder indem sich die Funktion selbst aufruft, ist Geschmackssache.
 :::
 
 ## Übungen
