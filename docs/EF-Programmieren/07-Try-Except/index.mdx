@@ -124,7 +124,7 @@ else:
 
 :::
 
-:::aufgabe[Obigen Code analysieren?]
+:::aufgabe[Obigen Code analysieren]
 <Answer type="state" id="89a1d1b0-af52-4f01-a3d3-4567be6cdbf4" />
 
 Welche Variante ist praktischer für die Programmierer:in?
@@ -151,6 +151,231 @@ else:
 ```
 :::
 
+## Eingabe wiederholen
+
+Bisher wird bei einer fehlerhaften Eingabe eine Fehlermeldung ausgegeben und das Programm ist fertig. Oft möchte man aber, dass die Benutzer:in es **nochmals versuchen** kann, und zwar so lange, bis die Eingabe gültig ist. Da man nicht im Voraus weiss, wie viele Versuche es braucht, ist hier eine `while`-Schleife sinnvoll.
+
+### Variante 1: Merkvariable
+
+Eine Variable merkt sich, ob schon eine gültige Eingabe gemacht wurde. Solange das nicht der Fall ist, wird erneut gefragt.
+
+```py live_pyo slim
+valide_eingabe = False 
+while not valide_eingabe:
+    eingabe = input('Wie alt sind Sie? ')
+    if eingabe.isnumeric():
+        alter = int(eingabe)
+        valide_eingabe = True
+    else:
+        print('Bitte nur Ziffern eingeben!')
+
+print('In 10 Jahren sind Sie', alter + 10, 'Jahre alt.')
+```
+
+### Variante 2: Funktion mit `while True` und `return`
+
+Die Abfrage wird in eine Funktion verpackt, die eine (eigentlich endlose) Schleife enthält. Sobald die Eingabe gültig ist, wird sie mit `return` zurückgegeben. Da `return` die Funktion **sofort** verlässt, ist damit auch die Schleife beendet. Dasselbe Muster kennen Sie bereits von der Funktion `lies_zahl()` im Kapitel [Funktionen](../04-Funktionen/index.mdx).
+
+```py live_pyo slim
+def zahl_abfragen(frage):
+    while True:
+        eingabe = input(frage)
+        try:
+            return float(eingabe)
+        except:
+            print(f'"{eingabe}" ist keine Zahl, bitte nochmals!')
+
+breite = zahl_abfragen('Breite in m: ')
+laenge = zahl_abfragen('Länge in m: ')
+print('Fläche:', breite * laenge, 'm²')
+```
+
+:::finding
+Mit einer `while`-Schleife lässt sich eine gültige Eingabe **erzwingen**: Es geht erst weiter, wenn die Eingabe passt. Steckt die Abfrage in einer Funktion (Variante 2), kann sie für mehrere Eingaben wiederverwendet werden und das Hauptprogramm bleibt übersichtlich.
+:::
+
+## Übungen
+
+::::aufgabe[1. Uhrzeit einlesen]
+<Answer type="state" id="442986ca-f215-4c14-8687-8775b5ad1587" />
+
+Eine Benutzer:in soll eine Uhrzeit im Format `hh:mm` eingeben, z.B. `07:45`. Die Funktion `uhrzeit_umwandeln(text)` soll die Uhrzeit als Liste `[stunden, minuten]` zurückgeben, also z.B. `[7, 45]`. Ist die Eingabe ungültig, gibt sie `False` zurück. Gültig sind Stunden von `0` bis `23` und Minuten von `0` bis `59`.
+
+Damit Sie nicht bei jedem Test etwas eintippen müssen, wird die Funktion unten mit einer Liste von Testeingaben aufgerufen (statt mit `input()`).
+
+**Teil A: mit `try-except`**
+
+Wandeln Sie die Stunden und Minuten innerhalb eines `try`-Blocks in Zahlen um. Den Wertebereich (z.B. `24:00`) dürfen Sie anschliessend mit `if` prüfen.
+
+```py live_py title=uhrzeit_try.py id=4f63adda-92e0-4135-ad9f-0bb141cfebe8
+def uhrzeit_umwandeln(text):
+    ...
+
+tests = ['07:45', '23:59', '00:00', '24:00', '12:60', 'zwölf', '12-30', '', '12:3a', '7:45', '12:30:00', ' 7:45']
+for t in tests:
+    print(f"'{t}' ->", uhrzeit_umwandeln(t))
+```
+
+**Teil B: nur mit `if`-Abfragen**
+
+Lösen Sie dieselbe Aufgabe nochmals, diesmal **ohne** `try-except`. Prüfen Sie die Eingabe also mit `if`-Abfragen, bevor Sie sie in Zahlen umwandeln.
+
+```py live_py title=uhrzeit_if.py id=45d8a70e-9ecf-4988-a53e-1da9dbaf63a2
+def uhrzeit_umwandeln(text):
+    ...
+
+tests = ['07:45', '23:59', '00:00', '24:00', '12:60', 'zwölf', '12-30', '', '12:3a', '7:45', '12:30:00', ' 7:45']
+for t in tests:
+    print(f"'{t}' ->", uhrzeit_umwandeln(t))
+```
+
+:::details[Hinweis Teil B]
+Nützlich sind `len()`, der Zugriff auf einzelne Zeichen bzw. Bereiche (`text[2]`, `text[:2]`) und `.isnumeric()` (vgl. Kapitel [Strings](../06-Input-Validierung/index.mdx)).
+:::
+
+**Teil C: Vergleich**
+
+Bei welchen Testeingaben liefern Ihre beiden Varianten ein unterschiedliches Resultat? Welche Variante verhält sich in diesen Fällen "richtig"?
+
+<Answer type="text" id="b80aeecf-ff0a-414d-82fc-1af420adf466" placeholder="✍️ Antwort..." />
+
+<Solution id="d976532c-8723-498c-b251-124308fc2c8b" title="Lösung Teil A">
+
+```py live_py slim
+def uhrzeit_umwandeln(text):
+    try:
+        teile = text.split(':')
+        stunden = int(teile[0])
+        minuten = int(teile[1])
+    except:
+        return False
+    if stunden < 0 or stunden > 23 or minuten < 0 or minuten > 59:
+        return False
+    return [stunden, minuten]
+
+tests = ['07:45', '23:59', '00:00', '24:00', '12:60', 'zwölf', '12-30', '', '12:3a', '7:45', '12:30:00', ' 7:45']
+for t in tests:
+    print(f"'{t}' ->", uhrzeit_umwandeln(t))
+```
+
+</Solution>
+
+<Solution id="a436125f-5258-40eb-ae45-4fef84db75fe" title="Lösung Teil B">
+
+```py live_py slim
+def uhrzeit_umwandeln(text):
+    if len(text) != 5 or text[2] != ':':
+        return False
+    if not text[:2].isnumeric() or not text[3:].isnumeric():
+        return False
+    stunden = int(text[:2])
+    minuten = int(text[3:])
+    if stunden > 23 or minuten > 59:
+        return False
+    return [stunden, minuten]
+
+tests = ['07:45', '23:59', '00:00', '24:00', '12:60', 'zwölf', '12-30', '', '12:3a', '7:45', '12:30:00', ' 7:45']
+for t in tests:
+    print(f"'{t}' ->", uhrzeit_umwandeln(t))
+```
+
+</Solution>
+
+<Solution id="dd5a2116-3bd2-4261-b5e0-f7ed1e9109f4" title="Lösung Teil C">
+
+Mit den obigen Lösungen unterscheiden sich `'7:45'`, `'12:30:00'` und `' 7:45'`: Variante A akzeptiert sie, Variante B nicht. `int()` ist nämlich grosszügig (Leerzeichen werden ignoriert, eine Ziffer reicht) und was nach dem zweiten `:` kommt, wird gar nie angeschaut.
+
+Was "richtig" ist, hängt von den Anforderungen ab: `'7:45'` zu akzeptieren ist benutzerfreundlich, `'12:30:00'` stillschweigend zu `[12, 30]` zu machen ist eher ein Fehler. Mit `try-except` prüft man nur, ob die Umwandlung **klappt**; mit `if`-Abfragen legt man genau fest, wie die Eingabe **aussehen muss**.
+
+</Solution>
+::::
+
+::::aufgabe[2. Taschenrechner]
+<Answer type="state" id="73ab584b-f724-4192-a3df-2bfa6b45be71" />
+
+Schreiben Sie einen Taschenrechner, der eine ganze Rechnung in **einer** Eingabe entgegennimmt, z.B. `3.5 * 4`. Die Zahlen und der Operator sind durch Leerzeichen getrennt, erlaubte Operatoren sind `+`, `-`, `*` und `/`.
+
+Das Programm soll bei **keiner** Eingabe abstürzen, sondern so lange nachfragen, bis eine gültige Rechnung eingegeben wurde. Prüfen Sie die Eingabe dabei **ausschliesslich mit `try-except`**.
+
+1. `berechnen(rechnung)`: zerlegt die Rechnung, rechnet sie aus und gibt das Resultat zurück. Um die Fehler kümmert sich diese Funktion nicht.
+2. `rechnung_abfragen()`: fragt so lange nach einer Rechnung, bis `berechnen()` ohne Fehler durchläuft, und gibt dann das Resultat zurück.
+
+```py live_pyo title=taschenrechner.py id=cc975ac3-96ff-467a-8f24-37e24f2414cb
+def berechnen(rechnung):
+    ...
+
+def rechnung_abfragen():
+    ...
+
+resultat = rechnung_abfragen()
+print('Resultat:', resultat)
+```
+
+Testen Sie Ihr Programm unter anderem mit diesen Eingaben: `drei mal vier`, `3*4`, `3 * 4 * 5`, `3 % 4`, `3 / 0`, eine leere Eingabe und schliesslich `3.5 * 4`.
+
+:::details[Hinweis: Rechnung zerlegen]
+`.split()` ohne Parameter trennt bei Leerzeichen. Das Resultat kann direkt auf mehrere Variablen verteilt werden:
+
+```py live_py slim
+zahl1, operator, zahl2 = '3.5 * 4'.split()
+print(zahl1, operator, zahl2)
+```
+
+Hat die Liste nicht genau drei Elemente, gibt es einen Fehler. Und das ist hier genau richtig so!
+:::
+
+:::details[Hinweis: Unbekannter Operator]
+Für einen unbekannten Operator wie `%` gibt es von sich aus keinen Fehler. Diesen können Sie wie im Beispiel oben mit `raise ValueError('...')` selbst auslösen.
+:::
+
+**⭐️ Zusatz:** Geben Sie je nach Fehler eine passende Meldung aus, z.B. `Division durch 0 ist nicht erlaubt!`. Recherchieren Sie dazu, wie mit `except` nur eine bestimmte Art von Fehler abgefangen werden kann.
+
+<Solution id="8673d5cd-8cb3-4a35-98fe-579118bde5bb">
+
+```py live_pyo slim
+def berechnen(rechnung):
+    zahl1, operator, zahl2 = rechnung.split()
+    zahl1 = float(zahl1)
+    zahl2 = float(zahl2)
+    if operator == '+':
+        return zahl1 + zahl2
+    elif operator == '-':
+        return zahl1 - zahl2
+    elif operator == '*':
+        return zahl1 * zahl2
+    elif operator == '/':
+        return zahl1 / zahl2
+    else:
+        raise ValueError('Unbekannter Operator')
+
+
+def rechnung_abfragen():
+    while True:
+        rechnung = input('Rechnung eingeben (z.B. 3.5 * 4): ')
+        try:
+            return berechnen(rechnung)
+        except:
+            print('Ungültige Rechnung, bitte nochmals!')
+
+
+resultat = rechnung_abfragen()
+print('Resultat:', resultat)
+```
+
+**⭐️ Zusatz:** Nach `except` kann die Art des Fehlers angegeben werden. Es dürfen mehrere `except`-Blöcke folgen:
+
+```py
+        try:
+            return berechnen(rechnung)
+        except ZeroDivisionError:
+            print('Division durch 0 ist nicht erlaubt!')
+        except ValueError:
+            print('Ungültige Rechnung! Format: <Zahl> <Operator> <Zahl>')
+```
+
+</Solution>
+::::
+
 ## Fazit
 
 Benutzereingaben sind mühsam...
@@ -171,11 +396,4 @@ Um die Lesbarkeit und Wartbarkeit des Programms zu verbessern, können gewisse R
 ![](./images/io-joke-1.webp)
 ::br
 ![](./images/io-joke-2.jpg)
-:::
-
-:::aufgabe[NumTrip]
-<Answer type="state" id="60a2eb84-8f87-4202-a6c7-14cf5189ba84" />
-
-Überprüfen Sie im NumTrip Spiel die Benutzereingaben, so dass auch bei fehlerhaften Eingaben das Programm nicht abstürzt.
-
 :::
